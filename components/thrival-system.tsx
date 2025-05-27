@@ -1004,22 +1004,182 @@ const ThrivalSystem = () => {
             </Card>
           </TabsContent>
 
-          {/* Settings Tab */}
-          <TabsContent value="settings" className="space-y-6">
-            <Card className={darkMode ? 'bg-gray-800 border-gray-700' : ''}>
-              <CardContent className="p-6">
-                <div className="text-center py-8">
-                  <p className={darkMode ? 'text-gray-400' : 'text-gray-600'}>
-                    Settings interface will be rendered here based on selected section.
-                  </p>
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
-        </Tabs>
-      </div>
-    </div>
-  );
-};
+     {/* Settings Tab */}
+<TabsContent value="settings" className="space-y-6">
+  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+    {/* API Configuration */}
+    <Card className={darkMode ? 'bg-gray-800 border-gray-700' : ''}>
+      <CardHeader>
+        <CardTitle>API Configuration</CardTitle>
+      </CardHeader>
+      <CardContent className="space-y-4">
+        <div>
+          <Label>Claude API Key</Label>
+          <Input
+            type="password"
+            placeholder="sk-ant-api03-..."
+            value={apiKeys.claude}
+            onChange={(e: any) => setApiKeys((prev: any) => ({ ...prev, claude: e.target.value }))}
+            className={darkMode ? 'border-white/20' : ''}
+          />
+        </div>
+        <div>
+          <Label>Twitter Bearer Token</Label>
+          <Input
+            type="password"
+            placeholder="Optional"
+            value={apiKeys.twitter}
+            onChange={(e: any) => setApiKeys((prev: any) => ({ ...prev, twitter: e.target.value }))}
+            className={darkMode ? 'border-white/20' : ''}
+          />
+        </div>
+        <div>
+          <Label>GitHub Token</Label>
+          <Input
+            type="password"
+            placeholder="Optional"
+            value={apiKeys.github}
+            onChange={(e: any) => setApiKeys((prev: any) => ({ ...prev, github: e.target.value }))}
+            className={darkMode ? 'border-white/20' : ''}
+          />
+        </div>
+      </CardContent>
+    </Card>
+
+    {/* Evaluation Criteria Weights */}
+    <Card className={darkMode ? 'bg-gray-800 border-gray-700' : ''}>
+      <CardHeader>
+        <CardTitle>Criteria Weights</CardTitle>
+      </CardHeader>
+      <CardContent className="space-y-4">
+        {Object.entries(criteriaWeights).map(([criterion, weight]) => (
+          <div key={criterion} className="flex items-center justify-between">
+            <Label className="capitalize">{criterion}</Label>
+            <div className="flex items-center space-x-2">
+              <Input
+                type="number"
+                min="0"
+                max="100"
+                value={weight}
+                onChange={(e: any) => handleWeightChange(criterion, e.target.value)}
+                className={`w-16 h-8 text-center ${darkMode ? 'border-white/20' : ''}`}
+              />
+              <span className="text-sm">%</span>
+            </div>
+          </div>
+        ))}
+        <div className="pt-2 border-t">
+          <p className={`text-sm ${getTotalWeight() === 100 ? 'text-green-600' : 'text-red-600'}`}>
+            Total: {getTotalWeight()}% {getTotalWeight() !== 100 && '(Must equal 100%)'}
+          </p>
+        </div>
+      </CardContent>
+    </Card>
+
+    {/* System Preferences */}
+    <Card className={darkMode ? 'bg-gray-800 border-gray-700' : ''}>
+      <CardHeader>
+        <CardTitle>System Preferences</CardTitle>
+      </CardHeader>
+      <CardContent className="space-y-4">
+        <div className="flex items-center justify-between">
+          <div>
+            <Label>Email Notifications</Label>
+            <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+              Get notified when evaluations complete
+            </p>
+          </div>
+          <Switch
+            checked={systemPreferences.emailNotifications}
+            onCheckedChange={(checked: any) => 
+              setSystemPreferences((prev: any) => ({ ...prev, emailNotifications: checked }))
+            }
+          />
+        </div>
+        <div className="flex items-center justify-between">
+          <div>
+            <Label>Auto-save</Label>
+            <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+              Automatically save evaluation progress
+            </p>
+          </div>
+          <Switch
+            checked={systemPreferences.autoSave}
+            onCheckedChange={(checked: any) => 
+              setSystemPreferences((prev: any) => ({ ...prev, autoSave: checked }))
+            }
+          />
+        </div>
+        <div>
+          <Label>Export Format</Label>
+          <Select 
+            value={systemPreferences.exportFormat} 
+            onValueChange={(value: any) => 
+              setSystemPreferences((prev: any) => ({ ...prev, exportFormat: value }))
+            }
+          >
+            <SelectTrigger className={darkMode ? 'border-white/20' : ''}>
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="pdf">PDF</SelectItem>
+              <SelectItem value="csv">CSV</SelectItem>
+              <SelectItem value="json">JSON</SelectItem>
+              <SelectItem value="docx">DOCX</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+      </CardContent>
+    </Card>
+
+    {/* Program Management */}
+    <Card className={darkMode ? 'bg-gray-800 border-gray-700' : ''}>
+      <CardHeader>
+        <div className="flex items-center justify-between">
+          <CardTitle>Programs</CardTitle>
+          <Button size="sm" onClick={() => setShowProgramEditor(true)}>
+            <Plus className="h-4 w-4 mr-2" />
+            Add Program
+          </Button>
+        </div>
+      </CardHeader>
+      <CardContent className="space-y-4">
+        {Object.entries(programs).map(([id, program]) => (
+          <div key={id} className={`p-3 rounded-lg border ${darkMode ? 'border-gray-600' : 'border-gray-200'}`}>
+            <div className="flex items-center justify-between">
+              <div className="flex-1">
+                <h4 className="font-medium">{(program as any).name}</h4>
+                <p className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-600'} mt-1`}>
+                  {(program as any).criteria.substring(0, 80)}...
+                </p>
+              </div>
+              <div className="flex items-center space-x-2">
+                <Switch
+                  checked={(program as any).active}
+                  onCheckedChange={(checked: any) => {
+                    setPrograms((prev: any) => ({
+                      ...prev,
+                      [id]: { ...prev[id], active: checked }
+                    }));
+                  }}
+                />
+                <Button 
+                  variant="ghost" 
+                  size="sm"
+                  onClick={() => {
+                    setDeletingProgram(id);
+                    setShowDeleteConfirm(true);
+                  }}
+                >
+                  <Trash2 className="h-4 w-4" />
+                </Button>
+              </div>
+            </div>
+          </div>
+        ))}
+      </CardContent>
+    </Card>
+  </div>
+</TabsContent>
 
 export default ThrivalSystem;
