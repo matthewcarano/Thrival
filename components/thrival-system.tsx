@@ -6,7 +6,7 @@ import { Textarea } from '@/components/ui';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/radix-components';
 import { Badge } from '@/components/ui';
 import { Switch } from '@/components/ui/radix-components';
-import { Label } from '@/components/ui';
+import { Label } from '@/components/ui/index';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/radix-components';
 import { AlertCircle, Settings, Users, FileText, History, Upload, Moon, Sun, Edit, Trash2, Plus, X, UserCheck, TrendingUp, Puzzle, Target, Lightbulb, Focus, ChevronDown, ChevronRight } from 'lucide-react';
 
@@ -462,7 +462,7 @@ const calculateWeightedScore = (scores: any) => {
             <h3 className="text-lg font-semibold mb-4">Add New Program</h3>
             <div className="space-y-4">
               <div>
-                <Label>Program Name</Label>
+                <div className="text-sm font-medium">Program Name</div>
                 <Input
                   value={newProgram.name}
                   onChange={(e) => setNewProgram(prev => ({ ...prev, name: e.target.value }))}
