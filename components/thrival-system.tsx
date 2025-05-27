@@ -592,7 +592,7 @@ const calculateWeightedScore = (scores: any) => {
                       </SelectTrigger>
                       <SelectContent>
                         {Object.entries(programs)
-                          .filter(([, program]) => (program as any).active))
+                          .filter(([, program]) => (program as any).active)
                           .map(([id, program]) => (
                             <SelectItem key={id} value={id}>
                               {(program as any).name}
