@@ -29,7 +29,7 @@ const ThrivalSystem = () => {
   const [evaluationHistory, setEvaluationHistory] = useState<any[]>([]);
   
   // Bulk processing state
-  const [bulkFile, setBulkFile] = useState(null);
+  const [bulkFile, setBulkFile] = useState<any>(null);
   const [bulkResults, setBulkResults] = useState<any[]>([]);
   const [bulkProcessing, setBulkProcessing] = useState(false);
   
