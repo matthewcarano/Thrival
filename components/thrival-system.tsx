@@ -355,7 +355,7 @@ const calculateWeightedScore = (scores: any) => {
     }
     
     const programId = `program${Date.now()}`;
-    setPrograms(prev => ({
+    setPrograms((prev: any) => ({
       ...prev,
       [programId]: {
         name: newProgram.name,
@@ -406,7 +406,7 @@ const calculateWeightedScore = (scores: any) => {
       lastLogin: 'Never'
     };
     
-    setTeamMembers(prev => [...prev, member]);
+    setTeamMembers((prev: any) => [...prev, member]);
     setNewTeamMember({ name: '', email: '', role: 'Evaluator' });
     setShowTeamEditor(false);
   };
@@ -417,7 +417,7 @@ const calculateWeightedScore = (scores: any) => {
 
   // Weight management
   const handleWeightChange = (criterion: string, value: string) => {
-    setCriteriaWeights(prev => ({
+    setCriteriaWeights((prev: any) => ({
       ...prev,
       [criterion]: parseInt(value) || 0
     }));
