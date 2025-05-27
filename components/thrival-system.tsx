@@ -759,7 +759,7 @@ const calculateWeightedScore = (scores: any) => {
                   <div className="flex items-center space-x-4">
                     <Button
                       variant="outline"
-                      onClick={() => document.getElementById('bulk-file').click()}
+                      onClick={() => document.getElementById('bulk-file')?.click()}
                       className="h-10"
                     >
                       <Upload className="h-4 w-4 mr-2" />
