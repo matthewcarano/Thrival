@@ -195,7 +195,7 @@ const ThrivalSystem = () => {
     
     const score = Math.min(10, baseScore + programBonus + externalBonus);
     
-    const evidenceExamples = {
+    const evidenceExamples: {[key: string]: string[]} = {
       team: [
         "GitHub shows 500+ commits across 15 repositories",
         "Ex-Coinbase product manager with 3 years DeFi experience", 
