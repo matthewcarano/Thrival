@@ -30,54 +30,55 @@ const buttonVariants = cva(
 
 // Button Component
 function Button({ className, variant = "default", size = "default", children, ...props }: any) {
-  return (
-    <button
-      className={cn(buttonVariants({ variant, size, className }))}
-      {...props}
-    >
-      {children}
-    </button>
-  );
+  const classes = cn(buttonVariants({ variant, size, className }));
+  
+  return React.createElement("button", {
+    className: classes,
+    ...props
+  }, children);
 }
 
 // Card Components
-function Card({ className, ...props }: any) {
-  return (
-    <div
-      className={cn(
-        "rounded-lg border bg-card text-card-foreground shadow-sm",
-        className
-      )}
-      {...props}
-    />
-  )
+function Card({ className, children, ...props }: any) {
+  const classes = cn(
+    "rounded-lg border bg-card text-card-foreground shadow-sm",
+    className
+  );
+  
+  return React.createElement("div", {
+    className: classes,
+    ...props
+  }, children);
 }
 
-function CardHeader({ className, ...props }: any) {
-  return (
-    <div
-      className={cn("flex flex-col space-y-1.5 p-6", className)}
-      {...props}
-    />
-  )
+function CardHeader({ className, children, ...props }: any) {
+  const classes = cn("flex flex-col space-y-1.5 p-6", className);
+  
+  return React.createElement("div", {
+    className: classes,
+    ...props
+  }, children);
 }
 
-function CardTitle({ className, ...props }: any) {
-  return (
-    <h3
-      className={cn(
-        "text-2xl font-semibold leading-none tracking-tight",
-        className
-      )}
-      {...props}
-    />
-  )
+function CardTitle({ className, children, ...props }: any) {
+  const classes = cn(
+    "text-2xl font-semibold leading-none tracking-tight",
+    className
+  );
+  
+  return React.createElement("h3", {
+    className: classes,
+    ...props
+  }, children);
 }
 
-function CardContent({ className, ...props }: any) {
-  return (
-    <div className={cn("p-6 pt-0", className)} {...props} />
-  )
+function CardContent({ className, children, ...props }: any) {
+  const classes = cn("p-6 pt-0", className);
+  
+  return React.createElement("div", {
+    className: classes,
+    ...props
+  }, children);
 }
 
 // Input Component
@@ -93,6 +94,7 @@ function Input({ className, type = "text", ...props }: any) {
     ...props
   });
 }
+
 // Textarea Component
 function Textarea({ className, ...props }: any) {
   const classes = cn(
@@ -107,30 +109,43 @@ function Textarea({ className, ...props }: any) {
 }
 
 // Label Component
-function Label({ className, ...props }: any) {
-  return (
-    <label
-      className={cn(
-        "text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70",
-        className
-      )}
-      {...props}
-    />
-  )
+function Label({ className, children, ...props }: any) {
+  const classes = cn(
+    "text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70",
+    className
+  );
+  
+  return React.createElement("label", {
+    className: classes,
+    ...props
+  }, children);
 }
 
 // Badge Component
-function Badge({ className, variant, ...props }: any) {
-  return (
-    <div className={cn(badgeVariants({ variant }), className)} {...props} />
-  )
-}
+const badgeVariants = cva(
+  "inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2",
+  {
+    variants: {
+      variant: {
+        default: "border-transparent bg-primary text-primary-foreground hover:bg-primary/80",
+        secondary: "border-transparent bg-secondary text-secondary-foreground hover:bg-secondary/80",
+        destructive: "border-transparent bg-destructive text-destructive-foreground hover:bg-destructive/80",
+        outline: "text-foreground",
+      },
+    },
+    defaultVariants: {
+      variant: "default",
+    },
+  }
 )
 
-function Badge({ className, variant, ...props }: any) {
-  return (
-    <div className={cn(badgeVariants({ variant }), className)} {...props} />
-  )
+function Badge({ className, variant, children, ...props }: any) {
+  const classes = cn(badgeVariants({ variant }), className);
+  
+  return React.createElement("div", {
+    className: classes,
+    ...props
+  }, children);
 }
 
 export { Button, buttonVariants, Card, CardHeader, CardTitle, CardContent, Input, Textarea, Label, Badge, badgeVariants }
