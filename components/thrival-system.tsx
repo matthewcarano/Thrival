@@ -375,7 +375,7 @@ const calculateWeightedScore = (scores: any) => {
       return;
     }
     
-    setPrograms(prev => {
+    setPrograms((prev: any) => {
       const updated = { ...prev };
       delete updated[programId];
       return updated;
