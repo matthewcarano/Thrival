@@ -1188,5 +1188,3 @@ const ThrivalSystem = () => {
 };
 
 export default ThrivalSystem;
-
-export default ThrivalSystem;
