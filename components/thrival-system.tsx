@@ -1181,5 +1181,12 @@ const ThrivalSystem = () => {
     </Card>
   </div>
 </TabsContent>
+          </Tabs>
+      </div>
+    </div>
+  );
+};
+
+export default ThrivalSystem;
 
 export default ThrivalSystem;
