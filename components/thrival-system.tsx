@@ -30,7 +30,7 @@ const ThrivalSystem = () => {
   
   // Bulk processing state
   const [bulkFile, setBulkFile] = useState(null);
-  const [bulkResults, setBulkResults] = useState([]);
+  const [bulkResults, setBulkResults] = useState<any[]>([]);
   const [bulkProcessing, setBulkProcessing] = useState(false);
   
   // Settings state
