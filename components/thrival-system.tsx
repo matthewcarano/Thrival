@@ -34,7 +34,7 @@ const ThrivalSystem = () => {
   const [bulkProcessing, setBulkProcessing] = useState(false);
   
   // Settings state
-  const [programs, setPrograms] = useState({
+  const [programs, setPrograms] = useState<any>({
     program1: { 
       name: 'Program 1 - DeFi Innovation', 
       active: true,
