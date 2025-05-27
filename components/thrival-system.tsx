@@ -3,11 +3,14 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui';
 import { Button } from '@/components/ui';
 import { Input } from '@/components/ui';
 import { Textarea } from '@/components/ui';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/radix-components';
 import { Badge } from '@/components/ui';
 import { Switch } from '@/components/ui/radix-components';
-import { Label } from '@/components/ui/index';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/radix-components';
 import { AlertCircle, Settings, Users, FileText, History, Upload, Moon, Sun, Edit, Trash2, Plus, X, UserCheck, TrendingUp, Puzzle, Target, Lightbulb, Focus, ChevronDown, ChevronRight } from 'lucide-react';
+
+// Simple Label replacement
+const Label = ({ children, className }: any) => <div className={`text-sm font-medium ${className || ''}`}>{children}</div>;
 
 const ThrivalSystem = () => {
   // Core state
@@ -51,7 +54,7 @@ const ThrivalSystem = () => {
     }
   });
   
-  const [teamMembers, setTeamMembers] = useState([
+  const [teamMembers, setTeamMembers] = useState<any[]>([
     {
       id: 1,
       name: 'Admin User',
@@ -239,7 +242,7 @@ const ThrivalSystem = () => {
   };
 
   // Calculate weighted score
-const calculateWeightedScore = (scores: any) => {
+  const calculateWeightedScore = (scores: any) => {
     const totalWeightedScore = 
       (scores.team * criteriaWeights.team / 100) +
       (scores.evidence * criteriaWeights.evidence / 100) +
@@ -312,7 +315,7 @@ const calculateWeightedScore = (scores: any) => {
       };
       
       setEvaluationResult(evaluation);
-      setEvaluationHistory(prev => [evaluation, ...prev]);
+      setEvaluationHistory((prev: any) => [evaluation, ...prev]);
       
     } catch (error) {
       console.error('Evaluation error:', error);
@@ -368,7 +371,7 @@ const calculateWeightedScore = (scores: any) => {
   };
 
   const handleDeleteProgram = (programId: string) => {
-    const activePrograms = Object.entries(programs).filter(([, prog]: [string, any]) => prog.active);
+    const activePrograms = Object.entries(programs).filter(([, prog]) => (prog as any).active);
     if (activePrograms.length <= 1) {
       alert('Cannot delete the last active program.');
       return;
@@ -411,7 +414,7 @@ const calculateWeightedScore = (scores: any) => {
   };
 
   const handleDeleteTeamMember = (memberId: number) => {
-    setTeamMembers(prev => prev.filter(member => member.id !== memberId));
+    setTeamMembers((prev: any) => prev.filter((member: any) => member.id !== memberId));
   };
 
   // Weight management
@@ -461,10 +464,10 @@ const calculateWeightedScore = (scores: any) => {
             <h3 className="text-lg font-semibold mb-4">Add New Program</h3>
             <div className="space-y-4">
               <div>
-                <div className="text-sm font-medium">Program Name</div>
+                <Label>Program Name</Label>
                 <Input
                   value={newProgram.name}
-                  onChange={(e) => setNewProgram(prev => ({ ...prev, name: e.target.value }))}
+                  onChange={(e: any) => setNewProgram((prev: any) => ({ ...prev, name: e.target.value }))}
                   placeholder="e.g., Program 4 - AI & ML"
                   className={darkMode ? 'border-white/20' : ''}
                 />
@@ -473,7 +476,7 @@ const calculateWeightedScore = (scores: any) => {
                 <Label>Evaluation Criteria</Label>
                 <Textarea
                   value={newProgram.criteria}
-                  onChange={(e) => setNewProgram(prev => ({ ...prev, criteria: e.target.value }))}
+                  onChange={(e: any) => setNewProgram((prev: any) => ({ ...prev, criteria: e.target.value }))}
                   placeholder="Describe the program focus and evaluation priorities..."
                   rows={4}
                   className={darkMode ? 'border-white/20' : ''}
@@ -501,7 +504,7 @@ const calculateWeightedScore = (scores: any) => {
                 <Label>Name</Label>
                 <Input
                   value={newTeamMember.name}
-                  onChange={(e) => setNewTeamMember(prev => ({ ...prev, name: e.target.value }))}
+                  onChange={(e: any) => setNewTeamMember((prev: any) => ({ ...prev, name: e.target.value }))}
                   placeholder="Full name"
                   className={darkMode ? 'border-white/20' : ''}
                 />
@@ -511,7 +514,7 @@ const calculateWeightedScore = (scores: any) => {
                 <Input
                   type="email"
                   value={newTeamMember.email}
-                  onChange={(e) => setNewTeamMember(prev => ({ ...prev, email: e.target.value }))}
+                  onChange={(e: any) => setNewTeamMember((prev: any) => ({ ...prev, email: e.target.value }))}
                   placeholder="email@company.com"
                   className={darkMode ? 'border-white/20' : ''}
                 />
@@ -520,7 +523,7 @@ const calculateWeightedScore = (scores: any) => {
                 <Label>Role</Label>
                 <Select 
                   value={newTeamMember.role} 
-                  onValueChange={(value) => setNewTeamMember(prev => ({ ...prev, role: value }))}
+                  onValueChange={(value: any) => setNewTeamMember((prev: any) => ({ ...prev, role: value }))}
                 >
                   <SelectTrigger className={darkMode ? 'border-white/20' : ''}>
                     <SelectValue />
@@ -550,13 +553,13 @@ const calculateWeightedScore = (scores: any) => {
           <div className={`${darkMode ? 'bg-gray-800' : 'bg-white'} p-6 rounded-lg w-96 max-w-md`}>
             <h3 className="text-lg font-semibold mb-4">Confirm Delete</h3>
             <p className="mb-4">
-              Are you sure you want to delete "{deletingProgram && programs[deletingProgram]?.name}"?
+              Are you sure you want to delete "{programs[deletingProgram as any]?.name}"?
             </p>
             <div className="flex justify-end space-x-2">
               <Button variant="outline" onClick={() => setShowDeleteConfirm(false)}>
                 Cancel
               </Button>
-              <Button variant="destructive" onClick={() => deletingProgram && handleDeleteProgram(deletingProgram)}>
+              <Button variant="destructive" onClick={() => handleDeleteProgram(deletingProgram as any)}>
                 Delete
               </Button>
             </div>
@@ -611,7 +614,7 @@ const calculateWeightedScore = (scores: any) => {
                     <Textarea
                       placeholder="Paste the application text here..."
                       value={applicationText}
-                      onChange={(e) => setApplicationText(e.target.value)}
+                      onChange={(e: any) => setApplicationText(e.target.value)}
                       rows={20}
                       className={darkMode ? 'border-white/30' : ''}
                     />
@@ -663,7 +666,7 @@ const calculateWeightedScore = (scores: any) => {
                             }
                           };
                           
-                          const info = (criteriaInfo as any)[criterion];
+                          const info = criteriaInfo[criterion];
                           const IconComponent = info.icon;
                           
                           return (
@@ -698,7 +701,7 @@ const calculateWeightedScore = (scores: any) => {
                         <Input
                           placeholder="@username"
                           value={externalData.twitter}
-                          onChange={(e) => setExternalData(prev => ({ ...prev, twitter: e.target.value }))}
+                          onChange={(e: any) => setExternalData((prev: any) => ({ ...prev, twitter: e.target.value }))}
                           className={`text-xs h-8 ${darkMode ? 'border-white/20' : ''}`}
                         />
                       </div>
@@ -707,7 +710,7 @@ const calculateWeightedScore = (scores: any) => {
                         <Input
                           placeholder="github.com/user/repo"
                           value={externalData.github}
-                          onChange={(e) => setExternalData(prev => ({ ...prev, github: e.target.value }))}
+                          onChange={(e: any) => setExternalData((prev: any) => ({ ...prev, github: e.target.value }))}
                           className={`text-xs h-8 ${darkMode ? 'border-white/20' : ''}`}
                         />
                       </div>
@@ -716,7 +719,7 @@ const calculateWeightedScore = (scores: any) => {
                         <Input
                           placeholder="https://project.com"
                           value={externalData.website}
-                          onChange={(e) => setExternalData(prev => ({ ...prev, website: e.target.value }))}
+                          onChange={(e: any) => setExternalData((prev: any) => ({ ...prev, website: e.target.value }))}
                           className={`text-xs h-8 ${darkMode ? 'border-white/20' : ''}`}
                         />
                       </div>
@@ -771,7 +774,7 @@ const calculateWeightedScore = (scores: any) => {
                       id="bulk-file"
                       type="file"
                       accept=".csv"
-                      onChange={(e) => setBulkFile(e.target.files[0])}
+                      onChange={(e: any) => setBulkFile(e.target.files[0])}
                       className="hidden"
                     />
                   </div>
@@ -812,10 +815,10 @@ const calculateWeightedScore = (scores: any) => {
                           </tr>
                         </thead>
                         <tbody>
-                          {bulkResults.map((result, index) => (
+                          {bulkResults.map((result: any, index: number) => (
                             <tr key={result.id} className={index % 2 === 0 ? (darkMode ? 'bg-gray-800' : 'bg-white') : (darkMode ? 'bg-gray-750' : 'bg-gray-50')}>
                               <td className="px-4 py-3 font-medium">{result.name}</td>
-                              <td className="px-4 py-3">{(result as any).score}/10.0</td>
+                              <td className="px-4 py-3">{result.score}/10.0</td>
                               <td className="px-4 py-3">{result.percentage}%</td>
                               <td className="px-4 py-3">
                                 <Badge 
@@ -920,7 +923,7 @@ const calculateWeightedScore = (scores: any) => {
                                 {(result as any).score}/10
                               </Badge>
                               <Badge variant="outline" className={darkMode ? 'border-white/20' : ''}>
-                                {criteriaWeights[criterion]}% weight
+                                {(criteriaWeights as any)[criterion]}% weight
                               </Badge>
                             </div>
                           </div>
@@ -962,7 +965,7 @@ const calculateWeightedScore = (scores: any) => {
               <CardContent>
                 {evaluationHistory.length > 0 ? (
                   <div className="space-y-4">
-                    {evaluationHistory.map((evaluation) => (
+                    {evaluationHistory.map((evaluation: any) => (
                       <div key={evaluation.id} className={`p-4 rounded-lg border ${darkMode ? 'border-gray-600 bg-gray-700' : 'border-gray-200 bg-gray-50'}`}>
                         <div className="flex items-center justify-between mb-3">
                           <div>
@@ -1007,41 +1010,10 @@ const calculateWeightedScore = (scores: any) => {
           <TabsContent value="settings" className="space-y-6">
             <Card className={darkMode ? 'bg-gray-800 border-gray-700' : ''}>
               <CardContent className="p-6">
-                <div className="flex">
-                  <div className="w-64 pr-8 border-r border-gray-200 dark:border-gray-700">
-                    <h3 className="font-semibold mb-4 pt-4">Settings Categories</h3>
-                    <nav className="space-y-2">
-                      {[
-                        { id: 'prompts', label: 'Prompt Management', icon: FileText },
-                        { id: 'programs', label: 'Program Management', icon: Settings },
-                        { id: 'team', label: 'Team & Access', icon: Users },
-                        { id: 'grading', label: 'Grading Tiers', icon: Target },
-                        { id: 'system', label: 'System Configuration', icon: Settings }
-                      ].map(({ id, label, icon: Icon }) => (
-                        <button
-                          key={id}
-                          onClick={() => setSettingsSection(id)}
-                          className={`w-full flex items-center px-3 py-2 text-left rounded-lg transition-colors ${
-                            settingsSection === id 
-                              ? (darkMode ? 'bg-blue-600 text-white' : 'bg-blue-100 text-blue-700')
-                              : (darkMode ? 'text-gray-300 hover:bg-gray-700' : 'text-gray-700 hover:bg-gray-100')
-                          }`}
-                        >
-                          <Icon className="h-4 w-4 mr-3" />
-                          {label}
-                        </button>
-                      ))}
-                    </nav>
-                  </div>
-
-                  <div className="flex-1 pl-8 pt-4">
-                    {/* Settings content would continue here - truncated for length */}
-                    <div className="text-center py-8">
-                      <p className={darkMode ? 'text-gray-400' : 'text-gray-600'}>
-                        Settings interface will be rendered here based on selected section.
-                      </p>
-                    </div>
-                  </div>
+                <div className="text-center py-8">
+                  <p className={darkMode ? 'text-gray-400' : 'text-gray-600'}>
+                    Settings interface will be rendered here based on selected section.
+                  </p>
                 </div>
               </CardContent>
             </Card>
