@@ -24,9 +24,9 @@ const ThrivalSystem = () => {
     github: '',
     website: ''
   });
-  const [evaluationResult, setEvaluationResult] = useState(null);
+  const [evaluationResult, setEvaluationResult] = useState<any>(null);
   const [isEvaluating, setIsEvaluating] = useState(false);
-  const [evaluationHistory, setEvaluationHistory] = useState([]);
+  const [evaluationHistory, setEvaluationHistory] = useState<any[]>([]);
   
   // Bulk processing state
   const [bulkFile, setBulkFile] = useState(null);
