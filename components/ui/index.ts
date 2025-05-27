@@ -100,15 +100,17 @@ const Textarea = ({ className, ...props }: any) => {
 }
 
 // Label Component
-const Label = ({ className, ...props }: any) => (
-  <label
-    className={cn(
-      "text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70",
-      className
-    )}
-    {...props}
-  />
-)
+const Label = ({ className, ...props }: any) => {
+  return (
+    <label
+      className={cn(
+        "text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70",
+        className
+      )}
+      {...props}
+    />
+  )
+}
 
 // Badge Component
 const badgeVariants = cva(
