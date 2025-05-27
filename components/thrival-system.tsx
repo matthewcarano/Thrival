@@ -369,7 +369,7 @@ const calculateWeightedScore = (scores: any) => {
   };
 
   const handleDeleteProgram = (programId: string) => {
-    const activePrograms = Object.entries(programs).filter(([, prog]) => prog.active);
+    const activePrograms = Object.entries(programs).filter(([, prog]: [string, any]) => prog.active);
     if (activePrograms.length <= 1) {
       alert('Cannot delete the last active program.');
       return;
