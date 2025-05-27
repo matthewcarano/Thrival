@@ -3,7 +3,6 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui';
 import { Button } from '@/components/ui';
 import { Input } from '@/components/ui';
 import { Textarea } from '@/components/ui';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/radix-components';
 import { Badge } from '@/components/ui';
 import { Switch } from '@/components/ui/radix-components';
 import { Label } from '@/components/ui/index';
