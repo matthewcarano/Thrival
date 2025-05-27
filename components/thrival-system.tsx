@@ -579,9 +579,9 @@ const ThrivalSystem = () => {
           </TabsList>
 
           {/* Evaluate Tab */}
-          <TabsContent value="evaluate" className="space-y-6">
-           <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
-              <div className="xl:col-span-2 space-y-6">
+         <TabsContent value="evaluate" className="space-y-6">
+            <div className="space-y-6">
+              <div className="space-y-6">
                 {/* Program Selection */}
                 <Card className={darkMode ? 'bg-gray-800 border-gray-700' : ''}>
                   <CardHeader>
@@ -620,10 +620,9 @@ const ThrivalSystem = () => {
                     />
                   </CardContent>
                 </Card>
-              </div>
+             </div>
 
-              {/* Right Column - Evaluation Criteria and External Data Side by Side */}
-              <div className="space-y-4">
+              {/* Evaluation Criteria and External Data Side by Side */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {/* Evaluation Criteria */}
                   <Card className={darkMode ? 'bg-gray-800 border-gray-700' : ''}>
@@ -727,16 +726,15 @@ const ThrivalSystem = () => {
                   </Card>
                 </div>
 
-                {/* Start Evaluation Button */}
-                <div className="flex justify-start">
-                  <Button 
-                    onClick={handleEvaluate}
-                    disabled={isEvaluating}
-                    size="lg"
-                  >
-                    {isEvaluating ? 'Evaluating...' : 'Start Evaluation'}
-                  </Button>
-                </div>
+               {/* Start Evaluation Button */}
+              <div className="flex justify-center">
+                <Button 
+                  onClick={handleEvaluate}
+                  disabled={isEvaluating}
+                  size="lg"
+                >
+                  {isEvaluating ? 'Evaluating...' : 'Start Evaluation'}
+                </Button>
               </div>
             </div>
           </TabsContent>
