@@ -10,8 +10,6 @@
     "noImplicitThis": false,
     "suppressImplicitAnyIndexErrors": true,
     "noEmit": true,
-  // ... rest of your settings
-}
     "esModuleInterop": true,
     "module": "esnext",
     "moduleResolution": "bundler",
