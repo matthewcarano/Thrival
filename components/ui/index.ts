@@ -29,7 +29,7 @@ const buttonVariants = cva(
 )
 
 // Button Component
-const Button = ({ className, variant = "default", size = "default", children, ...props }: any) => {
+function Button({ className, variant = "default", size = "default", children, ...props }: any) {
   return (
     <button
       className={cn(buttonVariants({ variant, size, className }))}
@@ -38,42 +38,50 @@ const Button = ({ className, variant = "default", size = "default", children, ..
       {children}
     </button>
   );
-};
+}
 
 // Card Components
-const Card = ({ className, ...props }: any) => (
-  <div
-    className={cn(
-      "rounded-lg border bg-card text-card-foreground shadow-sm",
-      className
-    )}
-    {...props}
-  />
-)
+function Card({ className, ...props }: any) {
+  return (
+    <div
+      className={cn(
+        "rounded-lg border bg-card text-card-foreground shadow-sm",
+        className
+      )}
+      {...props}
+    />
+  )
+}
 
-const CardHeader = ({ className, ...props }: any) => (
-  <div
-    className={cn("flex flex-col space-y-1.5 p-6", className)}
-    {...props}
-  />
-)
+function CardHeader({ className, ...props }: any) {
+  return (
+    <div
+      className={cn("flex flex-col space-y-1.5 p-6", className)}
+      {...props}
+    />
+  )
+}
 
-const CardTitle = ({ className, ...props }: any) => (
-  <h3
-    className={cn(
-      "text-2xl font-semibold leading-none tracking-tight",
-      className
-    )}
-    {...props}
-  />
-)
+function CardTitle({ className, ...props }: any) {
+  return (
+    <h3
+      className={cn(
+        "text-2xl font-semibold leading-none tracking-tight",
+        className
+      )}
+      {...props}
+    />
+  )
+}
 
-const CardContent = ({ className, ...props }: any) => (
-  <div className={cn("p-6 pt-0", className)} {...props} />
-)
+function CardContent({ className, ...props }: any) {
+  return (
+    <div className={cn("p-6 pt-0", className)} {...props} />
+  )
+}
 
 // Input Component
-const Input = ({ className, type, ...props }: any) => {
+function Input({ className, type, ...props }: any) {
   return (
     <input
       type={type}
@@ -87,7 +95,7 @@ const Input = ({ className, type, ...props }: any) => {
 }
 
 // Textarea Component
-const Textarea = ({ className, ...props }: any) => {
+function Textarea({ className, ...props }: any) {
   return (
     <textarea
       className={cn(
@@ -100,7 +108,7 @@ const Textarea = ({ className, ...props }: any) => {
 }
 
 // Label Component
-const Label = ({ className, ...props }: any) => {
+function Label({ className, ...props }: any) {
   return (
     <label
       className={cn(
@@ -113,21 +121,11 @@ const Label = ({ className, ...props }: any) => {
 }
 
 // Badge Component
-const badgeVariants = cva(
-  "inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2",
-  {
-    variants: {
-      variant: {
-        default: "border-transparent bg-primary text-primary-foreground hover:bg-primary/80",
-        secondary: "border-transparent bg-secondary text-secondary-foreground hover:bg-secondary/80",
-        destructive: "border-transparent bg-destructive text-destructive-foreground hover:bg-destructive/80",
-        outline: "text-foreground",
-      },
-    },
-    defaultVariants: {
-      variant: "default",
-    },
-  }
+function Badge({ className, variant, ...props }: any) {
+  return (
+    <div className={cn(badgeVariants({ variant }), className)} {...props} />
+  )
+}
 )
 
 function Badge({ className, variant, ...props }: any) {
