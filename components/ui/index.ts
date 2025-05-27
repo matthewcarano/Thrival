@@ -81,19 +81,18 @@ function CardContent({ className, ...props }: any) {
 }
 
 // Input Component
-function Input({ className, type, ...props }: any) {
-  return (
-    <input
-      type={type}
-      className={cn(
-        "flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
-        className
-      )}
-      {...props}
-    />
-  )
+function Input({ className, type = "text", ...props }: any) {
+  const classes = cn(
+    "flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
+    className
+  );
+  
+  return React.createElement("input", {
+    type: type,
+    className: classes,
+    ...props
+  });
 }
-
 // Textarea Component
 function Textarea({ className, ...props }: any) {
   return (
