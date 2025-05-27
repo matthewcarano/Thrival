@@ -631,7 +631,7 @@ const calculateWeightedScore = (scores: any) => {
                     <CardContent className="pt-0">
                       <div className="space-y-4">
                         {Object.entries(criteriaWeights).map(([criterion, weight]) => {
-                          const criteriaInfo = {
+                          const criteriaInfo: {[key: string]: any} = {
                             team: {
                               icon: UserCheck,
                               title: 'Team',
@@ -664,7 +664,7 @@ const calculateWeightedScore = (scores: any) => {
                             }
                           };
                           
-                          const info = criteriaInfo[criterion];
+                          const info = (criteriaInfo as any)[criterion];
                           const IconComponent = info.icon;
                           
                           return (
