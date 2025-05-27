@@ -186,7 +186,7 @@ const ThrivalSystem = () => {
   const [expandedTiers, setExpandedTiers] = useState({});
 
   // Mock AI evaluation function
-  const evaluateWithAI = async (criterion, applicationText, programId) => {
+  const evaluateWithAI = async (criterion: string, applicationText: string, programId: string) => {
     await new Promise(resolve => setTimeout(resolve, 2000 + Math.random() * 1000));
     
     const baseScore = Math.floor(Math.random() * 4) + 4; // 4-7 base range
@@ -368,7 +368,7 @@ const ThrivalSystem = () => {
     setShowProgramEditor(false);
   };
 
-  const handleDeleteProgram = (programId) => {
+  const handleDeleteProgram = (programId: string) => {
     const activePrograms = Object.entries(programs).filter(([, prog]) => prog.active);
     if (activePrograms.length <= 1) {
       alert('Cannot delete the last active program.');
@@ -411,12 +411,12 @@ const ThrivalSystem = () => {
     setShowTeamEditor(false);
   };
 
-  const handleDeleteTeamMember = (memberId) => {
+  const handleDeleteTeamMember = (memberId: number) => {
     setTeamMembers(prev => prev.filter(member => member.id !== memberId));
   };
 
   // Weight management
-  const handleWeightChange = (criterion, value) => {
+  const handleWeightChange = (criterion: string, value: string) => {
     setCriteriaWeights(prev => ({
       ...prev,
       [criterion]: parseInt(value) || 0
