@@ -1,16 +1,6 @@
-import Head from 'next/head'
-import ThrivalSystem from '@/components/thrival-system'
+import '@/styles/globals.css'
+import type { AppProps } from 'next/app'
 
-export default function Home() {
-  return (
-    <>
-      <Head>
-        <title>Thrival - AI Evaluation System</title>
-        <meta name="description" content="AI-powered evaluation system for grant applications" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-      <ThrivalSystem />
-    </>
-  )
+export default function App({ Component, pageProps }: AppProps) {
+  return <Component {...pageProps} />
 }
