@@ -30,34 +30,19 @@ const buttonVariants = cva(
   }
 )
 
-export interface ButtonProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
-    VariantProps<typeof buttonVariants> {
-  asChild?: boolean
 }
 
-const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, asChild = false, children, ...props }, ref) => {
-    if (asChild) {
-      return (
-        <Slot ref={ref} className={cn(buttonVariants({ variant, size, className }))} {...props}>
-          {children}
-        </Slot>
-      );
-    }
-    
-    return (
-      <button
-        className={cn(buttonVariants({ variant, size, className }))}
-        ref={ref}
-        {...props}
-      >
-        {children}
-      </button>
-    );
-  }
-);
-Button.displayName = "Button"
+// Button Component
+const Button = ({ className, variant = "default", size = "default", children, ...props }: any) => {
+  return (
+    <button
+      className={cn(buttonVariants({ variant, size, className }))}
+      {...props}
+    >
+      {children}
+    </button>
+  );
+};
 
 // Card Components
 const Card = React.forwardRef<
