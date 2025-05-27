@@ -816,7 +816,7 @@ const calculateWeightedScore = (scores: any) => {
                           {bulkResults.map((result, index) => (
                             <tr key={result.id} className={index % 2 === 0 ? (darkMode ? 'bg-gray-800' : 'bg-white') : (darkMode ? 'bg-gray-750' : 'bg-gray-50')}>
                               <td className="px-4 py-3 font-medium">{result.name}</td>
-                              <td className="px-4 py-3">{result.score}/10.0</td>
+                              <td className="px-4 py-3">{(result as any).score}/10.0</td>
                               <td className="px-4 py-3">{result.percentage}%</td>
                               <td className="px-4 py-3">
                                 <Badge 
