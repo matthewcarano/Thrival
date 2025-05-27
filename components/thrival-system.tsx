@@ -551,7 +551,7 @@ const calculateWeightedScore = (scores: any) => {
           <div className={`${darkMode ? 'bg-gray-800' : 'bg-white'} p-6 rounded-lg w-96 max-w-md`}>
             <h3 className="text-lg font-semibold mb-4">Confirm Delete</h3>
             <p className="mb-4">
-              Are you sure you want to delete "{programs[deletingProgram]?.name}"?
+              Are you sure you want to delete "{deletingProgram && programs[deletingProgram]?.name}"?
             </p>
             <div className="flex justify-end space-x-2">
               <Button variant="outline" onClick={() => setShowDeleteConfirm(false)}>
