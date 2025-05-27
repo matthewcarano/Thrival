@@ -240,7 +240,7 @@ const ThrivalSystem = () => {
   };
 
   // Calculate weighted score
-  const calculateWeightedScore = (scores) => {
+const calculateWeightedScore = (scores: any) => {
     const totalWeightedScore = 
       (scores.team * criteriaWeights.team / 100) +
       (scores.evidence * criteriaWeights.evidence / 100) +
