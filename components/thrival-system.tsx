@@ -271,7 +271,7 @@ const calculateWeightedScore = (scores: any) => {
     
     try {
       const criteria = ['team', 'evidence', 'fit', 'need', 'novelty', 'focus'];
-      const results = {};
+      const results: any = {};
       
       for (const criterion of criteria) {
         const result = await evaluateWithAI(criterion, applicationText, selectedProgram);
