@@ -557,7 +557,7 @@ const calculateWeightedScore = (scores: any) => {
               <Button variant="outline" onClick={() => setShowDeleteConfirm(false)}>
                 Cancel
               </Button>
-              <Button variant="destructive" onClick={() => handleDeleteProgram(deletingProgram)}>
+              <Button variant="destructive" onClick={() => deletingProgram && handleDeleteProgram(deletingProgram)}>
                 Delete
               </Button>
             </div>
