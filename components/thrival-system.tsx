@@ -918,7 +918,7 @@ const calculateWeightedScore = (scores: any) => {
                             <h3 className="font-semibold capitalize text-lg">{criterion}</h3>
                             <div className="flex items-center space-x-2">
                               <Badge variant="outline" className="text-lg px-3 py-1">
-                                {result.score}/10
+                                {(result as any).score}/10
                               </Badge>
                               <Badge variant="outline" className={darkMode ? 'border-white/20' : ''}>
                                 {criteriaWeights[criterion]}% weight
@@ -926,7 +926,7 @@ const calculateWeightedScore = (scores: any) => {
                             </div>
                           </div>
                           <p className={`text-sm leading-relaxed ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
-                            {result.feedback}
+                            {(result as any).feedback}
                           </p>
                         </div>
                       ))}
