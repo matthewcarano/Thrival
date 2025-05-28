@@ -197,7 +197,6 @@ const [newProgram, setNewProgram] = useState({
   }
 });
 
-// Update the handleAddProgram function (find this function and replace it)
 const handleAddProgram = () => {
   if (!newProgram.name.trim() || !newProgram.criteria.trim()) {
     alert('Please fill in both program name and focus description.');
@@ -406,27 +405,6 @@ const handleAddProgram = () => {
     
     setBulkResults(mockResults);
     setBulkProcessing(false);
-  };
-
-  // Program management
-  const handleAddProgram = () => {
-    if (!newProgram.name.trim() || !newProgram.criteria.trim()) {
-      alert('Please fill in both program name and criteria.');
-      return;
-    }
-    
-    const programId = `program${Date.now()}`;
-    setPrograms((prev: any) => ({
-      ...prev,
-      [programId]: {
-        name: newProgram.name,
-        criteria: newProgram.criteria,
-        active: true
-      }
-    }));
-    
-    setNewProgram({ name: '', criteria: '' });
-    setShowProgramEditor(false);
   };
 
   const handleDeleteProgram = (programId: string) => {
