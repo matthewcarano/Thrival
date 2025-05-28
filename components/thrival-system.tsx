@@ -790,7 +790,18 @@ const handleAddProgram = () => {
         <div className="flex justify-end space-x-4 pt-6 border-t border-gray-300 dark:border-gray-600">
           <Button variant="outline" onClick={() => {
             setShowProgramEditor(false);
-            setNewProgram({ name: '', criteria: '', prompts: {} });
+            setNewProgram({ 
+                name: '', 
+                criteria: '', 
+                prompts: {
+                  team: '',
+                  evidence: '',
+                  fit: '',  
+                  need: '',
+                  novelty: '', 
+                  focus: ''
+                }
+              });
           }}>
             Cancel
           </Button>
