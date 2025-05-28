@@ -183,7 +183,81 @@ const ThrivalSystem = () => {
   const [editingProgram, setEditingProgram] = useState(null);
   const [editingTeamMember, setEditingTeamMember] = useState(null);
   const [deletingProgram, setDeletingProgram] = useState(null);
-  const [newProgram, setNewProgram] = useState({ name: '', criteria: '' });
+ // Update the newProgram state initialization (find this line and replace it)
+const [newProgram, setNewProgram] = useState({ 
+  name: '', 
+  criteria: '', 
+  prompts: {
+    team: '',
+    evidence: '',
+    fit: '',
+    need: '',
+    novelty: '',
+    focus: ''
+  }
+});
+
+// Update the handleAddProgram function (find this function and replace it)
+// Update the newProgram state initialization (find this line and replace it)
+const [newProgram, setNewProgram] = useState({ 
+  name: '', 
+  criteria: '', 
+  prompts: {
+    team: '',
+    evidence: '',
+    fit: '',
+    need: '',
+    novelty: '',
+    focus: ''
+  }
+});
+
+// Update the handleAddProgram function (find this function and replace it)
+const handleAddProgram = () => {
+  if (!newProgram.name.trim() || !newProgram.criteria.trim()) {
+    alert('Please fill in both program name and focus description.');
+    return;
+  }
+  
+  if (getTotalWeight() !== 100) {
+    alert('Criteria weights must total exactly 100%.');
+    return;
+  }
+  
+  const programId = `program${Date.now()}`;
+  setPrograms((prev: any) => ({
+    ...prev,
+    [programId]: {
+      name: newProgram.name,
+      criteria: newProgram.criteria,
+      active: true,
+      weights: { ...criteriaWeights },
+      prompts: {
+        team: newProgram.prompts.team || prompts.team.default,
+        evidence: newProgram.prompts.evidence || prompts.evidence.default,
+        fit: newProgram.prompts.fit || prompts.fit.default,
+        need: newProgram.prompts.need || prompts.need.default,
+        novelty: newProgram.prompts.novelty || prompts.novelty.default,
+        focus: newProgram.prompts.focus || prompts.focus.default
+      }
+    }
+  }));
+  
+  // Reset form
+  setNewProgram({ 
+    name: '', 
+    criteria: '', 
+    prompts: {
+      team: '',
+      evidence: '',
+      fit: '',
+      need: '',
+      novelty: '',
+      focus: ''
+    }
+  });
+  setShowProgramEditor(false);
+};
   const [newTeamMember, setNewTeamMember] = useState({ name: '', email: '', role: 'Evaluator' });
   const [expandedTiers, setExpandedTiers] = useState({});
 
@@ -458,42 +532,316 @@ const ThrivalSystem = () => {
       </header>
 
       {/* Modals */}
-      {showProgramEditor && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className={`${darkMode ? 'bg-gray-800' : 'bg-white'} p-6 rounded-lg w-96 max-w-md`}>
-            <h3 className="text-lg font-semibold mb-4">Add New Program</h3>
-            <div className="space-y-4">
-              <div>
-                <Label>Program Name</Label>
-                <Input
-                  value={newProgram.name}
-                  onChange={(e: any) => setNewProgram((prev: any) => ({ ...prev, name: e.target.value }))}
-                  placeholder="e.g., Program 4 - AI & ML"
-                  className={darkMode ? 'border-white/20' : ''}
-                />
-              </div>
-              <div>
-                <Label>Evaluation Criteria</Label>
-                <Textarea
-                  value={newProgram.criteria}
-                  onChange={(e: any) => setNewProgram((prev: any) => ({ ...prev, criteria: e.target.value }))}
-                  placeholder="Describe the program focus and evaluation priorities..."
-                  rows={4}
-                  className={darkMode ? 'border-white/20' : ''}
-                />
-              </div>
-              <div className="flex justify-end space-x-2">
-                <Button variant="outline" onClick={() => setShowProgramEditor(false)}>
-                  Cancel
-                </Button>
-                <Button onClick={handleAddProgram}>
-                  Add Program
-                </Button>
-              </div>
-            </div>
+    {showProgramEditor && (
+  <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div className={`${darkMode ? 'bg-gray-800' : 'bg-white'} p-6 rounded-lg w-full max-w-4xl max-h-[90vh] overflow-y-auto`}>
+      <h3 className="text-xl font-semibold mb-6">Create New Evaluation Program</h3>
+      
+      <div className="space-y-6">
+        {/* Basic Program Info */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <Label className="text-base font-medium">Program Name</Label>
+            <Input
+              value={newProgram.name}
+              onChange={(e: any) => setNewProgram((prev: any) => ({ ...prev, name: e.target.value }))}
+              placeholder="e.g., Program 4 - AI & Machine Learning"
+              className={darkMode ? 'border-white/20' : ''}
+            />
+          </div>
+          <div>
+            <Label className="text-base font-medium">Program Focus</Label>
+            <Input
+              value={newProgram.criteria}
+              onChange={(e: any) => setNewProgram((prev: any) => ({ ...prev, criteria: e.target.value }))}
+              placeholder="Brief description of program focus..."
+              className={darkMode ? 'border-white/20' : ''}
+            />
           </div>
         </div>
-      )}
+
+        {/* Criteria Weights */}
+        <div className={`p-4 rounded-lg ${darkMode ? 'bg-gray-700' : 'bg-gray-50'}`}>
+          <h4 className="text-lg font-semibold mb-4">Evaluation Criteria Weights</h4>
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+            {Object.entries(criteriaWeights).map(([criterion, weight]) => (
+              <div key={criterion} className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <Label className="capitalize font-medium">{criterion}</Label>
+                  <span className="text-sm font-medium">{weight}%</span>
+                </div>
+                <Input
+                  type="number"
+                  min="0"
+                  max="100"
+                  value={weight}
+                  onChange={(e: any) => handleWeightChange(criterion, e.target.value)}
+                  className={`text-center ${darkMode ? 'border-white/20' : ''}`}
+                />
+              </div>
+            ))}
+          </div>
+          <div className="mt-4 pt-4 border-t border-gray-300 dark:border-gray-600">
+            <p className={`text-sm font-medium ${getTotalWeight() === 100 ? 'text-green-600' : 'text-red-600'}`}>
+              Total Weight: {getTotalWeight()}% {getTotalWeight() !== 100 && '(Must equal 100%)'}
+            </p>
+          </div>
+        </div>
+
+        {/* Custom Evaluation Prompts */}
+        <div>
+          <h4 className="text-lg font-semibold mb-4">Custom Evaluation Prompts</h4>
+          <p className={`text-sm mb-4 ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+            Customize how Claude evaluates each criterion for this specific program.
+          </p>
+          
+          <Tabs defaultValue="team" className="w-full">
+            <TabsList className="grid w-full grid-cols-6 mb-4">
+              <TabsTrigger value="team">Team</TabsTrigger>
+              <TabsTrigger value="evidence">Evidence</TabsTrigger>
+              <TabsTrigger value="fit">Fit</TabsTrigger>
+              <TabsTrigger value="need">Need</TabsTrigger>
+              <TabsTrigger value="novelty">Novelty</TabsTrigger>
+              <TabsTrigger value="focus">Focus</TabsTrigger>
+            </TabsList>
+
+            {/* Team Prompt */}
+            <TabsContent value="team" className="space-y-4">
+              <div className="flex items-center justify-between">
+                <Label className="text-base font-medium">Team Evaluation Prompt ({criteriaWeights.team}% weight)</Label>
+                <Button variant="outline" size="sm" onClick={() => {
+                  setNewProgram((prev: any) => ({
+                    ...prev,
+                    prompts: {
+                      ...prev.prompts,
+                      team: prompts.team.default
+                    }
+                  }));
+                }}>
+                  Use Default
+                </Button>
+              </div>
+              <Textarea
+                value={newProgram.prompts?.team || prompts.team.default}
+                onChange={(e: any) => setNewProgram((prev: any) => ({
+                  ...prev,
+                  prompts: {
+                    ...prev.prompts,
+                    team: e.target.value
+                  }
+                }))}
+                rows={8}
+                className={`${darkMode ? 'border-white/20 bg-gray-900' : ''} text-sm`}
+                placeholder="Enter custom prompt for evaluating team background, experience, and execution ability..."
+              />
+              <div className={`p-3 rounded-lg ${darkMode ? 'bg-blue-900/20 border-blue-500/20' : 'bg-blue-50 border-blue-200'} border`}>
+                <p className="text-xs">
+                  <strong>Tip:</strong> Be specific about what team qualities matter most for this program (e.g., DeFi experience, technical depth, previous exits).
+                </p>
+              </div>
+            </TabsContent>
+
+            {/* Evidence Prompt */}
+            <TabsContent value="evidence" className="space-y-4">
+              <div className="flex items-center justify-between">
+                <Label className="text-base font-medium">Evidence Evaluation Prompt ({criteriaWeights.evidence}% weight)</Label>
+                <Button variant="outline" size="sm" onClick={() => {
+                  setNewProgram((prev: any) => ({
+                    ...prev,
+                    prompts: {
+                      ...prev.prompts,
+                      evidence: prompts.evidence.default
+                    }
+                  }));
+                }}>
+                  Use Default
+                </Button>
+              </div>
+              <Textarea
+                value={newProgram.prompts?.evidence || prompts.evidence.default}
+                onChange={(e: any) => setNewProgram((prev: any) => ({
+                  ...prev,
+                  prompts: {
+                    ...prev.prompts,
+                    evidence: e.target.value
+                  }
+                }))}
+                rows={8}
+                className={`${darkMode ? 'border-white/20 bg-gray-900' : ''} text-sm`}
+                placeholder="Enter custom prompt for evaluating traction metrics and performance evidence..."
+              />
+              <div className={`p-3 rounded-lg ${darkMode ? 'bg-blue-900/20 border-blue-500/20' : 'bg-blue-50 border-blue-200'} border`}>
+                <p className="text-xs">
+                  <strong>Tip:</strong> Specify which metrics matter most (TVL, users, revenue, partnerships) and verification methods.
+                </p>
+              </div>
+            </TabsContent>
+
+            {/* Fit Prompt */}
+            <TabsContent value="fit" className="space-y-4">
+              <div className="flex items-center justify-between">
+                <Label className="text-base font-medium">Ecosystem Fit Prompt ({criteriaWeights.fit}% weight)</Label>
+                <Button variant="outline" size="sm" onClick={() => {
+                  setNewProgram((prev: any) => ({
+                    ...prev,
+                    prompts: {
+                      ...prev.prompts,
+                      fit: prompts.fit.default
+                    }
+                  }));
+                }}>
+                  Use Default
+                </Button>
+              </div>
+              <Textarea
+                value={newProgram.prompts?.fit || prompts.fit.default}
+                onChange={(e: any) => setNewProgram((prev: any) => ({
+                  ...prev,
+                  prompts: {
+                    ...prev.prompts,
+                    fit: e.target.value
+                  }
+                }))}
+                rows={8}
+                className={`${darkMode ? 'border-white/20 bg-gray-900' : ''} text-sm`}
+                placeholder="Enter custom prompt for evaluating ecosystem integration and alignment..."
+              />
+              <div className={`p-3 rounded-lg ${darkMode ? 'bg-blue-900/20 border-blue-500/20' : 'bg-blue-50 border-blue-200'} border`}>
+                <p className="text-xs">
+                  <strong>Tip:</strong> Define what makes a project a good fit for your specific ecosystem or platform.
+                </p>
+              </div>
+            </TabsContent>
+
+            {/* Need Prompt */}
+            <TabsContent value="need" className="space-y-4">
+              <div className="flex items-center justify-between">
+                <Label className="text-base font-medium">Market Need Prompt ({criteriaWeights.need}% weight)</Label>
+                <Button variant="outline" size="sm" onClick={() => {
+                  setNewProgram((prev: any) => ({
+                    ...prev,
+                    prompts: {
+                      ...prev.prompts,
+                      need: prompts.need.default
+                    }
+                  }));
+                }}>
+                  Use Default
+                </Button>
+              </div>
+              <Textarea
+                value={newProgram.prompts?.need || prompts.need.default}
+                onChange={(e: any) => setNewProgram((prev: any) => ({
+                  ...prev,
+                  prompts: {
+                    ...prev.prompts,
+                    need: e.target.value
+                  }
+                }))}
+                rows={8}
+                className={`${darkMode ? 'border-white/20 bg-gray-900' : ''} text-sm`}
+                placeholder="Enter custom prompt for evaluating market gaps and demand..."
+              />
+              <div className={`p-3 rounded-lg ${darkMode ? 'bg-blue-900/20 border-blue-500/20' : 'bg-blue-50 border-blue-200'} border`}>
+                <p className="text-xs">
+                  <strong>Tip:</strong> Specify what problems or gaps this program should address and how to identify real demand.
+                </p>
+              </div>
+            </TabsContent>
+
+            {/* Novelty Prompt */}
+            <TabsContent value="novelty" className="space-y-4">
+              <div className="flex items-center justify-between">
+                <Label className="text-base font-medium">Innovation & Novelty Prompt ({criteriaWeights.novelty}% weight)</Label>
+                <Button variant="outline" size="sm" onClick={() => {
+                  setNewProgram((prev: any) => ({
+                    ...prev,
+                    prompts: {
+                      ...prev.prompts,
+                      novelty: prompts.novelty.default
+                    }
+                  }));
+                }}>
+                  Use Default
+                </Button>
+              </div>
+              <Textarea
+                value={newProgram.prompts?.novelty || prompts.novelty.default}
+                onChange={(e: any) => setNewProgram((prev: any) => ({
+                  ...prev,
+                  prompts: {
+                    ...prev.prompts,
+                    novelty: e.target.value
+                  }
+                }))}
+                rows={8}
+                className={`${darkMode ? 'border-white/20 bg-gray-900' : ''} text-sm`}
+                placeholder="Enter custom prompt for evaluating innovation and differentiation..."
+              />
+              <div className={`p-3 rounded-lg ${darkMode ? 'bg-blue-900/20 border-blue-500/20' : 'bg-blue-50 border-blue-200'} border`}>
+                <p className="text-xs">
+                  <strong>Tip:</strong> Define what level of innovation you're looking for - breakthrough vs incremental improvements.
+                </p>
+              </div>
+            </TabsContent>
+
+            {/* Focus Prompt */}
+            <TabsContent value="focus" className="space-y-4">
+              <div className="flex items-center justify-between">
+                <Label className="text-base font-medium">Strategic Focus Prompt ({criteriaWeights.focus}% weight)</Label>
+                <Button variant="outline" size="sm" onClick={() => {
+                  setNewProgram((prev: any) => ({
+                    ...prev,
+                    prompts: {
+                      ...prev.prompts,
+                      focus: prompts.focus.default
+                    }
+                  }));
+                }}>
+                  Use Default
+                </Button>
+              </div>
+              <Textarea
+                value={newProgram.prompts?.focus || prompts.focus.default}
+                onChange={(e: any) => setNewProgram((prev: any) => ({
+                  ...prev,
+                  prompts: {
+                    ...prev.prompts,
+                    focus: e.target.value
+                  }
+                }))}
+                rows={8}
+                className={`${darkMode ? 'border-white/20 bg-gray-900' : ''} text-sm`}
+                placeholder="Enter custom prompt for evaluating strategic alignment..."
+              />
+              <div className={`p-3 rounded-lg ${darkMode ? 'bg-blue-900/20 border-blue-500/20' : 'bg-blue-50 border-blue-200'} border`}>
+                <p className="text-xs">
+                  <strong>Tip:</strong> Specify your strategic priorities and how projects should align with your goals.
+                </p>
+              </div>
+            </TabsContent>
+          </Tabs>
+        </div>
+
+        {/* Action Buttons */}
+        <div className="flex justify-end space-x-4 pt-6 border-t border-gray-300 dark:border-gray-600">
+          <Button variant="outline" onClick={() => {
+            setShowProgramEditor(false);
+            setNewProgram({ name: '', criteria: '', prompts: {} });
+          }}>
+            Cancel
+          </Button>
+          <Button 
+            onClick={handleAddProgram}
+            disabled={!newProgram.name.trim() || !newProgram.criteria.trim() || getTotalWeight() !== 100}
+          >
+            Create Program
+          </Button>
+        </div>
+      </div>
+    </div>
+  </div>
+)}
 
       {showTeamEditor && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
