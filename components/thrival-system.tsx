@@ -198,21 +198,6 @@ const [newProgram, setNewProgram] = useState({
 });
 
 // Update the handleAddProgram function (find this function and replace it)
-// Update the newProgram state initialization (find this line and replace it)
-const [newProgram, setNewProgram] = useState({ 
-  name: '', 
-  criteria: '', 
-  prompts: {
-    team: '',
-    evidence: '',
-    fit: '',
-    need: '',
-    novelty: '',
-    focus: ''
-  }
-});
-
-// Update the handleAddProgram function (find this function and replace it)
 const handleAddProgram = () => {
   if (!newProgram.name.trim() || !newProgram.criteria.trim()) {
     alert('Please fill in both program name and focus description.');
