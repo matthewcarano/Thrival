@@ -496,7 +496,7 @@ const handleEditProgram = (programId: string, programs: any, setNewProgram: any,
   setShowProgramEditor(true);
 };
 
-  const handleDeleteProgram = (programId: string) => {
+  const handleDeleteProgram = (programId: string, programs: any, setPrograms: any, selectedProgram: string, setSelectedProgram: any, setShowDeleteConfirm: any, setDeletingProgram: any) => {
     const activePrograms = Object.entries(programs).filter(([, prog]) => (prog as any).active);
     if (activePrograms.length <= 1) {
       alert('Cannot delete the last active program.');
@@ -980,7 +980,7 @@ const handleEditProgram = (programId: string, programs: any, setNewProgram: any,
               <Button variant="outline" onClick={() => setShowDeleteConfirm(false)}>
                 Cancel
               </Button>
-              <Button variant="destructive" onClick={() => handleDeleteProgram(deletingProgram as any)}>
+              <Button variant="destructive" onClick={() => handleDeleteProgram(deletingProgram as any, programs, setPrograms, selectedProgram, setSelectedProgram, setShowDeleteConfirm, setDeletingProgram)}>
                 Delete
               </Button>
             </div>
