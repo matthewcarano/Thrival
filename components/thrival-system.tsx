@@ -660,7 +660,7 @@ const handleEditProgram = (programId: string, programs: any, setNewProgram: any,
           </div>
         </div>
 
-        {/* Custom Evaluation Prompts - Now Optional/Advanced */}
+        {/* Custom Evaluation Prompts - Now Optional/Advanced - Updated */}
         <div>
           <h4 className="text-lg font-semibold mb-2">Advanced: Custom Criterion Prompts (Optional)</h4>
           <p className={`text-sm mb-4 ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
