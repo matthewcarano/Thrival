@@ -980,6 +980,7 @@ const handleEditProgram = (programId: string, programs: any, setNewProgram: any,
       )}
 
       {/* Main Content */}
+      {/* DEBUG: Main tabs start here */}
       <div className="container mx-auto px-6 py-8">
         <Tabs value={activeTab} onValueChange={setActiveTab}>
           <TabsList className="grid w-full grid-cols-5">
