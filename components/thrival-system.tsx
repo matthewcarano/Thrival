@@ -304,7 +304,7 @@ setNewProgram({
   const [expandedTiers, setExpandedTiers] = useState({});
 
   // Mock AI evaluation function
-  const evaluateWithAI = async (criterion: string, applicationText: string, programId: string) => {
+  const evaluateWithAI = async (criterion: string, applicationText: string, programId: string, externalData: any) => {
     await new Promise(resolve => setTimeout(resolve, 2000 + Math.random() * 1000));
     
     const baseScore = Math.floor(Math.random() * 4) + 4; // 4-7 base range
@@ -392,7 +392,7 @@ setNewProgram({
       const results: any = {};
       
       for (const criterion of criteria) {
-        const result = await evaluateWithAI(criterion, applicationText, selectedProgram);
+        const result = await evaluateWithAI(criterion, applicationText, selectedProgram, externalData);
         results[criterion] = result;
       }
       
