@@ -300,33 +300,6 @@ setNewProgram({
   setShowProgramEditor(false);
 };
 
-const handleEditProgram = (programId: string) => {
-  const program = programs[programId];
-  setNewProgram({
-    name: program.name,
-    criteria: program.criteria || '',
-    mainCriteria: program.mainCriteria || '',
-    prompts: {
-      team: program.prompts?.team || '',
-      evidence: program.prompts?.evidence || '',
-      fit: program.prompts?.fit || '',
-      need: program.prompts?.need || '',
-      novelty: program.prompts?.novelty || '',
-      focus: program.prompts?.focus || ''
-    },
-    weights: {
-      team: program.weights?.team || 20,
-      evidence: program.weights?.evidence || 20,
-      fit: program.weights?.fit || 15,
-      need: program.weights?.need || 15,
-      novelty: program.weights?.novelty || 15,
-      focus: program.weights?.focus || 15
-    }
-  });
-  setEditingProgram(programId);
-  setShowProgramEditor(true);
-};
-
   const [newTeamMember, setNewTeamMember] = useState({ name: '', email: '', role: 'Evaluator' });
   const [expandedTiers, setExpandedTiers] = useState({});
 
@@ -513,6 +486,33 @@ const handleEditProgram = (programId: string) => {
     setShowDeleteConfirm(false);
     setDeletingProgram(null);
   };
+
+const handleEditProgram = (programId: string) => {
+  const program = programs[programId];
+  setNewProgram({
+    name: program.name,
+    criteria: program.criteria || '',
+    mainCriteria: program.mainCriteria || '',
+    prompts: {
+      team: program.prompts?.team || '',
+      evidence: program.prompts?.evidence || '',
+      fit: program.prompts?.fit || '',
+      need: program.prompts?.need || '',
+      novelty: program.prompts?.novelty || '',
+      focus: program.prompts?.focus || ''
+    },
+    weights: {
+      team: program.weights?.team || 20,
+      evidence: program.weights?.evidence || 20,
+      fit: program.weights?.fit || 15,
+      need: program.weights?.need || 15,
+      novelty: program.weights?.novelty || 15,
+      focus: program.weights?.focus || 15
+    }
+  });
+  setEditingProgram(programId);
+  setShowProgramEditor(true);
+};
 
   // Team management
   const handleAddTeamMember = () => {
