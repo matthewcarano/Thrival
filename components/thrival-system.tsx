@@ -551,7 +551,7 @@ const handleEditProgram = (programId: string, programs: any, setNewProgram: any,
     }));
   };
 
-  const getTotalWeight = () => {
+  const getTotalWeight = (criteriaWeights: any) => {
     return Object.values(criteriaWeights).reduce((sum, weight) => sum + weight, 0);
   };
 
@@ -1476,8 +1476,8 @@ const handleEditProgram = (programId: string, programs: any, setNewProgram: any,
     </Card>
 
         <div className="pt-2 border-t">
-          <p className={`text-sm ${getTotalWeight() === 100 ? 'text-green-600' : 'text-red-600'}`}>
-            Total: {getTotalWeight()}% {getTotalWeight() !== 100 && '(Must equal 100%)'}
+          <p className={`text-sm ${getTotalWeight(criteriaWeights) === 100 ? 'text-green-600' : 'text-red-600'}`}>
+            Total: {getTotalWeight(criteriaWeights)}% {getTotalWeight(criteriaWeights) !== 100 && '(Must equal 100%)'}
           </p>
         </div>
       </CardContent>
