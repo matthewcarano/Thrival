@@ -519,7 +519,7 @@ const handleEditProgram = (programId: string, programs: any, setNewProgram: any,
   };
 
   // Team management
-  const handleAddTeamMember = () => {
+  const handleAddTeamMember = (newTeamMember: any, setTeamMembers: any, setNewTeamMember: any, setShowTeamEditor: any) => {
     if (!newTeamMember.name.trim() || !newTeamMember.email.trim()) {
       alert('Please fill in both name and email.');
       return;
@@ -960,7 +960,7 @@ const handleEditProgram = (programId: string, programs: any, setNewProgram: any,
                 <Button variant="outline" onClick={() => setShowTeamEditor(false)}>
                   Cancel
                 </Button>
-                <Button onClick={handleAddTeamMember}>
+                <Button onClick={() => handleAddTeamMember(newTeamMember, setTeamMembers, setNewTeamMember, setShowTeamEditor)}
                   Add Member
                 </Button>
               </div>
