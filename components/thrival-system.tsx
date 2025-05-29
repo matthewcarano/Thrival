@@ -1579,7 +1579,7 @@ const handleEditProgram = (programId: string, programs: any, setNewProgram: any,
     </Card>
   </div>
 </TabsContent>
-          </Tabs>
+        </Tabs>
       </div>
     </div>
   );
