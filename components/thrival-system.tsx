@@ -544,7 +544,7 @@ const handleEditProgram = (programId: string, programs: any, setNewProgram: any,
   };
 
   // Weight management
-  const handleWeightChange = (criterion: string, value: string) => {
+  const handleWeightChange = (criterion: string, value: string, setCriteriaWeights: any) => {
     setCriteriaWeights((prev: any) => ({
       ...prev,
       [criterion]: parseInt(value) || 0
