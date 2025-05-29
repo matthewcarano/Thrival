@@ -358,14 +358,14 @@ setNewProgram({
   };
 
   // Calculate weighted score
-  const calculateWeightedScore = (scores: any) => {
+  const calculateWeightedScore = (scores: any, weights: any) => {
     const totalWeightedScore = 
-      (scores.team * criteriaWeights.team / 100) +
-      (scores.evidence * criteriaWeights.evidence / 100) +
-      (scores.fit * criteriaWeights.fit / 100) +
-      (scores.need * criteriaWeights.need / 100) +
-      (scores.novelty * criteriaWeights.novelty / 100) +
-      (scores.focus * criteriaWeights.focus / 100);
+        (scores.team * weights.team / 100) +
+        (scores.evidence * weights.evidence / 100) +
+        (scores.fit * weights.fit / 100) +
+        (scores.need * weights.need / 100) +
+        (scores.novelty * weights.novelty / 100) +
+        (scores.focus * weights.focus / 100);
     
     const maxPossibleScore = 10;
     const percentage = Math.round((totalWeightedScore / maxPossibleScore) * 100);
