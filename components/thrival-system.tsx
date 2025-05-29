@@ -465,28 +465,6 @@ setNewProgram({
     setBulkProcessing(false);
   };
 
-  const handleDeleteProgram = (programId: string) => {
-    const activePrograms = Object.entries(programs).filter(([, prog]) => (prog as any).active);
-    if (activePrograms.length <= 1) {
-      alert('Cannot delete the last active program.');
-      return;
-    }
-    
-    setPrograms((prev: any) => {
-      const updated = { ...prev };
-      delete updated[programId];
-      return updated;
-    });
-    
-    if (selectedProgram === programId) {
-      const remainingPrograms = Object.keys(programs).filter(id => id !== programId);
-      setSelectedProgram(remainingPrograms[0]);
-    }
-    
-    setShowDeleteConfirm(false);
-    setDeletingProgram(null);
-  };
-
 const handleEditProgram = (programId: string) => {
   const program = programs[programId];
   setNewProgram({
@@ -513,6 +491,28 @@ const handleEditProgram = (programId: string) => {
   setEditingProgram(programId);
   setShowProgramEditor(true);
 };
+
+  const handleDeleteProgram = (programId: string) => {
+    const activePrograms = Object.entries(programs).filter(([, prog]) => (prog as any).active);
+    if (activePrograms.length <= 1) {
+      alert('Cannot delete the last active program.');
+      return;
+    }
+    
+    setPrograms((prev: any) => {
+      const updated = { ...prev };
+      delete updated[programId];
+      return updated;
+    });
+    
+    if (selectedProgram === programId) {
+      const remainingPrograms = Object.keys(programs).filter(id => id !== programId);
+      setSelectedProgram(remainingPrograms[0]);
+    }
+    
+    setShowDeleteConfirm(false);
+    setDeletingProgram(null);
+  };
 
   // Team management
   const handleAddTeamMember = () => {
