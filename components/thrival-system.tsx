@@ -862,7 +862,7 @@ const handleEditProgram = (programId: string, programs: any, setNewProgram: any,
                 placeholder="Optional: Custom prompt for evaluating strategic alignment. Leave blank to use default."
               />
             </TabsContent>
-          </Tabs>
+        
         </div>
 
         {/* Action Buttons */}
