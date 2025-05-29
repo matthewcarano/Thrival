@@ -1425,56 +1425,18 @@ const handleEditProgram = (programId: string, programs: any, setNewProgram: any,
             </Card>
           </TabsContent>
 {/* Settings Tab */}
-        <TabsContent value="settings" className="space-y-6">
-  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-    {/* API Configuration */}
-    <Card className={darkMode ? 'bg-gray-800 border-gray-700' : ''}>
-      <CardHeader>
-        <CardTitle>API Configuration</CardTitle>
-      </CardHeader>
-      <CardContent className="space-y-4">
-        <div>
-          <Label>Claude API Key</Label>
-          <Input
-            type="password"
-            placeholder="sk-ant-api03-..."
-            value={apiKeys.claude}
-            onChange={(e: any) => setApiKeys((prev: any) => ({ ...prev, claude: e.target.value }))}
-            className={darkMode ? 'border-white/20' : ''}
-          />
-        </div>
-        <div>
-          <Label>Twitter Bearer Token</Label>
-          <Input
-            type="password"
-            placeholder="Optional"
-            value={apiKeys.twitter}
-            onChange={(e: any) => setApiKeys((prev: any) => ({ ...prev, twitter: e.target.value }))}
-            className={darkMode ? 'border-white/20' : ''}
-          />
-        </div>
-        <div>
-          <Label>GitHub Token</Label>
-          <Input
-            type="password"
-            placeholder="Optional"
-            value={apiKeys.github}
-            onChange={(e: any) => setApiKeys((prev: any) => ({ ...prev, github: e.target.value }))}
-            className={darkMode ? 'border-white/20' : ''}
-          />
-        </div>
-      </CardContent>
-    </Card>
-
-        <div className="pt-2 border-t">
-          <p className={`text-sm ${getTotalWeight(criteriaWeights) === 100 ? 'text-green-600' : 'text-red-600'}`}>
-            Total: {getTotalWeight(criteriaWeights)}% {getTotalWeight(criteriaWeights) !== 100 && '(Must equal 100%)'}
-          </p>
-           </div>
-        </CardContent>
-      </Card>
-    </div>
-  </TabsContent>
+    <TabsContent value="settings" className="space-y-6">
+          <Card className={darkMode ? 'bg-gray-800 border-gray-700' : ''}>
+            <CardHeader>
+              <CardTitle>Settings</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className={darkMode ? 'text-gray-400' : 'text-gray-600'}>
+                Settings interface will be implemented here.
+              </p>
+            </CardContent>
+          </Card>
+        </TabsContent>
 
     {/* System Preferences */}
     <Card className={darkMode ? 'bg-gray-800 border-gray-700' : ''}>
