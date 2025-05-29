@@ -552,7 +552,7 @@ const handleEditProgram = (programId: string, programs: any, setNewProgram: any,
   };
 
   const getTotalWeight = (criteriaWeights: any) => {
-    return Object.values(criteriaWeights).reduce((sum, weight) => sum + weight, 0);
+    return Object.values(criteriaWeights).reduce((sum: number, weight: any) => sum + (weight as number), 0);
   };
 
   // Apply dark mode
