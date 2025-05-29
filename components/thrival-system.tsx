@@ -555,15 +555,6 @@ const handleEditProgram = (programId: string, programs: any, setNewProgram: any,
     return Object.values(criteriaWeights).reduce((sum: number, weight: any) => sum + (weight as number), 0);
   };
 
-  // Apply dark mode
-  useEffect(() => {
-    if (darkMode) {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
-  }, [darkMode]);
-
   return (
     <div className={`min-h-screen transition-colors duration-200 ${darkMode ? 'dark bg-gray-900 text-white' : 'bg-gray-50 text-gray-900'}`}>
       {/* Header */}
