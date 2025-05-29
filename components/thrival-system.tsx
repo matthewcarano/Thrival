@@ -1474,6 +1474,7 @@ const handleEditProgram = (programId: string, programs: any, setNewProgram: any,
         </div>
       </CardContent>
     </Card>
+  </TabsContent>
 
     {/* System Preferences */}
     <Card className={darkMode ? 'bg-gray-800 border-gray-700' : ''}>
