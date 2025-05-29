@@ -379,29 +379,6 @@ setNewProgram({
 
   // Main evaluation function
 
-  // Bulk processing
-  const handleBulkProcess = async () => {
-    if (!bulkFile) {
-      alert('Please select a CSV file to process.');
-      return;
-    }
-    
-    setBulkProcessing(true);
-    
-    // Mock bulk processing
-    await new Promise(resolve => setTimeout(resolve, 3000));
-    
-    const mockResults = [
-      { id: 1, name: 'DeFi Yield Protocol', score: 7.2, percentage: 72, recommendation: 'Conditional' },
-      { id: 2, name: 'Cross-Chain Bridge', score: 8.4, percentage: 84, recommendation: 'Recommend funding' },
-      { id: 3, name: 'NFT Marketplace', score: 5.1, percentage: 51, recommendation: 'Do not fund' },
-      { id: 4, name: 'Gaming Protocol', score: 6.8, percentage: 68, recommendation: 'Conditional' },
-      { id: 5, name: 'Infrastructure Tool', score: 9.1, percentage: 91, recommendation: 'Recommend funding' }
-    ];
-    
-    setBulkResults(mockResults);
-    setBulkProcessing(false);
-  };
   const handleEvaluate = async () => {
     if (!applicationText.trim()) {
       alert('Please enter application text before evaluating.');
@@ -435,6 +412,32 @@ setNewProgram({
       const tier = gradingTiers.find(tier => 
         finalScore.percentage >= tier.minScore && finalScore.percentage <= tier.maxScore
       );
+
+        // Bulk processing
+  const handleBulkProcess = async () => {
+    if (!bulkFile) {
+      alert('Please select a CSV file to process.');
+      return;
+    }
+    
+    setBulkProcessing(true);
+    
+    // Mock bulk processing
+    await new Promise(resolve => setTimeout(resolve, 3000));
+    
+    const mockResults = [
+      { id: 1, name: 'DeFi Yield Protocol', score: 7.2, percentage: 72, recommendation: 'Conditional' },
+      { id: 2, name: 'Cross-Chain Bridge', score: 8.4, percentage: 84, recommendation: 'Recommend funding' },
+      { id: 3, name: 'NFT Marketplace', score: 5.1, percentage: 51, recommendation: 'Do not fund' },
+      { id: 4, name: 'Gaming Protocol', score: 6.8, percentage: 68, recommendation: 'Conditional' },
+      { id: 5, name: 'Infrastructure Tool', score: 9.1, percentage: 91, recommendation: 'Recommend funding' }
+    ];
+    
+    setBulkResults(mockResults);
+    setBulkProcessing(false);
+  };
+
+
       
       const recommendation = tier ? tier.recommendation : 'Ungraded';
       const applicantFeedback = tier ? 
