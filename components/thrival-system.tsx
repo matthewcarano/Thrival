@@ -469,7 +469,7 @@ setNewProgram({
   };
 
 
-const handleEditProgram = (programId: string) => {
+const handleEditProgram = (programId: string, programs: any, setNewProgram: any, setEditingProgram: any, setShowProgramEditor: any, prompts: any) => {
   const program = programs[programId];
   setNewProgram({
     name: program.name,
@@ -1190,7 +1190,7 @@ const handleEditProgram = (programId: string) => {
   <Button 
     variant="ghost" 
     size="sm"
-    onClick={() => handleEditProgram(id)}
+    onClick={() => handleEditProgram(id, programs, setNewProgram, setEditingProgram, setShowProgramEditor, prompts)}
   >
     <Edit className="h-4 w-4" />
   </Button>
