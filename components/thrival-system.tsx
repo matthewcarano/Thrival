@@ -1425,124 +1425,16 @@ const handleEditProgram = (programId: string, programs: any, setNewProgram: any,
             </Card>
           </TabsContent>
 {/* Settings Tab */}
-    <TabsContent value="settings" className="space-y-6">
+   <TabsContent value="settings" className="space-y-6">
           <Card className={darkMode ? 'bg-gray-800 border-gray-700' : ''}>
             <CardHeader>
               <CardTitle>Settings</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className={darkMode ? 'text-gray-400' : 'text-gray-600'}>
-                Settings interface will be implemented here.
-              </p>
+              <p>Settings coming soon...</p>
             </CardContent>
           </Card>
         </TabsContent>
-
-    {/* System Preferences */}
-    <Card className={darkMode ? 'bg-gray-800 border-gray-700' : ''}>
-      <CardHeader>
-        <CardTitle>System Preferences</CardTitle>
-      </CardHeader>
-      <CardContent className="space-y-4">
-        <div className="flex items-center justify-between">
-          <div>
-            <Label>Email Notifications</Label>
-            <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-              Get notified when evaluations complete
-            </p>
-          </div>
-          <Switch
-            checked={systemPreferences.emailNotifications}
-            onCheckedChange={(checked: any) => 
-              setSystemPreferences((prev: any) => ({ ...prev, emailNotifications: checked }))
-            }
-          />
-        </div>
-        <div className="flex items-center justify-between">
-          <div>
-            <Label>Auto-save</Label>
-            <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-              Automatically save evaluation progress
-            </p>
-          </div>
-          <Switch
-            checked={systemPreferences.autoSave}
-            onCheckedChange={(checked: any) => 
-              setSystemPreferences((prev: any) => ({ ...prev, autoSave: checked }))
-            }
-          />
-        </div>
-        <div>
-          <Label>Export Format</Label>
-          <Select 
-            value={systemPreferences.exportFormat} 
-            onValueChange={(value: any) => 
-              setSystemPreferences((prev: any) => ({ ...prev, exportFormat: value }))
-            }
-          >
-            <SelectTrigger className={darkMode ? 'border-white/20' : ''}>
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="pdf">PDF</SelectItem>
-              <SelectItem value="csv">CSV</SelectItem>
-              <SelectItem value="json">JSON</SelectItem>
-              <SelectItem value="docx">DOCX</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-      </CardContent>
-    </Card>
-
-    {/* Program Management */}
-    <Card className={darkMode ? 'bg-gray-800 border-gray-700' : ''}>
-      <CardHeader>
-        <div className="flex items-center justify-between">
-          <CardTitle>Programs</CardTitle>
-          <Button size="sm" onClick={() => setShowProgramEditor(true)}>
-            <Plus className="h-4 w-4 mr-2" />
-            Add Program
-          </Button>
-        </div>
-      </CardHeader>
-      <CardContent className="space-y-4">
-        {Object.entries(programs).map(([id, program]) => (
-          <div key={id} className={`p-3 rounded-lg border ${darkMode ? 'border-gray-600' : 'border-gray-200'}`}>
-            <div className="flex items-center justify-between">
-              <div className="flex-1">
-                <h4 className="font-medium">{(program as any).name}</h4>
-                <p className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-600'} mt-1`}>
-                  {(program as any).criteria.substring(0, 80)}...
-                </p>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Switch
-                  checked={(program as any).active}
-                  onCheckedChange={(checked: any) => {
-                    setPrograms((prev: any) => ({
-                      ...prev,
-                      [id]: { ...prev[id], active: checked }
-                    }));
-                  }}
-                />
-                <Button 
-                  variant="ghost" 
-                  size="sm"
-                  onClick={() => {
-                    setDeletingProgram(id);
-                    setShowDeleteConfirm(true);
-                  }}
-                >
-                  <Trash2 className="h-4 w-4" />
-                </Button>
-              </div>
-            </div>
-          </div>
-        ))}
-      </CardContent>
-    </Card>
-  </div>
-</TabsContent>
         </Tabs>
       </div>
     </div>
