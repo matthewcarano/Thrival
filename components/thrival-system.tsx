@@ -951,7 +951,7 @@ const handleEditProgram = (programId: string, programs: any, setNewProgram: any,
                 <Button variant="outline" onClick={() => setShowTeamEditor(false)}>
                   Cancel
                 </Button>
-                <Button onClick={() => handleAddTeamMember(newTeamMember, setTeamMembers, setNewTeamMember, setShowTeamEditor)}
+                <Button onClick={() => handleAddTeamMember(newTeamMember, setTeamMembers, setNewTeamMember, setShowTeamEditor)}>
                   Add Member
                 </Button>
               </div>
