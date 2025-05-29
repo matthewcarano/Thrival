@@ -539,7 +539,7 @@ const handleEditProgram = (programId: string, programs: any, setNewProgram: any,
     setShowTeamEditor(false);
   };
 
-  const handleDeleteTeamMember = (memberId: number) => {
+  const handleDeleteTeamMember = (memberId: number, setTeamMembers: any) => {
     setTeamMembers((prev: any) => prev.filter((member: any) => member.id !== memberId));
   };
 
