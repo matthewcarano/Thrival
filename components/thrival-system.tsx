@@ -405,7 +405,7 @@ setNewProgram({
         focus: results.focus.score
       };
       
-      const finalScore = calculateWeightedScore(scores);
+      const finalScore = calculateWeightedScore(scores, programs[selectedProgram]?.weights || criteriaWeights);
       
       // Find the appropriate grading tier
       const tier = gradingTiers.find(tier => 
