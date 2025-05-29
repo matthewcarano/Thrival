@@ -379,7 +379,7 @@ setNewProgram({
 
   // Main evaluation function
 
-  const handleEvaluate = async () => {
+  const handleEvaluate = async (applicationText: string, setIsEvaluating: any, setActiveTab: any, selectedProgram: string, externalData: any, setEvaluationResult: any, setEvaluationHistory: any, programs: any, gradingTiers: any, prompts: any) => {
     if (!applicationText.trim()) {
       alert('Please enter application text before evaluating.');
       return;
@@ -1150,7 +1150,7 @@ const handleEditProgram = (programId: string) => {
                {/* Start Evaluation Button */}
               <div className="flex justify-center">
                 <Button 
-                  onClick={handleEvaluate}
+                  onClick={() => handleEvaluate(applicationText, setIsEvaluating, setActiveTab, selectedProgram, externalData, setEvaluationResult, setEvaluationHistory, programs, gradingTiers, prompts)}
                   disabled={isEvaluating}
                   size="lg"
                 >
