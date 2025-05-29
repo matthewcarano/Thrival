@@ -1424,9 +1424,8 @@ const handleEditProgram = (programId: string, programs: any, setNewProgram: any,
               </CardContent>
             </Card>
           </TabsContent>
-
-     {/* Settings Tab */}
-{/* <TabsContent value="settings" className="space-y-6">
+{/* Settings Tab */}
+        <TabsContent value="settings" className="space-y-6">
   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
     {/* API Configuration */}
     <Card className={darkMode ? 'bg-gray-800 border-gray-700' : ''}>
@@ -1475,7 +1474,7 @@ const handleEditProgram = (programId: string, programs: any, setNewProgram: any,
         </CardContent>
       </Card>
     </div>
-  </TabsContent> */}
+  </TabsContent>
 
     {/* System Preferences */}
     <Card className={darkMode ? 'bg-gray-800 border-gray-700' : ''}>
