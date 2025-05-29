@@ -1471,7 +1471,10 @@ const handleEditProgram = (programId: string, programs: any, setNewProgram: any,
           <p className={`text-sm ${getTotalWeight(criteriaWeights) === 100 ? 'text-green-600' : 'text-red-600'}`}>
             Total: {getTotalWeight(criteriaWeights)}% {getTotalWeight(criteriaWeights) !== 100 && '(Must equal 100%)'}
           </p>
-        </div>
+           </div>
+        </CardContent>
+      </Card>
+    </div>
   </TabsContent>
 
     {/* System Preferences */}
