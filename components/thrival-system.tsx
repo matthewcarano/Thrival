@@ -276,18 +276,27 @@ const handleAddProgram = () => {
 };
   
   // Reset form
-  setNewProgram({ 
-    name: '', 
-    criteria: '', 
-    prompts: {
-      team: '',
-      evidence: '',
-      fit: '',
-      need: '',
-      novelty: '',
-      focus: ''
-    }
-  });
+setNewProgram({ 
+  name: '', 
+  criteria: '',
+  mainCriteria: '',
+  prompts: {
+    team: '',
+    evidence: '',
+    fit: '',
+    need: '',
+    novelty: '',
+    focus: ''
+  },
+  weights: {
+    team: 20,
+    evidence: 20,
+    fit: 15,
+    need: 15,
+    novelty: 15,
+    focus: 15
+  }
+});
   setShowProgramEditor(false);
 };
 
