@@ -414,7 +414,7 @@ setNewProgram({
       );
 
         // Bulk processing
-  const handleBulkProcess = async () => {
+  const handleBulkProcess = async (bulkFile: any, setBulkProcessing: any, setBulkResults: any) => {
     if (!bulkFile) {
       alert('Please select a CSV file to process.');
       return;
@@ -1220,7 +1220,7 @@ const handleEditProgram = (programId: string) => {
 
                 <div className="pt-4">
                   <Button 
-                    onClick={handleBulkProcess}
+                    onClick={() => handleBulkProcess(bulkFile, setBulkProcessing, setBulkResults)}
                     disabled={!bulkFile || bulkProcessing}
                     size="lg"
                   >
