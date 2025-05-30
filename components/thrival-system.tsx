@@ -1197,7 +1197,8 @@ const [apiUsageStats, setApiUsageStats] = useState({
             </div>
           </div>
         </div>
-      )}
+    )}
+        </Tabs>
       </div>
     </div>
   );
