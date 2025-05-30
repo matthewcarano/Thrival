@@ -906,8 +906,6 @@ const [apiUsageStats, setApiUsageStats] = useState({
             </Card>
           </TabsContent>
 
-       // Replace the Settings TabsContent in thrival-system.tsx with this implementation
-
 {/* Settings Tab */}
 <TabsContent value="settings" className="space-y-6">
   {/* API Configuration Section */}
