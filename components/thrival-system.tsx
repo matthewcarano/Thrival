@@ -499,6 +499,55 @@ const [apiUsageStats, setApiUsageStats] = useState({
     }
   }, []);
 
+  // Handle prompt changes
+  const handlePromptChange = (criterion: string, newPrompt: string) => {
+    setPrompts(prev => ({
+      ...prev,
+      [criterion]: {
+        ...prev[criterion],
+        default: newPrompt
+      }
+    }));
+  };
+
+  // Reset prompt to default
+  const handleResetPrompt = (criterion: string) => {
+    const defaultPrompts: {[key: string]: string} = {
+      team: 'Evaluate the team\'s experience, track record, and ability to execute on this project.',
+      evidence: 'Assess the evidence of traction, user adoption, technical progress, and market validation.',
+      fit: 'Determine how well this project aligns with the program\'s focus and strategic objectives.',
+      need: 'Evaluate the market need, problem significance, and demand for this solution.',
+      novelty: 'Assess the innovation, technical novelty, and differentiation from existing solutions.',
+      focus: 'Evaluate strategic focus, clear vision, and alignment with stated goals.'
+    };
+    
+    setPrompts(prev => ({
+      ...prev,
+      [criterion]: {
+        ...prev[criterion],
+        default: defaultPrompts[criterion]
+      }
+    }));
+  };
+
+  // Save criteria settings
+  const handleSaveCriteriaSettings = () => {
+    try {
+      const criteriaData = {
+        weights: criteriaWeights,
+        prompts: prompts,
+        savedAt: new Date().toISOString()
+      };
+      
+      localStorage.setItem('thrival_criteria_settings', JSON.stringify(criteriaData));
+      alert('Criteria settings saved successfully!');
+    } catch (error) {
+      console.error('Error saving criteria settings:', error);
+      alert('Failed to save criteria settings. Please try again.');
+    }
+  };
+
+  return (
   return (
     <div className={`min-h-screen transition-colors duration-200 ${darkMode ? 'dark bg-gray-900 text-white' : 'bg-gray-50 text-gray-900'}`}>
       {/* Header */}
