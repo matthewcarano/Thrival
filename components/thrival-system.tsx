@@ -590,7 +590,7 @@ const handleEditProgram = (programId: string, programs: any, setNewProgram: any,
               value=""
               onChange={() => {}}
               placeholder="e.g., Program 4 - AI & Machine Learning"
-              className={darkMode ? 'border-white/20' : ''}
+              className=""
             />
           </div>
           <div>
