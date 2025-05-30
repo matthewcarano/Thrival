@@ -15,6 +15,7 @@ const Label = ({ children, className }: any) => <div className={`text-sm font-me
 const ThrivalSystem = () => {
   // State declarations
   const [activeTab, setActiveTab] = useState('evaluate');
+  const [activeSettingsSection, setActiveSettingsSection] = useState('overview');
   const [applicationText, setApplicationText] = useState('');
   const [selectedProgram, setSelectedProgram] = useState('program1');
   const [isEvaluating, setIsEvaluating] = useState(false);
@@ -978,397 +979,415 @@ const [systemPreferences, setSystemPreferences] = useState({
   {/* Settings Navigation Menu */}
   <Card className={darkMode ? 'bg-gray-800 border-gray-700' : ''}>
     <CardHeader>
-      <CardTitle>Settings Overview</CardTitle>
+      <CardTitle>Settings</CardTitle>
     </CardHeader>
     <CardContent>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        <div className="p-4 rounded-lg border-2 border-blue-200 dark:border-blue-800 bg-blue-50 dark:bg-blue-900/20">
-          <h3 className="font-medium text-blue-900 dark:text-blue-100">✅ API Configuration</h3>
-          <p className="text-sm text-blue-700 dark:text-blue-300 mt-1">Claude, Twitter & GitHub API keys</p>
-        </div>
-    <div className="p-4 rounded-lg border-2 border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-800">
+        <button
+          onClick={() => setActiveSettingsSection('api')}
+          className={`p-4 rounded-lg border-2 text-left transition-colors ${
+            activeSettingsSection === 'api' 
+              ? 'border-blue-200 dark:border-blue-800 bg-blue-50 dark:bg-blue-900/20' 
+              : 'border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 hover:border-blue-200 dark:hover:border-blue-800'
+          }`}
+        >
+          <h3 className={`font-medium ${activeSettingsSection === 'api' ? 'text-blue-900 dark:text-blue-100' : ''}`}>
+            ✅ API Configuration
+          </h3>
+          <p className={`text-sm mt-1 ${activeSettingsSection === 'api' ? 'text-blue-700 dark:text-blue-300' : 'text-gray-600 dark:text-gray-400'}`}>
+            Claude, Twitter & GitHub API keys
+          </p>
+        </button>
+        
+        <button
+          onClick={() => setActiveSettingsSection('preferences')}
+          className={`p-4 rounded-lg border-2 text-left transition-colors ${
+            activeSettingsSection === 'preferences' 
+              ? 'border-blue-200 dark:border-blue-800 bg-blue-50 dark:bg-blue-900/20' 
+              : 'border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 hover:border-blue-200 dark:hover:border-blue-800'
+          }`}
+        >
+          <h3 className={`font-medium ${activeSettingsSection === 'preferences' ? 'text-blue-900 dark:text-blue-100' : ''}`}>
+            ⚙️ System Preferences
+          </h3>
+          <p className={`text-sm mt-1 ${activeSettingsSection === 'preferences' ? 'text-blue-700 dark:text-blue-300' : 'text-gray-600 dark:text-gray-400'}`}>
+            Notifications, export format & defaults
+          </p>
+        </button>
+        
+        <div className="p-4 rounded-lg border-2 border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 opacity-50">
           <h3 className="font-medium">🔨 Evaluation Criteria</h3>
           <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">→ Now part of Program Management</p>
         </div>
-        <div className="p-4 rounded-lg border-2 border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-800">
-          <h3 className="font-medium">⚙️ System Preferences</h3>
-          <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">Notifications, export format & defaults</p>
-        </div>
-        <div className="p-4 rounded-lg border-2 border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-800">
+        
+        <div className="p-4 rounded-lg border-2 border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 opacity-50">
           <h3 className="font-medium">📁 Program Management</h3>
-          <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">Create, edit & manage programs</p>
+          <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">Coming soon</p>
         </div>
-        <div className="p-4 rounded-lg border-2 border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-800">
+        
+        <div className="p-4 rounded-lg border-2 border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 opacity-50">
           <h3 className="font-medium">👥 Team & Access</h3>
-          <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">User roles, permissions & invitations</p>
+          <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">Coming soon</p>
         </div>
-        <div className="p-4 rounded-lg border-2 border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-800">
+        
+        <div className="p-4 rounded-lg border-2 border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 opacity-50">
           <h3 className="font-medium">📊 Analytics & Reports</h3>
-          <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">Usage stats & performance metrics</p>
+          <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">Coming soon</p>
         </div>
       </div>
     </CardContent>
   </Card>
 
   {/* API Configuration Section */}
-  <Card className={darkMode ? 'bg-gray-800 border-gray-700' : ''}>
-    <CardHeader>
-      <CardTitle className="flex items-center space-x-2">
-        <span>API Configuration</span>
-        <Badge variant="outline" className="text-xs">
-          Required for AI evaluations
-        </Badge>
-      </CardTitle>
-    </CardHeader>
-    <CardContent className="space-y-6">
-      {/* Claude API Configuration */}
-      <div className="space-y-4">
-        <div className="flex items-center justify-between">
-          <div>
-            <h4 className="font-medium">Claude API</h4>
-            <p className="text-sm text-gray-600 dark:text-gray-400">
-              Required for AI-powered evaluations
-            </p>
-          </div>
-          <Badge variant={apiKeys.claude ? 'default' : 'secondary'}>
-            {apiKeys.claude ? 'Configured' : 'Not Set'}
+  {activeSettingsSection === 'api' && (
+    <Card className={darkMode ? 'bg-gray-800 border-gray-700' : ''}>
+      <CardHeader>
+        <CardTitle className="flex items-center space-x-2">
+          <span>API Configuration</span>
+          <Badge variant="outline" className="text-xs">
+            Required for AI evaluations
           </Badge>
-        </div>
-        
-        <div className="grid gap-4">
-          <div>
-            <Label>API Key</Label>
-            <div className="flex space-x-2">
-              <Input
-                type="password"
-                placeholder="sk-ant-..."
-                value={apiKeys.claude}
-                onChange={(e: any) => setApiKeys(prev => ({ ...prev, claude: e.target.value }))}
-                className={darkMode ? 'border-white/20' : ''}
-              />
-              <Button
-                variant="outline"
-                onClick={() => handleTestApiConnection('claude')}
-                disabled={!apiKeys.claude || testingConnection === 'claude'}
-                className="min-w-[80px]"
-              >
-                {testingConnection === 'claude' ? 'Testing...' : 'Test'}
-              </Button>
-            </div>
-            {connectionStatus.claude && (
-              <div className={`text-sm mt-1 ${connectionStatus.claude.success ? 'text-green-600' : 'text-red-600'}`}>
-                {connectionStatus.claude.message}
-              </div>
-            )}
-          </div>
-        </div>
-      </div>
-
-      <div className="border-t border-gray-200 dark:border-gray-600 pt-6">
-        {/* Twitter API Configuration */}
+        </CardTitle>
+      </CardHeader>
+      <CardContent className="space-y-6">
+        {/* Put all your existing API Configuration content here */}
+        {/* Claude API Configuration */}
         <div className="space-y-4">
           <div className="flex items-center justify-between">
             <div>
-              <h4 className="font-medium">Twitter API</h4>
+              <h4 className="font-medium">Claude API</h4>
               <p className="text-sm text-gray-600 dark:text-gray-400">
-                Optional: For social media data collection
+                Required for AI-powered evaluations
               </p>
             </div>
-            <Badge variant={apiKeys.twitter ? 'default' : 'secondary'}>
-              {apiKeys.twitter ? 'Configured' : 'Not Set'}
+            <Badge variant={apiKeys.claude ? 'default' : 'secondary'}>
+              {apiKeys.claude ? 'Configured' : 'Not Set'}
             </Badge>
           </div>
           
           <div className="grid gap-4">
             <div>
-              <Label>Bearer Token</Label>
+              <Label>API Key</Label>
               <div className="flex space-x-2">
                 <Input
                   type="password"
-                  placeholder="AAAA..."
-                  value={apiKeys.twitter}
-                  onChange={(e: any) => setApiKeys(prev => ({ ...prev, twitter: e.target.value }))}
+                  placeholder="sk-ant-..."
+                  value={apiKeys.claude}
+                  onChange={(e: any) => setApiKeys(prev => ({ ...prev, claude: e.target.value }))}
                   className={darkMode ? 'border-white/20' : ''}
                 />
                 <Button
                   variant="outline"
-                  onClick={() => handleTestApiConnection('twitter')}
-                  disabled={!apiKeys.twitter || testingConnection === 'twitter'}
+                  onClick={() => handleTestApiConnection('claude')}
+                  disabled={!apiKeys.claude || testingConnection === 'claude'}
                   className="min-w-[80px]"
                 >
-                  {testingConnection === 'twitter' ? 'Testing...' : 'Test'}
+                  {testingConnection === 'claude' ? 'Testing...' : 'Test'}
                 </Button>
               </div>
-              {connectionStatus.twitter && (
-                <div className={`text-sm mt-1 ${connectionStatus.twitter.success ? 'text-green-600' : 'text-red-600'}`}>
-                  {connectionStatus.twitter.message}
+              {connectionStatus.claude && (
+                <div className={`text-sm mt-1 ${connectionStatus.claude.success ? 'text-green-600' : 'text-red-600'}`}>
+                  {connectionStatus.claude.message}
                 </div>
               )}
             </div>
           </div>
         </div>
-      </div>
 
-      <div className="border-t border-gray-200 dark:border-gray-600 pt-6">
-        {/* GitHub API Configuration */}
-        <div className="space-y-4">
-          <div className="flex items-center justify-between">
-            <div>
-              <h4 className="font-medium">GitHub API</h4>
-              <p className="text-sm text-gray-600 dark:text-gray-400">
-                Optional: For repository analysis and code metrics
-              </p>
-            </div>
-            <Badge variant={apiKeys.github ? 'default' : 'secondary'}>
-              {apiKeys.github ? 'Configured' : 'Not Set'}
-            </Badge>
-          </div>
-          
-          <div className="grid gap-4">
-            <div>
-              <Label>Personal Access Token</Label>
-              <div className="flex space-x-2">
-                <Input
-                  type="password"
-                  placeholder="ghp_..."
-                  value={apiKeys.github}
-                  onChange={(e: any) => setApiKeys(prev => ({ ...prev, github: e.target.value }))}
-                  className={darkMode ? 'border-white/20' : ''}
-                />
-                <Button
-                  variant="outline"
-                  onClick={() => handleTestApiConnection('github')}
-                  disabled={!apiKeys.github || testingConnection === 'github'}
-                  className="min-w-[80px]"
-                >
-                  {testingConnection === 'github' ? 'Testing...' : 'Test'}
-                </Button>
-              </div>
-              {connectionStatus.github && (
-                <div className={`text-sm mt-1 ${connectionStatus.github.success ? 'text-green-600' : 'text-red-600'}`}>
-                  {connectionStatus.github.message}
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Save Configuration */}
-      <div className="border-t border-gray-200 dark:border-gray-600 pt-6">
-        <div className="flex justify-between items-center">
-          <div>
-            <p className="text-sm text-gray-600 dark:text-gray-400">
-              API keys are stored securely and used only for evaluations
-            </p>
-          </div>
-          <Button onClick={handleSaveApiConfiguration}>
-            Save Configuration
-          </Button>
-        </div>
-      </div>
-
-      {/* API Usage Statistics (if any APIs are configured) */}
-      {(apiKeys.claude || apiKeys.twitter || apiKeys.github) && (
         <div className="border-t border-gray-200 dark:border-gray-600 pt-6">
-          <h4 className="font-medium mb-4">API Usage Statistics</h4>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {apiKeys.claude && (
-              <div className="p-4 rounded-lg bg-blue-50 dark:bg-blue-900/20">
-                <div className="text-sm font-medium text-blue-700 dark:text-blue-300">Claude API</div>
-                <div className="text-2xl font-bold text-blue-900 dark:text-blue-100">
-                  {apiUsageStats.claude || 0}
-                </div>
-                <div className="text-xs text-blue-600 dark:text-blue-400">evaluations this month</div>
+          {/* Twitter API Configuration */}
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <h4 className="font-medium">Twitter API</h4>
+                <p className="text-sm text-gray-600 dark:text-gray-400">
+                  Optional: For social media data collection
+                </p>
               </div>
-            )}
-            {apiKeys.twitter && (
-              <div className="p-4 rounded-lg bg-purple-50 dark:bg-purple-900/20">
-                <div className="text-sm font-medium text-purple-700 dark:text-purple-300">Twitter API</div>
-                <div className="text-2xl font-bold text-purple-900 dark:text-purple-100">
-                  {apiUsageStats.twitter || 0}
-                </div>
-                <div className="text-xs text-purple-600 dark:text-purple-400">requests this month</div>
-              </div>
-            )}
-            {apiKeys.github && (
-              <div className="p-4 rounded-lg bg-green-50 dark:bg-green-900/20">
-                <div className="text-sm font-medium text-green-700 dark:text-green-300">GitHub API</div>
-                <div className="text-2xl font-bold text-green-900 dark:text-green-100">
-                  {apiUsageStats.github || 0}
-                </div>
-                <div className="text-xs text-green-600 dark:text-green-400">requests this month</div>
-              </div>
-            )}
-          </div>
-        </div>
-      )}
-    </CardContent>
-  </Card>
-
-
-  {/* System Preferences Section */}
-  <Card className={darkMode ? 'bg-gray-800 border-gray-700' : ''}>
-    <CardHeader>
-      <CardTitle className="flex items-center space-x-2">
-        <span>System Preferences</span>
-        <Badge variant="outline" className="text-xs">
-          Global system settings
-        </Badge>
-      </CardTitle>
-    </CardHeader>
-    <CardContent className="space-y-6">
-      {/* Notifications */}
-      <div className="space-y-4">
-        <h4 className="font-medium">Notifications</h4>
-        <div className="space-y-3">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="font-medium">Email Notifications</p>
-              <p className="text-sm text-gray-600 dark:text-gray-400">
-                Receive email alerts for evaluation completions and updates
-              </p>
-            </div>
-            <Switch
-              checked={systemPreferences.emailNotifications}
-              onCheckedChange={(checked: boolean) => 
-                setSystemPreferences(prev => ({ ...prev, emailNotifications: checked }))
-              }
-            />
-          </div>
-          
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="font-medium">Auto-save Progress</p>
-              <p className="text-sm text-gray-600 dark:text-gray-400">
-                Automatically save evaluation progress every 30 seconds
-              </p>
-            </div>
-            <Switch
-              checked={systemPreferences.autoSave}
-              onCheckedChange={(checked: boolean) => 
-                setSystemPreferences(prev => ({ ...prev, autoSave: checked }))
-              }
-            />
-          </div>
-        </div>
-      </div>
-
-      <div className="border-t border-gray-200 dark:border-gray-600 pt-6">
-        {/* Export & Download Preferences */}
-        <div className="space-y-4">
-          <h4 className="font-medium">Export & Download Preferences</h4>
-          <div className="space-y-3">
-            <div>
-              <Label>Default Export Format</Label>
-              <Select 
-                value={systemPreferences.exportFormat} 
-                onValueChange={(value: string) => 
-                  setSystemPreferences(prev => ({ ...prev, exportFormat: value }))
-                }
-              >
-                <SelectTrigger className={darkMode ? 'border-white/20' : ''}>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="pdf">PDF Report</SelectItem>
-                  <SelectItem value="csv">CSV Spreadsheet</SelectItem>
-                  <SelectItem value="json">JSON Data</SelectItem>
-                  <SelectItem value="xlsx">Excel Workbook</SelectItem>
-                </SelectContent>
-              </Select>
+              <Badge variant={apiKeys.twitter ? 'default' : 'secondary'}>
+                {apiKeys.twitter ? 'Configured' : 'Not Set'}
+              </Badge>
             </div>
             
-            <div>
-              <Label>Evaluation Timeout (minutes)</Label>
-              <Input
-                type="number"
-                min="1"
-                max="60"
-                value={systemPreferences.evaluationTimeout || 10}
-                onChange={(e: any) => 
-                  setSystemPreferences(prev => ({ ...prev, evaluationTimeout: parseInt(e.target.value) || 10 }))
-                }
-                className={`w-32 ${darkMode ? 'border-white/20' : ''}`}
-              />
-              <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                Maximum time to wait for AI evaluation responses
-              </p>
+            <div className="grid gap-4">
+              <div>
+                <Label>Bearer Token</Label>
+                <div className="flex space-x-2">
+                  <Input
+                    type="password"
+                    placeholder="AAAA..."
+                    value={apiKeys.twitter}
+                    onChange={(e: any) => setApiKeys(prev => ({ ...prev, twitter: e.target.value }))}
+                    className={darkMode ? 'border-white/20' : ''}
+                  />
+                  <Button
+                    variant="outline"
+                    onClick={() => handleTestApiConnection('twitter')}
+                    disabled={!apiKeys.twitter || testingConnection === 'twitter'}
+                    className="min-w-[80px]"
+                  >
+                    {testingConnection === 'twitter' ? 'Testing...' : 'Test'}
+                  </Button>
+                </div>
+                {connectionStatus.twitter && (
+                  <div className={`text-sm mt-1 ${connectionStatus.twitter.success ? 'text-green-600' : 'text-red-600'}`}>
+                    {connectionStatus.twitter.message}
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <div className="border-t border-gray-200 dark:border-gray-600 pt-6">
-        {/* UI Preferences */}
+        <div className="border-t border-gray-200 dark:border-gray-600 pt-6">
+          {/* GitHub API Configuration */}
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <h4 className="font-medium">GitHub API</h4>
+                <p className="text-sm text-gray-600 dark:text-gray-400">
+                  Optional: For repository analysis and code metrics
+                </p>
+              </div>
+              <Badge variant={apiKeys.github ? 'default' : 'secondary'}>
+                {apiKeys.github ? 'Configured' : 'Not Set'}
+              </Badge>
+            </div>
+            
+            <div className="grid gap-4">
+              <div>
+                <Label>Personal Access Token</Label>
+                <div className="flex space-x-2">
+                  <Input
+                    type="password"
+                    placeholder="ghp_..."
+                    value={apiKeys.github}
+                    onChange={(e: any) => setApiKeys(prev => ({ ...prev, github: e.target.value }))}
+                    className={darkMode ? 'border-white/20' : ''}
+                  />
+                  <Button
+                    variant="outline"
+                    onClick={() => handleTestApiConnection('github')}
+                    disabled={!apiKeys.github || testingConnection === 'github'}
+                    className="min-w-[80px]"
+                  >
+                    {testingConnection === 'github' ? 'Testing...' : 'Test'}
+                  </Button>
+                </div>
+                {connectionStatus.github && (
+                  <div className={`text-sm mt-1 ${connectionStatus.github.success ? 'text-green-600' : 'text-red-600'}`}>
+                    {connectionStatus.github.message}
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Save Configuration */}
+        <div className="border-t border-gray-200 dark:border-gray-600 pt-6">
+          <div className="flex justify-between items-center">
+            <div>
+              <p className="text-sm text-gray-600 dark:text-gray-400">
+                API keys are stored securely and used only for evaluations
+              </p>
+            </div>
+            <Button onClick={handleSaveApiConfiguration}>
+              Save Configuration
+            </Button>
+          </div>
+        </div>
+
+        {/* API Usage Statistics */}
+        {(apiKeys.claude || apiKeys.twitter || apiKeys.github) && (
+          <div className="border-t border-gray-200 dark:border-gray-600 pt-6">
+            <h4 className="font-medium mb-4">API Usage Statistics</h4>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {apiKeys.claude && (
+                <div className="p-4 rounded-lg bg-blue-50 dark:bg-blue-900/20">
+                  <div className="text-sm font-medium text-blue-700 dark:text-blue-300">Claude API</div>
+                  <div className="text-2xl font-bold text-blue-900 dark:text-blue-100">
+                    {apiUsageStats.claude || 0}
+                  </div>
+                  <div className="text-xs text-blue-600 dark:text-blue-400">evaluations this month</div>
+                </div>
+              )}
+              {apiKeys.twitter && (
+                <div className="p-4 rounded-lg bg-purple-50 dark:bg-purple-900/20">
+                  <div className="text-sm font-medium text-purple-700 dark:text-purple-300">Twitter API</div>
+                  <div className="text-2xl font-bold text-purple-900 dark:text-purple-100">
+                    {apiUsageStats.twitter || 0}
+                  </div>
+                  <div className="text-xs text-purple-600 dark:text-purple-400">requests this month</div>
+                </div>
+              )}
+              {apiKeys.github && (
+                <div className="p-4 rounded-lg bg-green-50 dark:bg-green-900/20">
+                  <div className="text-sm font-medium text-green-700 dark:text-green-300">GitHub API</div>
+                  <div className="text-2xl font-bold text-green-900 dark:text-green-100">
+                    {apiUsageStats.github || 0}
+                  </div>
+                  <div className="text-xs text-green-600 dark:text-green-400">requests this month</div>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+      </CardContent>
+    </Card>
+  )}
+
+  {/* System Preferences Section */}
+  {activeSettingsSection === 'preferences' && (
+    <Card className={darkMode ? 'bg-gray-800 border-gray-700' : ''}>
+      <CardHeader>
+        <CardTitle className="flex items-center space-x-2">
+          <span>System Preferences</span>
+          <Badge variant="outline" className="text-xs">
+            Global system settings
+          </Badge>
+        </CardTitle>
+      </CardHeader>
+      <CardContent className="space-y-6">
+        {/* Put all your existing System Preferences content here */}
+        {/* Notifications */}
         <div className="space-y-4">
-          <h4 className="font-medium">Interface Preferences</h4>
+          <h4 className="font-medium">Notifications</h4>
           <div className="space-y-3">
             <div className="flex items-center justify-between">
               <div>
-                <p className="font-medium">Dark Mode</p>
+                <p className="font-medium">Email Notifications</p>
                 <p className="text-sm text-gray-600 dark:text-gray-400">
-                  Use dark theme across the application
+                  Receive email alerts for evaluation completions and updates
                 </p>
               </div>
               <Switch
-                checked={darkMode}
-                onCheckedChange={setDarkMode}
+                checked={systemPreferences.emailNotifications}
+                onCheckedChange={(checked: boolean) => 
+                  setSystemPreferences(prev => ({ ...prev, emailNotifications: checked }))
+                }
               />
             </div>
             
-            <div>
-              <Label>Items per Page</Label>
-              <Select 
-                value={systemPreferences.itemsPerPage?.toString() || '25'} 
-                onValueChange={(value: string) => 
-                  setSystemPreferences(prev => ({ ...prev, itemsPerPage: parseInt(value) }))
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="font-medium">Auto-save Progress</p>
+                <p className="text-sm text-gray-600 dark:text-gray-400">
+                  Automatically save evaluation progress every 30 seconds
+                </p>
+              </div>
+              <Switch
+                checked={systemPreferences.autoSave}
+                onCheckedChange={(checked: boolean) => 
+                  setSystemPreferences(prev => ({ ...prev, autoSave: checked }))
                 }
-              >
-                <SelectTrigger className={`w-32 ${darkMode ? 'border-white/20' : ''}`}>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="10">10</SelectItem>
-                  <SelectItem value="25">25</SelectItem>
-                  <SelectItem value="50">50</SelectItem>
-                  <SelectItem value="100">100</SelectItem>
-                </SelectContent>
-              </Select>
+              />
             </div>
           </div>
         </div>
-      </div>
 
-      {/* Save Button */}
-      <div className="border-t border-gray-200 dark:border-gray-600 pt-6">
-        <div className="flex justify-between items-center">
-          <div>
-            <p className="text-sm text-gray-600 dark:text-gray-400">
-              Preferences are saved automatically and apply system-wide
-            </p>
+        <div className="border-t border-gray-200 dark:border-gray-600 pt-6">
+          {/* Export & Download Preferences */}
+          <div className="space-y-4">
+            <h4 className="font-medium">Export & Download Preferences</h4>
+            <div className="space-y-3">
+              <div>
+                <Label>Default Export Format</Label>
+                <Select 
+                  value={systemPreferences.exportFormat} 
+                  onValueChange={(value: string) => 
+                    setSystemPreferences(prev => ({ ...prev, exportFormat: value }))
+                  }
+                >
+                  <SelectTrigger className={darkMode ? 'border-white/20' : ''}>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="pdf">PDF Report</SelectItem>
+                    <SelectItem value="csv">CSV Spreadsheet</SelectItem>
+                    <SelectItem value="json">JSON Data</SelectItem>
+                    <SelectItem value="xlsx">Excel Workbook</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              
+              <div>
+                <Label>Evaluation Timeout (minutes)</Label>
+                <Input
+                  type="number"
+                  min="1"
+                  max="60"
+                  value={systemPreferences.evaluationTimeout || 10}
+                  onChange={(e: any) => 
+                    setSystemPreferences(prev => ({ ...prev, evaluationTimeout: parseInt(e.target.value) || 10 }))
+                  }
+                  className={`w-32 ${darkMode ? 'border-white/20' : ''}`}
+                />
+                <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                  Maximum time to wait for AI evaluation responses
+                </p>
+              </div>
+            </div>
           </div>
-          <Button onClick={handleSaveSystemPreferences}>
-            Save Preferences
-          </Button>
         </div>
-      </div>
-    </CardContent>
-  </Card>
 
-  {/* Placeholder for remaining settings sections */}
-  <Card className={darkMode ? 'bg-gray-800 border-gray-700' : ''}>
-    <CardHeader>
-      <CardTitle>Additional Settings</CardTitle>
-    </CardHeader>
-    <CardContent>
-      <p className={darkMode ? 'text-gray-400' : 'text-gray-600'}>
-        Remaining settings sections:
-        <br />• Program Management Hub
-        <br />• Team & Access Management
-      </p>
-    </CardContent>
-  </Card>
+        <div className="border-t border-gray-200 dark:border-gray-600 pt-6">
+          {/* UI Preferences */}
+          <div className="space-y-4">
+            <h4 className="font-medium">Interface Preferences</h4>
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="font-medium">Dark Mode</p>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                    Use dark theme across the application
+                  </p>
+                </div>
+                <Switch
+                  checked={darkMode}
+                  onCheckedChange={setDarkMode}
+                />
+              </div>
+              
+              <div>
+                <Label>Items per Page</Label>
+                <Select 
+                  value={systemPreferences.itemsPerPage?.toString() || '25'} 
+                  onValueChange={(value: string) => 
+                    setSystemPreferences(prev => ({ ...prev, itemsPerPage: parseInt(value) }))
+                  }
+                >
+                  <SelectTrigger className={`w-32 ${darkMode ? 'border-white/20' : ''}`}>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="10">10</SelectItem>
+                    <SelectItem value="25">25</SelectItem>
+                    <SelectItem value="50">50</SelectItem>
+                    <SelectItem value="100">100</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Save Button */}
+        <div className="border-t border-gray-200 dark:border-gray-600 pt-6">
+          <div className="flex justify-between items-center">
+            <div>
+              <p className="text-sm text-gray-600 dark:text-gray-400">
+                Preferences are saved automatically and apply system-wide
+              </p>
+            </div>
+            <Button onClick={handleSaveSystemPreferences}>
+              Save Preferences
+            </Button>
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  )}
 </TabsContent>
 
       {/* Add Team Member Modal */}
