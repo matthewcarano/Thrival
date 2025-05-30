@@ -588,7 +588,7 @@ const handleEditProgram = (programId: string, programs: any, setNewProgram: any,
             <Label className="text-base font-medium">Program Name</Label>
             <Input
               value=""
-              onChange={(e: any) => setNewProgram((prev: any) => ({ ...prev, name: e.target.value }))}
+              onChange={() => {}}
               placeholder="e.g., Program 4 - AI & Machine Learning"
               className={darkMode ? 'border-white/20' : ''}
             />
