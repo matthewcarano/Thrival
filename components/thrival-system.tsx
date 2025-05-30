@@ -908,6 +908,41 @@ const [apiUsageStats, setApiUsageStats] = useState({
 
 {/* Settings Tab */}
 <TabsContent value="settings" className="space-y-6">
+  {/* Settings Navigation Menu */}
+  <Card className={darkMode ? 'bg-gray-800 border-gray-700' : ''}>
+    <CardHeader>
+      <CardTitle>Settings Overview</CardTitle>
+    </CardHeader>
+    <CardContent>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="p-4 rounded-lg border-2 border-blue-200 dark:border-blue-800 bg-blue-50 dark:bg-blue-900/20">
+          <h3 className="font-medium text-blue-900 dark:text-blue-100">✅ API Configuration</h3>
+          <p className="text-sm text-blue-700 dark:text-blue-300 mt-1">Claude, Twitter & GitHub API keys</p>
+        </div>
+        <div className="p-4 rounded-lg border-2 border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-800">
+          <h3 className="font-medium">🔨 Evaluation Criteria</h3>
+          <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">Custom prompts, weights & criteria</p>
+        </div>
+        <div className="p-4 rounded-lg border-2 border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-800">
+          <h3 className="font-medium">⚙️ System Preferences</h3>
+          <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">Notifications, export format & defaults</p>
+        </div>
+        <div className="p-4 rounded-lg border-2 border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-800">
+          <h3 className="font-medium">📁 Program Management</h3>
+          <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">Create, edit & manage programs</p>
+        </div>
+        <div className="p-4 rounded-lg border-2 border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-800">
+          <h3 className="font-medium">👥 Team & Access</h3>
+          <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">User roles, permissions & invitations</p>
+        </div>
+        <div className="p-4 rounded-lg border-2 border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-800">
+          <h3 className="font-medium">📊 Analytics & Reports</h3>
+          <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">Usage stats & performance metrics</p>
+        </div>
+      </div>
+    </CardContent>
+  </Card>
+
   {/* API Configuration Section */}
   <Card className={darkMode ? 'bg-gray-800 border-gray-700' : ''}>
     <CardHeader>
