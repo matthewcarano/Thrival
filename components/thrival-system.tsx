@@ -79,8 +79,11 @@ const ThrivalSystem = () => {
     twitter: '',
     github: ''
   });
+  
 const [testingConnection, setTestingConnection] = useState<string | null>(null);
+  
 const [connectionStatus, setConnectionStatus] = useState<{[key: string]: {success: boolean, message: string}}>({});
+  
 const [apiUsageStats, setApiUsageStats] = useState({
   claude: 0,
   twitter: 0,
