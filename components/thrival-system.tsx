@@ -531,7 +531,25 @@ const [systemPreferences, setSystemPreferences] = useState({
       }
     }));
   };
+};
 
+  // Save system preferences
+  const handleSaveSystemPreferences = () => {
+    try {
+      const preferencesData = {
+        preferences: systemPreferences,
+        darkMode: darkMode,
+        savedAt: new Date().toISOString()
+      };
+      
+      localStorage.setItem('thrival_system_preferences', JSON.stringify(preferencesData));
+      alert('System preferences saved successfully!');
+    } catch (error) {
+      console.error('Error saving system preferences:', error);
+      alert('Failed to save system preferences. Please try again.');
+    }
+  };
+  
   // Save criteria settings
   const handleSaveCriteriaSettings = () => {
     try {
