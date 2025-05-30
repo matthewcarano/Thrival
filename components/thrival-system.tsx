@@ -607,13 +607,9 @@ const handleEditProgram = (programId: string, programs: any, setNewProgram: any,
         {/* Criteria Weights */}
         <div className="p-4 rounded-lg bg-gray-50">
           <h4 className="text-lg font-semibold mb-4">Evaluation Criteria Weights</h4>
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-            {Object.entries(newProgram.weights).map(([criterion, weight]) => (
-              <div key={criterion} className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <Label className="capitalize font-medium">{criterion}</Label>
-                  <span className="text-sm font-medium">{weight}%</span>
-                </div>
+         <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+            <p>Criteria weights will be configured here.</p>
+              </div> 
                 <Input
                   type="number"
                   min="0"
