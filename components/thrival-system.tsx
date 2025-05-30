@@ -553,7 +553,6 @@ const handleEditProgram = (programId: string, programs: any, setNewProgram: any,
 
   const getTotalWeight = (criteriaWeights: any) => {
     return Object.values(criteriaWeights).reduce((sum: number, weight: any) => sum + (weight as number), 0);
-  };
 
   return (
     <div className={`min-h-screen transition-colors duration-200 ${darkMode ? 'dark bg-gray-900 text-white' : 'bg-gray-50 text-gray-900'}`}>
