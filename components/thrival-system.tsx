@@ -548,7 +548,6 @@ const [apiUsageStats, setApiUsageStats] = useState({
   };
 
   return (
-  return (
     <div className={`min-h-screen transition-colors duration-200 ${darkMode ? 'dark bg-gray-900 text-white' : 'bg-gray-50 text-gray-900'}`}>
       {/* Header */}
       <header className={`border-b ${darkMode ? 'border-gray-700 bg-gray-800' : 'border-gray-200 bg-white'} px-6 py-4`}>
