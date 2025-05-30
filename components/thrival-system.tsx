@@ -20,6 +20,7 @@ const ThrivalSystem = () => {
   const [isEvaluating, setIsEvaluating] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
   const [evaluationResult, setEvaluationResult] = useState<any>(null);
+  const [evaluationHistory, setEvaluationHistory] = useState<any[]>([]);
   const [bulkFile, setBulkFile] = useState<any>(null);
   const [bulkProcessing, setBulkProcessing] = useState(false);
   const [bulkResults, setBulkResults] = useState<any[]>([]);
