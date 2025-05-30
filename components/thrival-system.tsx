@@ -1139,15 +1139,159 @@ const [apiUsageStats, setApiUsageStats] = useState({
     </CardContent>
   </Card>
 
-  {/* Placeholder for additional settings sections */}
+  {/* Evaluation Criteria Management Section */}
+  <Card className={darkMode ? 'bg-gray-800 border-gray-700' : ''}>
+    <CardHeader>
+      <CardTitle className="flex items-center space-x-2">
+        <span>Evaluation Criteria Management</span>
+        <Badge variant="outline" className="text-xs">
+          Customize evaluation process
+        </Badge>
+      </CardTitle>
+    </CardHeader>
+    <CardContent className="space-y-6">
+      {/* Criteria Weights */}
+      <div className="space-y-4">
+        <div className="flex items-center justify-between">
+          <div>
+            <h4 className="font-medium">Criteria Weights</h4>
+            <p className="text-sm text-gray-600 dark:text-gray-400">
+              Adjust the importance of each evaluation criterion (must total 100%)
+            </p>
+          </div>
+          <Badge variant={getTotalWeight() === 100 ? 'default' : 'destructive'}>
+            Total: {getTotalWeight()}%
+          </Badge>
+        </div>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {Object.entries(criteriaWeights).map(([criterion, weight]) => {
+            const criteriaInfo: {[key: string]: any} = {
+              team: { title: 'Team', icon: '👥', description: 'Experience & track record' },
+              evidence: { title: 'Evidence', icon: '📊', description: 'Traction & validation' },
+              fit: { title: 'Fit', icon: '🎯', description: 'Program alignment' },
+              need: { title: 'Need', icon: '📈', description: 'Market demand' },
+              novelty: { title: 'Novelty', icon: '💡', description: 'Innovation level' },
+              focus: { title: 'Focus', icon: '🔍', description: 'Strategic clarity' }
+            };
+            
+            const info = criteriaInfo[criterion];
+            
+            return (
+              <div key={criterion} className="p-4 rounded-lg border border-gray-200 dark:border-gray-600">
+                <div className="flex items-center space-x-2 mb-2">
+                  <span className="text-lg">{info.icon}</span>
+                  <span className="font-medium">{info.title}</span>
+                </div>
+                <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">{info.description}</p>
+                <div className="flex items-center space-x-2">
+                  <Input
+                    type="number"
+                    min="0"
+                    max="100"
+                    value={weight}
+                    onChange={(e: any) => handleWeightChange(criterion, e.target.value)}
+                    className="w-20"
+                  />
+                  <span className="text-sm text-gray-600 dark:text-gray-400">%</span>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+        
+        {getTotalWeight() !== 100 && (
+          <div className="p-3 rounded-lg bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800">
+            <p className="text-sm text-yellow-800 dark:text-yellow-200">
+              ⚠️ Weights must total exactly 100%. Currently: {getTotalWeight()}%
+            </p>
+          </div>
+        )}
+      </div>
+
+      <div className="border-t border-gray-200 dark:border-gray-600 pt-6">
+        {/* Custom Evaluation Prompts */}
+        <div className="space-y-4">
+          <div>
+            <h4 className="font-medium">Custom Evaluation Prompts</h4>
+            <p className="text-sm text-gray-600 dark:text-gray-400">
+              Customize the AI prompts used for each evaluation criterion
+            </p>
+          </div>
+          
+          <div className="space-y-4">
+            {Object.entries(prompts).map(([criterion, promptData]) => {
+              const criteriaInfo: {[key: string]: any} = {
+                team: { title: 'Team', icon: '👥' },
+                evidence: { title: 'Evidence', icon: '📊' },
+                fit: { title: 'Fit', icon: '🎯' },
+                need: { title: 'Need', icon: '📈' },
+                novelty: { title: 'Novelty', icon: '💡' },
+                focus: { title: 'Focus', icon: '🔍' }
+              };
+              
+              const info = criteriaInfo[criterion];
+              
+              return (
+                <div key={criterion} className="border border-gray-200 dark:border-gray-600 rounded-lg p-4">
+                  <div className="flex items-center space-x-2 mb-3">
+                    <span className="text-lg">{info.icon}</span>
+                    <h5 className="font-medium">{info.title} Evaluation Prompt</h5>
+                  </div>
+                  <Textarea
+                    value={promptData.default}
+                    onChange={(e: any) => handlePromptChange(criterion, e.target.value)}
+                    rows={3}
+                    className={darkMode ? 'border-white/20' : ''}
+                    placeholder={`Enter custom prompt for ${info.title.toLowerCase()} evaluation...`}
+                  />
+                  <div className="flex justify-between items-center mt-2">
+                    <p className="text-xs text-gray-500 dark:text-gray-400">
+                      This prompt guides the AI when evaluating the {info.title.toLowerCase()} criterion
+                    </p>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => handleResetPrompt(criterion)}
+                      className="text-xs"
+                    >
+                      Reset to Default
+                    </Button>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+
+      {/* Save Button */}
+      <div className="border-t border-gray-200 dark:border-gray-600 pt-6">
+        <div className="flex justify-between items-center">
+          <div>
+            <p className="text-sm text-gray-600 dark:text-gray-400">
+              Changes will apply to all future evaluations
+            </p>
+          </div>
+          <Button 
+            onClick={handleSaveCriteriaSettings}
+            disabled={getTotalWeight() !== 100}
+          >
+            Save Criteria Settings
+          </Button>
+        </div>
+      </div>
+    </CardContent>
+  </Card>
+
+  {/* Placeholder for remaining settings sections */}
   <Card className={darkMode ? 'bg-gray-800 border-gray-700' : ''}>
     <CardHeader>
       <CardTitle>Additional Settings</CardTitle>
     </CardHeader>
     <CardContent>
       <p className={darkMode ? 'text-gray-400' : 'text-gray-600'}>
-        Additional settings sections will be implemented here:
-        <br />• Evaluation Criteria Management
+        Remaining settings sections:
         <br />• System Preferences  
         <br />• Program Management Hub
         <br />• Team & Access Management
