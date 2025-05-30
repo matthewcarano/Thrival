@@ -531,7 +531,6 @@ const [systemPreferences, setSystemPreferences] = useState({
       }
     }));
   };
-};
 
   // Save system preferences
   const handleSaveSystemPreferences = () => {
