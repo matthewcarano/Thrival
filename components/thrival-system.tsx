@@ -557,7 +557,7 @@ const handleEditProgram = (programId: string, programs: any, setNewProgram: any,
   return (
     <div className="min-h-screen transition-colors duration-200 bg-gray-50 text-gray-900">
       {/* Header */}
-      <header className={`border-b ${darkMode ? 'border-gray-700 bg-gray-800' : 'border-gray-200 bg-white'} px-6 py-4`}>
+      <header className="border-b border-gray-200 bg-white px-6 py-4">
         <div className="flex items-center justify-between">
           <h1 className="text-2xl font-bold">Thrival: AI Evaluation System</h1>
           <div className="flex items-center space-x-4">
