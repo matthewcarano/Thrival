@@ -563,10 +563,10 @@ const handleEditProgram = (programId: string, programs: any, setNewProgram: any,
           <div className="flex items-center space-x-4">
             <div className="flex items-center space-x-2">
               <Sun className="h-4 w-4" />
-              <Switch
-                checked={darkMode}
-                onCheckedChange={setDarkMode}
-              />
+             <Switch
+                checked={false}
+                onCheckedChange={() => {}}
+                />
               <Moon className="h-4 w-4" />
             </div>
           </div>
