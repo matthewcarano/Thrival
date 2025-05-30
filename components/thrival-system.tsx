@@ -1188,6 +1188,155 @@ const [apiUsageStats, setApiUsageStats] = useState({
   </Card>
 
 
+  {/* System Preferences Section */}
+  <Card className={darkMode ? 'bg-gray-800 border-gray-700' : ''}>
+    <CardHeader>
+      <CardTitle className="flex items-center space-x-2">
+        <span>System Preferences</span>
+        <Badge variant="outline" className="text-xs">
+          Global system settings
+        </Badge>
+      </CardTitle>
+    </CardHeader>
+    <CardContent className="space-y-6">
+      {/* Notifications */}
+      <div className="space-y-4">
+        <h4 className="font-medium">Notifications</h4>
+        <div className="space-y-3">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="font-medium">Email Notifications</p>
+              <p className="text-sm text-gray-600 dark:text-gray-400">
+                Receive email alerts for evaluation completions and updates
+              </p>
+            </div>
+            <Switch
+              checked={systemPreferences.emailNotifications}
+              onCheckedChange={(checked: boolean) => 
+                setSystemPreferences(prev => ({ ...prev, emailNotifications: checked }))
+              }
+            />
+          </div>
+          
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="font-medium">Auto-save Progress</p>
+              <p className="text-sm text-gray-600 dark:text-gray-400">
+                Automatically save evaluation progress every 30 seconds
+              </p>
+            </div>
+            <Switch
+              checked={systemPreferences.autoSave}
+              onCheckedChange={(checked: boolean) => 
+                setSystemPreferences(prev => ({ ...prev, autoSave: checked }))
+              }
+            />
+          </div>
+        </div>
+      </div>
+
+      <div className="border-t border-gray-200 dark:border-gray-600 pt-6">
+        {/* Export & Download Preferences */}
+        <div className="space-y-4">
+          <h4 className="font-medium">Export & Download Preferences</h4>
+          <div className="space-y-3">
+            <div>
+              <Label>Default Export Format</Label>
+              <Select 
+                value={systemPreferences.exportFormat} 
+                onValueChange={(value: string) => 
+                  setSystemPreferences(prev => ({ ...prev, exportFormat: value }))
+                }
+              >
+                <SelectTrigger className={darkMode ? 'border-white/20' : ''}>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="pdf">PDF Report</SelectItem>
+                  <SelectItem value="csv">CSV Spreadsheet</SelectItem>
+                  <SelectItem value="json">JSON Data</SelectItem>
+                  <SelectItem value="xlsx">Excel Workbook</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            
+            <div>
+              <Label>Evaluation Timeout (minutes)</Label>
+              <Input
+                type="number"
+                min="1"
+                max="60"
+                value={systemPreferences.evaluationTimeout || 10}
+                onChange={(e: any) => 
+                  setSystemPreferences(prev => ({ ...prev, evaluationTimeout: parseInt(e.target.value) || 10 }))
+                }
+                className={`w-32 ${darkMode ? 'border-white/20' : ''}`}
+              />
+              <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                Maximum time to wait for AI evaluation responses
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="border-t border-gray-200 dark:border-gray-600 pt-6">
+        {/* UI Preferences */}
+        <div className="space-y-4">
+          <h4 className="font-medium">Interface Preferences</h4>
+          <div className="space-y-3">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="font-medium">Dark Mode</p>
+                <p className="text-sm text-gray-600 dark:text-gray-400">
+                  Use dark theme across the application
+                </p>
+              </div>
+              <Switch
+                checked={darkMode}
+                onCheckedChange={setDarkMode}
+              />
+            </div>
+            
+            <div>
+              <Label>Items per Page</Label>
+              <Select 
+                value={systemPreferences.itemsPerPage?.toString() || '25'} 
+                onValueChange={(value: string) => 
+                  setSystemPreferences(prev => ({ ...prev, itemsPerPage: parseInt(value) }))
+                }
+              >
+                <SelectTrigger className={`w-32 ${darkMode ? 'border-white/20' : ''}`}>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="10">10</SelectItem>
+                  <SelectItem value="25">25</SelectItem>
+                  <SelectItem value="50">50</SelectItem>
+                  <SelectItem value="100">100</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Save Button */}
+      <div className="border-t border-gray-200 dark:border-gray-600 pt-6">
+        <div className="flex justify-between items-center">
+          <div>
+            <p className="text-sm text-gray-600 dark:text-gray-400">
+              Preferences are saved automatically and apply system-wide
+            </p>
+          </div>
+          <Button onClick={handleSaveSystemPreferences}>
+            Save Preferences
+          </Button>
+        </div>
+      </div>
+    </CardContent>
+  </Card>
+
   {/* Placeholder for remaining settings sections */}
   <Card className={darkMode ? 'bg-gray-800 border-gray-700' : ''}>
     <CardHeader>
@@ -1196,7 +1345,6 @@ const [apiUsageStats, setApiUsageStats] = useState({
     <CardContent>
       <p className={darkMode ? 'text-gray-400' : 'text-gray-600'}>
         Remaining settings sections:
-        <br />• System Preferences  
         <br />• Program Management Hub
         <br />• Team & Access Management
       </p>
