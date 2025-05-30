@@ -1193,13 +1193,13 @@ const [apiUsageStats, setApiUsageStats] = useState({
               </Button>
               <Button variant="destructive" onClick={() => handleDeleteProgram(deletingProgram as any)}>
                 Delete
-              </Button>
+             </Button>
             </div>
           </div>
         </div>
       )}
+      </div>
     </div>
   );
 };
-
 export default ThrivalSystem;
