@@ -1414,5 +1414,5 @@ const handleEditProgram = (programId: string, programs: any, setNewProgram: any,
       </div>
     </div>
   );
-
+};
 export default ThrivalSystem;
