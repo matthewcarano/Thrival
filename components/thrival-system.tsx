@@ -605,7 +605,7 @@ const handleEditProgram = (programId: string, programs: any, setNewProgram: any,
         </div>
 
         {/* Criteria Weights */}
-        <div className="p-4 rounded-lg bg-gray-50"
+        <div className="p-4 rounded-lg bg-gray-50">
           <h4 className="text-lg font-semibold mb-4">Evaluation Criteria Weights</h4>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
             {Object.entries(newProgram.weights).map(([criterion, weight]) => (
