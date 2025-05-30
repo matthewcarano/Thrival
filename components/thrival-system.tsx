@@ -610,13 +610,11 @@ const handleEditProgram = (programId: string, programs: any, setNewProgram: any,
        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
       <p>Criteria weights will be configured here.</p>
         </div>
-          <div className="mt-4 pt-4 border-t border-gray-300 dark:border-gray-600">
-            <p className={`text-sm font-medium ${Object.values(newProgram.weights).reduce((sum: any, w: any) => sum + w, 0) === 100 ? 'text-green-600' : 'text-red-600'}`}>
-              Total Weight: {Object.values(newProgram.weights).reduce((sum: any, w: any) => sum + w, 0)}% 
-              {Object.values(newProgram.weights).reduce((sum: any, w: any) => sum + w, 0) !== 100 && ' (Must equal 100%)'}
+         <div className="mt-4 pt-4 border-t border-gray-300">
+      <p className="text-sm font-medium text-green-600">
+          Total Weight: 100%
             </p>
-          </div>
-        </div>
+              </div>
 
         {/* MAIN EVALUATION CRITERIA - NEW SECTION */}
         <div>
