@@ -555,7 +555,7 @@ const handleEditProgram = (programId: string, programs: any, setNewProgram: any,
     return Object.values(criteriaWeights).reduce((sum: number, weight: any) => sum + (weight as number), 0);
 
   return (
-    <<div className="min-h-screen transition-colors duration-200 bg-gray-50 text-gray-900">
+    <div className="min-h-screen transition-colors duration-200 bg-gray-50 text-gray-900">
       {/* Header */}
       <header className={`border-b ${darkMode ? 'border-gray-700 bg-gray-800' : 'border-gray-200 bg-white'} px-6 py-4`}>
         <div className="flex items-center justify-between">
