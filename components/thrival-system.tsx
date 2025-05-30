@@ -20,7 +20,7 @@ const ThrivalSystem = () => {
   const [isEvaluating, setIsEvaluating] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
   const [evaluationResult, setEvaluationResult] = useState<any>(null);
-  const [evaluationHistory, setEvaluationHistory] = useState<any[]>([]);
+  tsx
   const [bulkFile, setBulkFile] = useState<any>(null);
   const [bulkProcessing, setBulkProcessing] = useState(false);
   const [bulkResults, setBulkResults] = useState<any[]>([]);
@@ -90,11 +90,13 @@ const [apiUsageStats, setApiUsageStats] = useState({
   github: 0
 });
 
-  const [systemPreferences, setSystemPreferences] = useState({
-    emailNotifications: true,
-    autoSave: false,
-    exportFormat: 'pdf'
-  });
+const [systemPreferences, setSystemPreferences] = useState({
+  emailNotifications: true,
+  autoSave: false,
+  exportFormat: 'pdf',
+  evaluationTimeout: 10,
+  itemsPerPage: 25
+});
 
   const [prompts, setPrompts] = useState({
     team: {
