@@ -223,19 +223,19 @@ const [systemPreferences, setSystemPreferences] = useState({
   };
 
   // Calculate weighted score
-  const calculateWeightedScore = (scores: any) => {
-    const totalWeightedScore =
-      (scores.team * criteriaWeights.team / 100) +
-      (scores.evidence * criteriaWeights.evidence / 100) +
-      (scores.fit * criteriaWeights.fit / 100) +
-      (scores.need * criteriaWeights.need / 100) +
-      (scores.novelty * criteriaWeights.novelty / 100) +
-      (scores.focus * criteriaWeights.focus / 100);
+ const calculateWeightedScore = (scores: any, programWeights?: any) => {
+  const weights = programWeights || criteriaWeights;
+  const totalWeightedScore =
+    (scores.team * weights.team / 100) +
+    (scores.evidence * weights.evidence / 100) +
+    (scores.fit * weights.fit / 100) +
+    (scores.need * weights.need / 100) +
+    (scores.novelty * weights.novelty / 100) +
+    (scores.focus * weights.focus / 100);
 
-    const percentage = (totalWeightedScore / 10) * 100;
-    return { score: totalWeightedScore, percentage };
-  };
-
+  const percentage = (totalWeightedScore / 10) * 100;
+  return { score: totalWeightedScore, percentage };
+};
   // Main evaluation function
   const handleEvaluate = async () => {
     if (!applicationText.trim()) {
@@ -264,7 +264,8 @@ const [systemPreferences, setSystemPreferences] = useState({
         focus: results.focus.score
       };
 
-      const finalScore = calculateWeightedScore(scores);
+      const programWeights = programs[selectedProgram]?.weights || criteriaWeights;
+      const finalScore = calculateWeightedScore(scores, programWeights);
 
       // Find the appropriate grading tier
       const tier = gradingTiers.find(tier =>
@@ -276,7 +277,7 @@ const [systemPreferences, setSystemPreferences] = useState({
         tier.applicantMessage.replace('{programName}', programs[selectedProgram].name) :
         'Unable to determine appropriate feedback tier.';
 
-      const evaluation = {
+     const evaluation = {
         id: Date.now(),
         program: programs[selectedProgram],
         date: new Date().toISOString().split('T')[0],
@@ -284,6 +285,7 @@ const [systemPreferences, setSystemPreferences] = useState({
         externalData: { ...externalData },
         results,
         scores,
+        weightsUsed: programWeights,
         finalScore,
         recommendation,
         applicantFeedback
@@ -789,7 +791,7 @@ const [systemPreferences, setSystemPreferences] = useState({
                     <CardTitle>Evaluation Criteria</CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-4">
-                    {Object.entries(criteriaWeights).map(([criterion, weight]) => {
+                    {Object.entries(programs[selectedProgram]?.weights || criteriaWeights).map(([criterion, weight]) => {
                       const criteriaInfo: {[key: string]: any} = {
                         team: {
                           icon: UserCheck,
@@ -923,7 +925,7 @@ const [systemPreferences, setSystemPreferences] = useState({
                                 {(result as any).score}/10
                               </Badge>
                               <Badge variant="outline" className={darkMode ? 'border-white/20' : ''}>
-                                {criteriaWeights[criterion]}% weight
+                                {(programs[selectedProgram]?.weights || criteriaWeights)[criterion]}% weight
                               </Badge>
                             </div>
                           </div>
