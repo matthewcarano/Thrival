@@ -176,7 +176,6 @@ const evaluateWithAI = async (criterion: string, applicationText: string, progra
   try {
     const program = programs[programId];
     const criterionPrompt = program?.customPrompts?.[criterion] || program?.overallPrompt || prompts[criterion]?.default;
-    
     const response = await fetch('/api/evaluate', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -208,7 +207,8 @@ const evaluateWithAI = async (criterion: string, applicationText: string, progra
       score: 5, 
       feedback: `API Error: ${error.message || 'Unknown error'}. Check console for details.`
     };
-  }
+   }
+  };
 
   // Calculate weighted score
  const calculateWeightedScore = (scores: any, programWeights?: any) => {
