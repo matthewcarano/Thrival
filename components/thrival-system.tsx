@@ -27,26 +27,26 @@ const ThrivalSystem = () => {
   const [bulkProcessing, setBulkProcessing] = useState(false);
   const [bulkResults, setBulkResults] = useState<any[]>([]);
   const [showProgramEditor, setShowProgramEditor] = useState(false);
-  const [newProgram, setNewProgram] = useState({
-  name: '',
-  overallPrompt: '',
-  weights: {
-    team: 20,
-    evidence: 20,
-    fit: 15,
-    need: 15,
-    novelty: 15,
-    focus: 15
-  },
- customPrompts: {
-    team: '',
-    evidence: '',
-    fit: '',
-    need: '',
-    novelty: '',
-    focus: ''
-  }
-});
+ const [newProgram, setNewProgram] = useState({
+    name: '',
+    overallPrompt: '',
+    weights: {
+      team: 20,
+      evidence: 20,
+      fit: 15,
+      need: 15,
+      novelty: 15,
+      focus: 15
+    },
+    customPrompts: {
+      team: '',
+      evidence: '',
+      fit: '',
+      need: '',
+      novelty: '',
+      focus: ''
+    }
+  });
   const [editingProgram, setEditingProgram] = useState<string | null>(null);
   const [programs, setPrograms] = useState<any>({
     program1: {
