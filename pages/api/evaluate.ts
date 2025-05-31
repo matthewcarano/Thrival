@@ -50,10 +50,9 @@ ${prompt}
 APPLICATION TEXT TO EVALUATE:
 ${applicationText}
 
-${externalData && Object.keys(externalData).length > 0 ? `
-EXTERNAL DATA PROVIDED:
+${externalData && Object.keys(externalData).length > 0 ? 
+`EXTERNAL DATA PROVIDED:
 ${Object.entries(externalData)
   .filter(([, value]) => value)
   .map(([key, value]) => `${key}: ${value}`)
-  .join('\n')}
-` : ''}
+  .join('\n')}` : ''}
