@@ -1429,6 +1429,8 @@ const [systemPreferences, setSystemPreferences] = useState({
         </div>
       </CardContent>
     </Card>
+  )}
+    
   {/* Program Management Section */}
   {activeSettingsSection === 'programs' && (
     <Card className={darkMode ? 'bg-gray-800 border-gray-700' : ''}>
