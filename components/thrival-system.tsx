@@ -200,21 +200,9 @@ const evaluateWithAI = async (criterion: string, applicationText: string, progra
 } catch (error: any) {
     console.error('Evaluation API error details:', error);
     
-    // Try to get the actual response text
-    let errorDetails = error.message;
-    try {
-      if (response && !response.ok) {
-        const responseText = await response.text();
-        console.error('Response text:', responseText);
-        errorDetails = `Status: ${response.status}, Response: ${responseText}`;
-      }
-    } catch (parseErr) {
-      console.error('Could not parse error response');
-    }
-    
     return { 
       score: 5, 
-      feedback: `API Error: ${errorDetails}`
+      feedback: `API Error: ${error.message || 'Unknown error'}`
     };
   }
 };
