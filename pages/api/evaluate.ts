@@ -51,3 +51,55 @@ APPLICATION TEXT TO EVALUATE:
 ${applicationText}
 
 Please evaluate this application for the "${criterion}" criterion and respond with the JSON format specified above.`
+
+    const message = await anthropic.messages.create({
+      model: 'claude-3-sonnet-20240229',
+      max_tokens: 1000,
+      system: systemPrompt,
+      messages: [
+        {
+          role: 'user',
+          content: userPrompt
+        }
+      ]
+    })
+
+    const responseText = message.content[0].type === 'text' ? message.content[0].text : ''
+    console.log('Claude response:', responseText)
+    
+    try {
+      const jsonMatch = responseText.match(/\{[\s\S]*\}/)
+      if (!jsonMatch) {
+        console.error('No JSON found in response:', responseText)
+        throw new Error('No JSON found in response')
+      }
+      
+      const result = JSON.parse(jsonMatch[0])
+      console.log('Parsed result:', result)
+      
+      if (typeof result.score !== 'number' || !result.feedback) {
+        console.error('Invalid response structure:', result)
+        throw new Error('Invalid response structure')
+      }
+      
+      result.score = Math.max(1, Math.min(10, Math.round(result.score)))
+      
+      res.status(200).json(result)
+    } catch (parseError) {
+      console.error('Failed to parse Claude response:', parseError)
+      console.error('Raw response:', responseText)
+      
+      res.status(200).json({
+        score: 5,
+        feedback: 'The evaluation could not be completed due to a parsing issue. Please try again.'
+      })
+    }
+
+  } catch (error: any) {
+    console.error('Evaluation API error:', error)
+    res.status(500).json({ 
+      message: 'Internal server error',
+      error: error.message
+    })
+  }
+}
