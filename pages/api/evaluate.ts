@@ -38,10 +38,10 @@ RESPONSE FORMAT:
 Provide your response as a JSON object with exactly this structure:
 {
   "score": [number between 1-10],
-  "feedback": "[detailed feedback explaining the score]"
+  "feedback": "[1-2 sentences maximum explaining the score]"
 }
 
-The feedback should be professional, constructive, and specific. Reference concrete details from the application when possible.`
+Keep feedback brief and concise. One sentence explaining the score and one sentence with specific details or recommendations.`
 
    const userPrompt = `EVALUATION CRITERIA: ${criterion}
     
