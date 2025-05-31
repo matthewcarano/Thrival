@@ -42,7 +42,7 @@ Provide your response as a JSON object with exactly this structure:
 
 The feedback should be professional, constructive, and specific. Reference concrete details from the application when possible.`
 
-    const userPrompt = `EVALUATION CRITERIA: ${criterion}
+  const userPrompt = `EVALUATION CRITERIA: ${criterion}
 
 SPECIFIC PROMPT FOR THIS CRITERION:
 ${prompt}
@@ -50,9 +50,4 @@ ${prompt}
 APPLICATION TEXT TO EVALUATE:
 ${applicationText}
 
-${externalData && Object.keys(externalData).length > 0 ? 
-`EXTERNAL DATA PROVIDED:
-${Object.entries(externalData)
-  .filter(([, value]) => value)
-  .map(([key, value]) => `${key}: ${value}`)
-  .join('\n')}` : ''}
+Please evaluate this application for the "${criterion}" criterion and respond with the JSON format specified above.`
