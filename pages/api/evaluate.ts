@@ -1,9 +1,4 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-import Anthropic from '@anthropic-ai/sdk'
-
-const anthropic = new Anthropic({
-  apiKey: process.env.CLAUDE_API_KEY,
-})
 
 export default async function handler(
   req: NextApiRequest,
@@ -20,7 +15,7 @@ export default async function handler(
       return res.status(400).json({ message: 'Missing required fields' })
     }
 
-    console.log('Starting evaluation for criterion:', criterion)
+    console.log('API endpoint reached for criterion:', criterion)
 
     const systemPrompt = `You are an expert grant application evaluator. Your task is to evaluate applications based on specific criteria and provide both a numerical score (1-10) and detailed feedback.
 
@@ -40,9 +35,9 @@ Provide your response as a JSON object with exactly this structure:
   "feedback": "[5-sentence detailed feedback explaining the score]"
 }
 
-The feedback should be professional, constructive, and specific. Reference concrete details from the application when possible.`
+The feedback should be professional, constructive, and specific.`
 
-  const userPrompt = `EVALUATION CRITERIA: ${criterion}
+    const userPrompt = `EVALUATION CRITERIA: ${criterion}
 
 SPECIFIC PROMPT FOR THIS CRITERION:
 ${prompt}
@@ -52,25 +47,50 @@ ${applicationText}
 
 Please evaluate this application for the "${criterion}" criterion and respond with the JSON format specified above.`
 
-    const message = await anthropic.messages.create({
-      model: 'claude-3-sonnet-20240229',
-      max_tokens: 1000,
-      system: systemPrompt,
-      messages: [
-        {
-          role: 'user',
-          content: userPrompt
-        }
-      ]
+    console.log('Making request to Claude API...')
+
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': process.env.CLAUDE_API_KEY || '',
+        'anthropic-version': '2023-06-01'
+      },
+      body: JSON.stringify({
+        model: 'claude-3-sonnet-20240229',
+        max_tokens: 1000,
+        system: systemPrompt,
+        messages: [
+          {
+            role: 'user',
+            content: userPrompt
+          }
+        ]
+      })
     })
 
-    const responseText = message.content[0].type === 'text' ? message.content[0].text : ''
-    console.log('Claude response:', responseText)
+    console.log('Claude API response status:', response.status)
+
+    if (!response.ok) {
+      const errorText = await response.text()
+      console.error('Claude API error:', errorText)
+      return res.status(500).json({ 
+        message: 'Claude API error',
+        status: response.status,
+        error: errorText
+      })
+    }
+
+    const claudeResponse = await response.json()
+    console.log('Claude response received:', claudeResponse)
+
+    const responseText = claudeResponse.content[0]?.text || ''
+    console.log('Response text:', responseText)
     
     try {
       const jsonMatch = responseText.match(/\{[\s\S]*\}/)
       if (!jsonMatch) {
-        console.error('No JSON found in response:', responseText)
+        console.error('No JSON found in response')
         throw new Error('No JSON found in response')
       }
       
@@ -78,7 +98,6 @@ Please evaluate this application for the "${criterion}" criterion and respond wi
       console.log('Parsed result:', result)
       
       if (typeof result.score !== 'number' || !result.feedback) {
-        console.error('Invalid response structure:', result)
         throw new Error('Invalid response structure')
       }
       
@@ -86,8 +105,7 @@ Please evaluate this application for the "${criterion}" criterion and respond wi
       
       res.status(200).json(result)
     } catch (parseError) {
-      console.error('Failed to parse Claude response:', parseError)
-      console.error('Raw response:', responseText)
+      console.error('Parse error:', parseError)
       
       res.status(200).json({
         score: 5,
