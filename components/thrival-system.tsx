@@ -14,6 +14,7 @@ const Label = ({ children, className }: any) => <div className={`text-sm font-me
 
 const ThrivalSystem = () => {
   // State declarations
+// State declarations
   const [activeTab, setActiveTab] = useState('evaluate');
   const [activeSettingsSection, setActiveSettingsSection] = useState('overview');
   const [applicationText, setApplicationText] = useState('');
@@ -27,6 +28,7 @@ const ThrivalSystem = () => {
   const [bulkResults, setBulkResults] = useState<any[]>([]);
   const [showProgramEditor, setShowProgramEditor] = useState(false);
   const [newProgram, setNewProgram] = useState({ name: '', criteria: '' });
+  const [editingProgram, setEditingProgram] = useState<string | null>(null);
   const [programs, setPrograms] = useState<any>({
     program1: {
       name: 'Program 1 - DeFi Innovation',
@@ -1020,10 +1022,21 @@ const [systemPreferences, setSystemPreferences] = useState({
           <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">→ Now part of Program Management</p>
         </div>
         
-        <div className="p-4 rounded-lg border-2 border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 opacity-50">
-          <h3 className="font-medium">📁 Program Management</h3>
-          <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">Coming soon</p>
-        </div>
+       <button
+          onClick={() => setActiveSettingsSection('programs')}
+          className={`p-4 rounded-lg border-2 text-left transition-colors ${
+            activeSettingsSection === 'programs' 
+              ? 'border-blue-200 dark:border-blue-800 bg-blue-50 dark:bg-blue-900/20' 
+              : 'border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 hover:border-blue-200 dark:hover:border-blue-800'
+          }`}
+        >
+          <h3 className={`font-medium ${activeSettingsSection === 'programs' ? 'text-blue-900 dark:text-blue-100' : ''}`}>
+            📁 Program Management
+          </h3>
+          <p className={`text-sm mt-1 ${activeSettingsSection === 'programs' ? 'text-blue-700 dark:text-blue-300' : 'text-gray-600 dark:text-gray-400'}`}>
+            Create, edit & manage evaluation programs
+          </p>
+        </button>
         
         <div className="p-4 rounded-lg border-2 border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 opacity-50">
           <h3 className="font-medium">👥 Team & Access</h3>
