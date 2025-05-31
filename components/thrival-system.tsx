@@ -618,9 +618,8 @@ const [systemPreferences, setSystemPreferences] = useState({
         name: `${originalProgram.name} (Copy)`,
         active: false
       }
-    }));
+   }));
   };
-};
 
   const handleCreateProgram = () => {
     if (!newProgram.name.trim() || !newProgram.overallPrompt.trim()) {
