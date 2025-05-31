@@ -16,6 +16,9 @@ const ThrivalSystem = () => {
   // State declarations
 // State declarations
   const [activeTab, setActiveTab] = useState('evaluate');
+  const [searchTerm, setSearchTerm] = useState('');
+  const [currentEvaluator, setCurrentEvaluator] = useState('Current User');
+  const [projectName, setProjectName] = useState('');
   const [activeSettingsSection, setActiveSettingsSection] = useState('overview');
   const [applicationText, setApplicationText] = useState('');
   const [selectedProgram, setSelectedProgram] = useState('program1');
@@ -27,7 +30,7 @@ const ThrivalSystem = () => {
   const [bulkProcessing, setBulkProcessing] = useState(false);
   const [bulkResults, setBulkResults] = useState<any[]>([]);
   const [showProgramEditor, setShowProgramEditor] = useState(false);
- const [newProgram, setNewProgram] = useState({
+  const [newProgram, setNewProgram] = useState({
     name: '',
     overallPrompt: '',
     weights: {
@@ -277,9 +280,11 @@ const [systemPreferences, setSystemPreferences] = useState({
         tier.applicantMessage.replace('{programName}', programs[selectedProgram].name) :
         'Unable to determine appropriate feedback tier.';
 
-     const evaluation = {
+    const evaluation = {
         id: Date.now(),
         program: programs[selectedProgram],
+        projectName: projectName || `Application ${Date.now()}`,
+        evaluator: currentEvaluator,
         date: new Date().toISOString().split('T')[0],
         applicationText,
         externalData: { ...externalData },
@@ -290,10 +295,14 @@ const [systemPreferences, setSystemPreferences] = useState({
         recommendation,
         applicantFeedback
       };
-
       setEvaluationResult(evaluation);
       setEvaluationHistory(prev => [evaluation, ...prev]);
 
+  // Auto-redirect to Results page and clear form
+      setActiveTab('results');
+      setApplicationText('');
+      setProjectName('');
+      setExternalData({ twitter: '', github: '', website: '' });
     } catch (error) {
       console.error('Evaluation error:', error);
       alert('An error occurred during evaluation. Please try again.');
@@ -734,7 +743,7 @@ const [systemPreferences, setSystemPreferences] = useState({
           <TabsList className="grid w-full grid-cols-5">
             <TabsTrigger value="evaluate">Evaluate</TabsTrigger>
             <TabsTrigger value="bulk">Bulk Process</TabsTrigger>
-            <TabsTrigger value="history">History</TabsTrigger>
+            <TabsTrigger value="results">Results</TabsTrigger>
             <TabsTrigger value="team">Team</TabsTrigger>
             <TabsTrigger value="settings">Settings</TabsTrigger>
           </TabsList>
@@ -771,14 +780,26 @@ const [systemPreferences, setSystemPreferences] = useState({
                   <CardHeader>
                     <CardTitle>Application</CardTitle>
                   </CardHeader>
-                  <CardContent>
-                    <Textarea
-                      placeholder="Paste the application text here..."
-                      value={applicationText}
-                      onChange={(e: any) => setApplicationText(e.target.value)}
-                      rows={20}
-                      className={darkMode ? 'border-white/30' : ''}
-                    />
+                  <CardContent className="space-y-4">
+                    <div>
+                      <Label>Project Name (Optional)</Label>
+                      <Input
+                        placeholder="Enter a name for this project/application..."
+                        value={projectName}
+                        onChange={(e: any) => setProjectName(e.target.value)}
+                        className={darkMode ? 'border-white/30' : ''}
+                      />
+                    </div>
+                    <div>
+                      <Label>Application Text</Label>
+                      <Textarea
+                        placeholder="Paste the application text here..."
+                        value={applicationText}
+                        onChange={(e: any) => setApplicationText(e.target.value)}
+                        rows={18}
+                        className={darkMode ? 'border-white/30' : ''}
+                      />
+                    </div>
                   </CardContent>
                 </Card>
               </div>
@@ -893,55 +914,6 @@ const [systemPreferences, setSystemPreferences] = useState({
                   {isEvaluating ? 'Evaluating...' : 'Start Evaluation'}
                 </Button>
               </div>
-
-              {/* Evaluation Results */}
-              {evaluationResult && (
-                <Card className={darkMode ? 'bg-gray-800 border-gray-700' : ''}>
-                  <CardHeader>
-                    <CardTitle>Evaluation Results</CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-6">
-                    {/* Overall Score */}
-                    <div className="text-center p-6 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 rounded-lg">
-                      <div className="text-4xl font-bold text-blue-600">{evaluationResult.finalScore.score.toFixed(1)}/10</div>
-                      <div className="text-lg text-gray-600 dark:text-gray-400">{evaluationResult.finalScore.percentage.toFixed(0)}% Overall Score</div>
-                      <Badge className="mt-2" variant={
-                        evaluationResult.recommendation === 'Strongly Recommend' ? 'default' :
-                        evaluationResult.recommendation === 'Recommend' ? 'default' :
-                        evaluationResult.recommendation === 'Conditional' ? 'secondary' : 'destructive'
-                      }>
-                        {evaluationResult.recommendation}
-                      </Badge>
-                    </div>
-
-                    {/* Criteria Breakdown */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      {Object.entries(evaluationResult.results).map(([criterion, result]: [string, any]) => (
-                        <Card key={criterion} className="p-4">
-                          <div className="flex items-center justify-between mb-2">
-                            <h4 className="font-medium capitalize">{criterion}</h4>
-                            <div className="flex items-center space-x-2">
-                              <Badge variant="outline" className="text-lg px-3 py-1">
-                                {(result as any).score}/10
-                              </Badge>
-                              <Badge variant="outline" className={darkMode ? 'border-white/20' : ''}>
-                                {(programs[selectedProgram]?.weights || criteriaWeights)[criterion]}% weight
-                              </Badge>
-                            </div>
-                          </div>
-                          <p className="text-sm text-gray-600 dark:text-gray-400">{(result as any).feedback}</p>
-                        </Card>
-                      ))}
-                    </div>
-
-                    {/* Applicant Feedback */}
-                    <Card className="p-4 bg-blue-50 dark:bg-blue-900/20">
-                      <h4 className="font-medium mb-2">Applicant Feedback</h4>
-                      <p className="text-sm">{evaluationResult.applicantFeedback}</p>
-                    </Card>
-                  </CardContent>
-                </Card>
-              )}
             </div>
           </TabsContent>
 
@@ -1029,55 +1001,139 @@ const [systemPreferences, setSystemPreferences] = useState({
             </Card>
           </TabsContent>
 
-          {/* History Tab */}
-          <TabsContent value="history" className="space-y-6">
-            <Card className={darkMode ? 'bg-gray-800 border-gray-700' : ''}>
-              <CardHeader>
-                <div className="flex items-center justify-between">
-                  <CardTitle>Evaluation History</CardTitle>
-                  <Button variant="outline" size="sm">
-                    <Download className="h-4 w-4 mr-2" />
-                    Export All
-                  </Button>
-                </div>
-              </CardHeader>
-              <CardContent>
-                {evaluationHistory.length === 0 ? (
-                  <p className={`text-center py-8 ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-                    No evaluations completed yet. Start by evaluating an application in the Evaluate tab.
+       {/* Results Tab */}
+      <TabsContent value="results" className="space-y-6">
+        {/* Latest Evaluation Result */}
+        {evaluationResult && (
+          <Card className={darkMode ? 'bg-gray-800 border-gray-700' : ''}>
+            <CardHeader>
+              <CardTitle>Latest Evaluation Result</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              {/* Project Info */}
+              <div className="flex items-center justify-between p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+                <div>
+                  <h3 className="font-medium text-lg">{evaluationResult.projectName}</h3>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                    Evaluated by {evaluationResult.evaluator} on {evaluationResult.date} using {evaluationResult.program.name}
                   </p>
-                ) : (
-                  <div className="space-y-4">
-                    {evaluationHistory.map((evaluation: any) => (
-                      <Card key={evaluation.id} className="p-4">
-                        <div className="flex items-center justify-between mb-2">
-                          <div>
-                            <h4 className="font-medium">{evaluation.program.name}</h4>
-                            <p className="text-sm text-gray-600 dark:text-gray-400">{evaluation.date}</p>
-                          </div>
-                          <div className="flex items-center space-x-2">
-                            <Badge variant="outline" className="text-lg px-3 py-1">
-                              {evaluation.finalScore.score.toFixed(1)}/10
-                            </Badge>
-                            <Badge variant={
-                              evaluation.recommendation === 'Strongly Recommend' ? 'default' :
-                              evaluation.recommendation === 'Recommend' ? 'default' :
-                              evaluation.recommendation === 'Conditional' ? 'secondary' : 'destructive'
-                            }>
-                              {evaluation.recommendation}
-                            </Badge>
+                </div>
+                <Badge className="text-lg px-4 py-2" variant={
+                  evaluationResult.recommendation === 'Strongly Recommend' ? 'default' :
+                  evaluationResult.recommendation === 'Recommend' ? 'default' :
+                  evaluationResult.recommendation === 'Conditional' ? 'secondary' : 'destructive'
+                }>
+                  {evaluationResult.finalScore.score.toFixed(1)}/10
+                </Badge>
+              </div>
+      
+              {/* Overall Score */}
+              <div className="text-center p-6 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 rounded-lg">
+                <div className="text-4xl font-bold text-blue-600">{evaluationResult.finalScore.score.toFixed(1)}/10</div>
+                <div className="text-lg text-gray-600 dark:text-gray-400">{evaluationResult.finalScore.percentage.toFixed(0)}% Overall Score</div>
+                <Badge className="mt-2" variant={
+                  evaluationResult.recommendation === 'Strongly Recommend' ? 'default' :
+                  evaluationResult.recommendation === 'Recommend' ? 'default' :
+                  evaluationResult.recommendation === 'Conditional' ? 'secondary' : 'destructive'
+                }>
+                  {evaluationResult.recommendation}
+                </Badge>
+              </div>
+      
+              {/* Criteria Breakdown */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {Object.entries(evaluationResult.results).map(([criterion, result]: [string, any]) => (
+                  <Card key={criterion} className="p-4">
+                    <div className="flex items-center justify-between mb-2">
+                      <h4 className="font-medium capitalize">{criterion}</h4>
+                      <div className="flex items-center space-x-2">
+                        <Badge variant="outline" className="text-lg px-3 py-1">
+                          {(result as any).score}/10
+                        </Badge>
+                        <Badge variant="outline" className={darkMode ? 'border-white/20' : ''}>
+                          {evaluationResult.weightsUsed[criterion]}% weight
+                        </Badge>
+                      </div>
+                    </div>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">{(result as any).feedback}</p>
+                  </Card>
+                ))}
+              </div>
+      
+              {/* Applicant Feedback */}
+              <Card className="p-4 bg-blue-50 dark:bg-blue-900/20">
+                <h4 className="font-medium mb-2">Applicant Feedback</h4>
+                <p className="text-sm">{evaluationResult.applicantFeedback}</p>
+              </Card>
+            </CardContent>
+          </Card>
+        )}
+      
+        {/* Evaluation History */}
+        <Card className={darkMode ? 'bg-gray-800 border-gray-700' : ''}>
+          <CardHeader>
+            <div className="flex items-center justify-between">
+              <CardTitle>Evaluation History</CardTitle>
+              <div className="flex items-center space-x-2">
+                <Input
+                  placeholder="Search evaluations..."
+                  value={searchTerm}
+                  onChange={(e: any) => setSearchTerm(e.target.value)}
+                  className="w-64"
+                />
+                <Button variant="outline" size="sm">
+                  <Download className="h-4 w-4 mr-2" />
+                  Export All
+                </Button>
+              </div>
+            </div>
+          </CardHeader>
+          <CardContent>
+            {evaluationHistory.length === 0 ? (
+              <p className={`text-center py-8 ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                No evaluations completed yet. Start by evaluating an application in the Evaluate tab.
+              </p>
+            ) : (
+              <div className="space-y-3">
+                {evaluationHistory
+                  .filter((evaluation: any) => 
+                    !searchTerm || 
+                    evaluation.projectName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    evaluation.program.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    evaluation.evaluator.toLowerCase().includes(searchTerm.toLowerCase())
+                  )
+                  .map((evaluation: any) => (
+                    <div key={evaluation.id} className={`p-4 rounded-lg border ${darkMode ? 'border-gray-600' : 'border-gray-200'} hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer`}
+                         onClick={() => setEvaluationResult(evaluation)}>
+                      <div className="flex items-center justify-between">
+                        <div className="flex-1">
+                          <h4 className="font-medium">{evaluation.projectName}</h4>
+                          <div className="flex items-center space-x-4 text-sm text-gray-600 dark:text-gray-400 mt-1">
+                            <span>📅 {evaluation.date}</span>
+                            <span>👤 {evaluation.evaluator}</span>
+                            <span>📁 {evaluation.program.name}</span>
                           </div>
                         </div>
-                        <p className="text-sm text-gray-600 dark:text-gray-400 truncate">
-                          {evaluation.applicationText.substring(0, 150)}...
-                        </p>
-                      </Card>
-                    ))}
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-          </TabsContent>
+                        <div className="flex items-center space-x-3">
+                          <Badge variant="outline" className="text-lg px-3 py-1">
+                            {evaluation.finalScore.score.toFixed(1)}/10
+                          </Badge>
+                          <Badge variant={
+                            evaluation.recommendation === 'Strongly Recommend' ? 'default' :
+                            evaluation.recommendation === 'Recommend' ? 'default' :
+                            evaluation.recommendation === 'Conditional' ? 'secondary' : 'destructive'
+                          }>
+                            {evaluation.recommendation}
+                          </Badge>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      </TabsContent>
 
           {/* Team Tab */}
           <TabsContent value="team" className="space-y-6">
