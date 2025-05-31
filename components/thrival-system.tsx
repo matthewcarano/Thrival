@@ -325,25 +325,39 @@ const [systemPreferences, setSystemPreferences] = useState({
   };
 
   // Program management
-  const handleAddProgram = () => {
-    if (!newProgram.name.trim() || !newProgram.criteria.trim()) {
-      alert('Please fill in both program name and criteria.');
-      return;
+ const handleAddProgram = () => {
+  if (!newProgram.name.trim() || !newProgram.overallPrompt.trim()) {
+    alert('Please fill in both program name and overall prompt.');
+    return;
+  }
+
+  const totalWeight = Object.values(newProgram.weights).reduce((sum: number, weight: any) => sum + weight, 0);
+  if (totalWeight !== 100) {
+    alert(`Criteria weights must total 100%. Currently: ${totalWeight}%`);
+    return;
+  }
+
+  const programId = `program${Date.now()}`;
+  setPrograms((prev: any) => ({
+    ...prev,
+    [programId]: {
+      name: newProgram.name,
+      criteria: newProgram.overallPrompt,
+      overallPrompt: newProgram.overallPrompt,
+      weights: { ...newProgram.weights },
+      customPrompts: { ...newProgram.customPrompts },
+      active: true
     }
+  }));
 
-    const programId = `program${Date.now()}`;
-    setPrograms((prev: any) => ({
-      ...prev,
-      [programId]: {
-        name: newProgram.name,
-        criteria: newProgram.criteria,
-        active: true
-      }
-    }));
-
-    setNewProgram({ name: '', criteria: '' });
-    setShowProgramEditor(false);
-  };
+  setNewProgram({
+    name: '',
+    overallPrompt: '',
+    weights: { team: 20, evidence: 20, fit: 15, need: 15, novelty: 15, focus: 15 },
+    customPrompts: { team: '', evidence: '', fit: '', need: '', novelty: '', focus: '' }
+  });
+  setShowProgramEditor(false);
+};
 
   const handleDeleteProgram = (programId: string) => {
     const activePrograms = Object.entries(programs).filter(([, prog]) => (prog as any).active);
