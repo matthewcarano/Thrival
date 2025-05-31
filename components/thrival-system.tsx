@@ -198,15 +198,17 @@ const evaluateWithAI = async (criterion: string, applicationText: string, progra
       score: result.score, 
       feedback: result.feedback 
     };
-  } catch (error) {
-    console.error('Evaluation API error:', error);
-    // Fallback to prevent complete failure
+  } catch (error: any) {
+    console.error('Evaluation API error details:', error);
+    console.error('Response status:', error.status);
+    console.error('Response text:', await error.text?.());
+    
+    // Show the actual error to user for debugging
     return { 
       score: 5, 
-      feedback: 'Evaluation could not be completed due to a technical issue. Please try again.' 
+      feedback: `API Error: ${error.message || 'Unknown error'}. Check console for details.`
     };
-    }
-  };
+  }
 
   // Calculate weighted score
  const calculateWeightedScore = (scores: any, programWeights?: any) => {
