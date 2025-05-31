@@ -205,12 +205,7 @@ const evaluateWithAI = async (criterion: string, applicationText: string, progra
       score: 5, 
       feedback: 'Evaluation could not be completed due to a technical issue. Please try again.' 
     };
-  }
-};
-
-    const feedback = `${evidenceExamples[criterion][Math.floor(Math.random() * evidenceExamples[criterion].length)]} The project demonstrates ${score >= 8 ? 'exceptional' : score >= 6 ? 'strong' : score >= 4 ? 'adequate' : 'limited'} performance in this criterion. ${score >= 7 ? 'This is a significant strength that enhances the overall application.' : score >= 5 ? 'This area shows promise but could benefit from additional development.' : 'This area requires improvement to meet program standards.'} ${score >= 6 ? 'The evidence provided is convincing and well-documented.' : 'More concrete evidence would strengthen this evaluation.'} Overall, this criterion ${score >= 7 ? 'exceeds' : score >= 5 ? 'meets' : 'falls short of'} the expected standards for this program.`;
-
-    return { score, feedback };
+    }
   };
 
   // Calculate weighted score
