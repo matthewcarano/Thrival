@@ -27,7 +27,26 @@ const ThrivalSystem = () => {
   const [bulkProcessing, setBulkProcessing] = useState(false);
   const [bulkResults, setBulkResults] = useState<any[]>([]);
   const [showProgramEditor, setShowProgramEditor] = useState(false);
-  const [newProgram, setNewProgram] = useState({ name: '', criteria: '' });
+  const [newProgram, setNewProgram] = useState({
+  name: '',
+  overallPrompt: '',
+  weights: {
+    team: 20,
+    evidence: 20,
+    fit: 15,
+    need: 15,
+    novelty: 15,
+    focus: 15
+  },
+  customPrompts: {
+    team: '',
+    evidence: '',
+    fit: '',
+    need: '',
+    novelty: '',
+    focus: ''
+  }
+});
   const [editingProgram, setEditingProgram] = useState<string | null>(null);
   const [programs, setPrograms] = useState<any>({
     program1: {
@@ -563,10 +582,17 @@ const [systemPreferences, setSystemPreferences] = useState({
     }));
   };
 
-  const handleEditProgram = (programId: string) => {
-    setEditingProgram(programId);
-    setShowProgramEditor(true);
-  };
+ const handleEditProgram = (programId: string) => {
+  const program = programs[programId];
+  setNewProgram({
+    name: program.name,
+    overallPrompt: program.overallPrompt || program.criteria,
+    weights: program.weights || { team: 20, evidence: 20, fit: 15, need: 15, novelty: 15, focus: 15 },
+    customPrompts: program.customPrompts || { team: '', evidence: '', fit: '', need: '', novelty: '', focus: '' }
+  });
+  setEditingProgram(programId);
+  setShowProgramEditor(true);
+};
 
   const handleDuplicateProgram = (programId: string) => {
     const originalProgram = programs[programId];
@@ -579,6 +605,78 @@ const [systemPreferences, setSystemPreferences] = useState({
         active: false
       }
     }));
+  };
+};
+
+  const handleCreateProgram = () => {
+    if (!newProgram.name.trim() || !newProgram.overallPrompt.trim()) {
+      alert('Please fill in both program name and overall prompt.');
+      return;
+    }
+
+    const totalWeight = Object.values(newProgram.weights).reduce((sum: number, weight: any) => sum + weight, 0);
+    if (totalWeight !== 100) {
+      alert(`Criteria weights must total 100%. Currently: ${totalWeight}%`);
+      return;
+    }
+
+    const programId = `program${Date.now()}`;
+    setPrograms(prev => ({
+      ...prev,
+      [programId]: {
+        name: newProgram.name,
+        criteria: newProgram.overallPrompt,
+        overallPrompt: newProgram.overallPrompt,
+        weights: { ...newProgram.weights },
+        customPrompts: { ...newProgram.customPrompts },
+        active: true
+      }
+    }));
+
+    // Reset form
+    setNewProgram({
+      name: '',
+      overallPrompt: '',
+      weights: { team: 20, evidence: 20, fit: 15, need: 15, novelty: 15, focus: 15 },
+      customPrompts: { team: '', evidence: '', fit: '', need: '', novelty: '', focus: '' }
+    });
+    setShowProgramEditor(false);
+    setEditingProgram(null);
+  };
+
+  const handleUpdateProgram = () => {
+    if (!editingProgram || !newProgram.name.trim() || !newProgram.overallPrompt.trim()) {
+      alert('Please fill in both program name and overall prompt.');
+      return;
+    }
+
+    const totalWeight = Object.values(newProgram.weights).reduce((sum: number, weight: any) => sum + weight, 0);
+    if (totalWeight !== 100) {
+      alert(`Criteria weights must total 100%. Currently: ${totalWeight}%`);
+      return;
+    }
+
+    setPrograms(prev => ({
+      ...prev,
+      [editingProgram]: {
+        ...prev[editingProgram],
+        name: newProgram.name,
+        criteria: newProgram.overallPrompt,
+        overallPrompt: newProgram.overallPrompt,
+        weights: { ...newProgram.weights },
+        customPrompts: { ...newProgram.customPrompts }
+      }
+    }));
+
+    // Reset form
+    setNewProgram({
+      name: '',
+      overallPrompt: '',
+      weights: { team: 20, evidence: 20, fit: 15, need: 15, novelty: 15, focus: 15 },
+      customPrompts: { team: '', evidence: '', fit: '', need: '', novelty: '', focus: '' }
+    });
+    setShowProgramEditor(false);
+    setEditingProgram(null);
   };
   
   // Save criteria settings
@@ -1574,9 +1672,171 @@ const [systemPreferences, setSystemPreferences] = useState({
                 Delete
              </Button>
             </div>
-          </div>
+         </div>
         </div>
     )}
+
+      {/* Create/Edit Program Modal */}
+      {showProgramEditor && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className={`${darkMode ? 'bg-gray-800' : 'bg-white'} p-6 rounded-lg w-full max-w-4xl max-h-[90vh] overflow-y-auto`}>
+            <h3 className="text-lg font-semibold mb-4">
+              {editingProgram ? 'Edit Program' : 'Create New Program'}
+            </h3>
+            
+            <div className="space-y-6">
+              {/* Program Name */}
+              <div>
+                <Label>Program Name</Label>
+                <Input
+                  value={newProgram.name}
+                  onChange={(e: any) => setNewProgram(prev => ({ ...prev, name: e.target.value }))}
+                  placeholder="Enter program name..."
+                />
+              </div>
+
+              {/* Overall Prompt */}
+              <div>
+                <Label>Overall Evaluation Prompt</Label>
+                <Textarea
+                  value={newProgram.overallPrompt}
+                  onChange={(e: any) => setNewProgram(prev => ({ ...prev, overallPrompt: e.target.value }))}
+                  rows={4}
+                  placeholder="Enter the main prompt that will guide AI evaluation for this program..."
+                />
+              </div>
+
+              {/* Criteria Weights */}
+              <div>
+                <div className="flex items-center justify-between mb-4">
+                  <Label>Criteria Weights</Label>
+                  <Badge variant={
+                    Object.values(newProgram.weights).reduce((sum: number, weight: any) => sum + weight, 0) === 100 
+                      ? 'default' 
+                      : 'destructive'
+                  }>
+                    Total: {Object.values(newProgram.weights).reduce((sum: number, weight: any) => sum + weight, 0)}%
+                  </Badge>
+                </div>
+                
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                  {Object.entries(newProgram.weights).map(([criterion, weight]) => {
+                    const criteriaInfo: {[key: string]: any} = {
+                      team: { title: 'Team', icon: '👥' },
+                      evidence: { title: 'Evidence', icon: '📊' },
+                      fit: { title: 'Fit', icon: '🎯' },
+                      need: { title: 'Need', icon: '📈' },
+                      novelty: { title: 'Novelty', icon: '💡' },
+                      focus: { title: 'Focus', icon: '🔍' }
+                    };
+                    
+                    const info = criteriaInfo[criterion];
+                    
+                    return (
+                      <div key={criterion} className="p-3 rounded-lg border border-gray-200 dark:border-gray-600">
+                        <div className="flex items-center space-x-2 mb-2">
+                          <span className="text-lg">{info.icon}</span>
+                          <span className="font-medium text-sm">{info.title}</span>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <Input
+                            type="number"
+                            min="0"
+                            max="100"
+                            value={weight}
+                            onChange={(e: any) => 
+                              setNewProgram(prev => ({
+                                ...prev,
+                                weights: {
+                                  ...prev.weights,
+                                  [criterion]: parseInt(e.target.value) || 0
+                                }
+                              }))
+                            }
+                            className="w-16 text-sm"
+                          />
+                          <span className="text-sm text-gray-600 dark:text-gray-400">%</span>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Custom Prompts */}
+              <div>
+                <Label>Custom Criterion Prompts (Optional)</Label>
+                <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+                  Leave blank to use the overall prompt for all criteria, or customize individual prompts below.
+                </p>
+                
+                <div className="space-y-4">
+                  {Object.entries(newProgram.customPrompts).map(([criterion, prompt]) => {
+                    const criteriaInfo: {[key: string]: any} = {
+                      team: { title: 'Team', icon: '👥' },
+                      evidence: { title: 'Evidence', icon: '📊' },
+                      fit: { title: 'Fit', icon: '🎯' },
+                      need: { title: 'Need', icon: '📈' },
+                      novelty: { title: 'Novelty', icon: '💡' },
+                      focus: { title: 'Focus', icon: '🔍' }
+                    };
+                    
+                    const info = criteriaInfo[criterion];
+                    
+                    return (
+                      <div key={criterion}>
+                        <Label className="flex items-center space-x-2 mb-2">
+                          <span className="text-lg">{info.icon}</span>
+                          <span>{info.title} Prompt</span>
+                        </Label>
+                        <Textarea
+                          value={prompt}
+                          onChange={(e: any) => 
+                            setNewProgram(prev => ({
+                              ...prev,
+                              customPrompts: {
+                                ...prev.customPrompts,
+                                [criterion]: e.target.value
+                              }
+                            }))
+                          }
+                          rows={2}
+                          placeholder={`Custom ${info.title.toLowerCase()} evaluation prompt...`}
+                        />
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+
+            <div className="flex justify-end space-x-2 mt-6">
+              <Button 
+                variant="outline" 
+                onClick={() => {
+                  setShowProgramEditor(false);
+                  setEditingProgram(null);
+                  setNewProgram({
+                    name: '',
+                    overallPrompt: '',
+                    weights: { team: 20, evidence: 20, fit: 15, need: 15, novelty: 15, focus: 15 },
+                    customPrompts: { team: '', evidence: '', fit: '', need: '', novelty: '', focus: '' }
+                  });
+                }}
+              >
+                Cancel
+              </Button>
+              <Button 
+                onClick={editingProgram ? handleUpdateProgram : handleCreateProgram}
+                disabled={Object.values(newProgram.weights).reduce((sum: number, weight: any) => sum + weight, 0) !== 100}
+              >
+                {editingProgram ? 'Update Program' : 'Create Program'}
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
         </Tabs>
       </div>
     </div>
