@@ -84,34 +84,25 @@ Please evaluate this application for the "${criterion}" criterion and respond wi
     const claudeResponse = await response.json()
     const responseText = claudeResponse.content[0]?.text || ''
     
-    try {
-      const jsonMatch = responseText.match(/\{[\s\S]*\}/)
-      if (!jsonMatch) {
+  try {
+      // Extract just the score and feedback manually to avoid JSON parsing issues
+      const scoreMatch = responseText.match(/"score":\s*(\d+)/);
+      const feedbackMatch = responseText.match(/"feedback":\s*"(.*?)"\s*}/s);
+      
+      if (!scoreMatch || !feedbackMatch) {
         return res.status(200).json({
           score: 5,
-          feedback: `Could not parse response: ${responseText}`
+          feedback: `Could not extract score/feedback: ${responseText}`
         })
       }
       
-      // Clean up the JSON string to handle special characters
-      let cleanJsonString = jsonMatch[0]
-        .replace(/\n/g, '\\n')
-        .replace(/\r/g, '\\r')
-        .replace(/\t/g, '\\t')
-        .replace(/[\u0000-\u001F\u007F-\u009F]/g, '')
+      const score = Math.max(1, Math.min(10, parseInt(scoreMatch[1])));
+      const feedback = feedbackMatch[1]
+        .replace(/\\n/g, '\n')
+        .replace(/\\"/g, '"')
+        .replace(/\\\\/g, '\\');
       
-      const result = JSON.parse(cleanJsonString)
-      
-      if (typeof result.score !== 'number' || !result.feedback) {
-        return res.status(200).json({
-          score: 5,
-          feedback: `Invalid response format: ${JSON.stringify(result)}`
-        })
-      }
-      
-      result.score = Math.max(1, Math.min(10, Math.round(result.score)))
-      
-      res.status(200).json(result)
+      res.status(200).json({ score, feedback })
     } catch (parseError) {
       res.status(200).json({
         score: 5,
