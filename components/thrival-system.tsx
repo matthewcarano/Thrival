@@ -197,18 +197,27 @@ const evaluateWithAI = async (criterion: string, applicationText: string, progra
       score: result.score, 
       feedback: result.feedback 
     };
-  } catch (error: any) {
+} catch (error: any) {
     console.error('Evaluation API error details:', error);
-    console.error('Response status:', error.status);
-    console.error('Response text:', await error.text?.());
     
-    // Show the actual error to user for debugging
+    // Try to get the actual response text
+    let errorDetails = error.message;
+    try {
+      if (response && !response.ok) {
+        const responseText = await response.text();
+        console.error('Response text:', responseText);
+        errorDetails = `Status: ${response.status}, Response: ${responseText}`;
+      }
+    } catch (parseErr) {
+      console.error('Could not parse error response');
+    }
+    
     return { 
       score: 5, 
-      feedback: `API Error: ${error.message || 'Unknown error'}. Check console for details.`
+      feedback: `API Error: ${errorDetails}`
     };
-   }
-  };
+  }
+};
 
   // Calculate weighted score
  const calculateWeightedScore = (scores: any, programWeights?: any) => {
