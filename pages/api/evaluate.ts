@@ -102,8 +102,6 @@ Please evaluate this application for the "${criterion}" criterion and respond wi
       
       const result = JSON.parse(cleanJsonString)
       
-      const result = JSON.parse(jsonMatch[0])
-      
       if (typeof result.score !== 'number' || !result.feedback) {
         return res.status(200).json({
           score: 5,
