@@ -23,9 +23,9 @@ export default async function handler(
       })
     }
 
-    const systemPrompt = `You are an expert grant application evaluator. Your task is to evaluate applications based on specific criteria and provide both a numerical score (1-10) and detailed feedback.
+   const systemPrompt = `You are an expert grant application evaluator. Your task is to evaluate applications based on specific criteria and provide both a numerical score (1-10) and detailed feedback.
 
-For this evaluation, you are assessing the "${criterion}" criterion for a grant application.
+   For this evaluation, you are assessing the "${criterion}" criterion for a grant application. Use the program-specific evaluation guidance provided below as your primary framework for assessment.
 
 SCORING GUIDELINES:
 - Score 1-3: Poor/Inadequate - Major deficiencies that significantly impact viability
@@ -43,15 +43,17 @@ Provide your response as a JSON object with exactly this structure:
 
 The feedback should be professional, constructive, and specific. Reference concrete details from the application when possible.`
 
-    const userPrompt = `EVALUATION CRITERIA: ${criterion}
-
-SPECIFIC PROMPT FOR THIS CRITERION:
-${prompt}
-
-APPLICATION TEXT TO EVALUATE:
-${applicationText}
-
-Please evaluate this application for the "${criterion}" criterion and respond with the JSON format specified above.`
+   const userPrompt = `EVALUATION CRITERIA: ${criterion}
+    
+    PROGRAM-SPECIFIC EVALUATION GUIDANCE:
+    ${prompt}
+    
+    Use the above guidance as your primary framework for evaluating this criterion. Focus your assessment on how well the application aligns with these program-specific requirements.
+    
+    APPLICATION TEXT TO EVALUATE:
+    ${applicationText}
+    
+    Please evaluate this application for the "${criterion}" criterion using the program guidance above and respond with the JSON format specified above.`
 
     const response = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
