@@ -551,6 +551,35 @@ const [systemPreferences, setSystemPreferences] = useState({
       alert('Failed to save system preferences. Please try again.');
     }
   };
+
+  // Program management functions
+  const handleToggleProgram = (programId: string, active: boolean) => {
+    setPrograms(prev => ({
+      ...prev,
+      [programId]: {
+        ...prev[programId],
+        active: active
+      }
+    }));
+  };
+
+  const handleEditProgram = (programId: string) => {
+    setEditingProgram(programId);
+    setShowProgramEditor(true);
+  };
+
+  const handleDuplicateProgram = (programId: string) => {
+    const originalProgram = programs[programId];
+    const newProgramId = `program${Date.now()}`;
+    setPrograms(prev => ({
+      ...prev,
+      [newProgramId]: {
+        ...originalProgram,
+        name: `${originalProgram.name} (Copy)`,
+        active: false
+      }
+    }));
+  };
   
   // Save criteria settings
   const handleSaveCriteriaSettings = () => {
@@ -1397,6 +1426,74 @@ const [systemPreferences, setSystemPreferences] = useState({
               Save Preferences
             </Button>
           </div>
+        </div>
+      </CardContent>
+    </Card>
+  {/* Program Management Section */}
+  {activeSettingsSection === 'programs' && (
+    <Card className={darkMode ? 'bg-gray-800 border-gray-700' : ''}>
+      <CardHeader>
+        <div className="flex items-center justify-between">
+          <CardTitle className="flex items-center space-x-2">
+            <span>Program Management</span>
+            <Badge variant="outline" className="text-xs">
+              Evaluation programs
+            </Badge>
+          </CardTitle>
+          <Button onClick={() => setShowProgramEditor(true)}>
+            <Plus className="h-4 w-4 mr-2" />
+            Create Program
+          </Button>
+        </div>
+      </CardHeader>
+      <CardContent className="space-y-6">
+        {/* Program List */}
+        <div className="space-y-4">
+          {Object.entries(programs).map(([programId, program]: [string, any]) => (
+            <div key={programId} className={`p-4 rounded-lg border ${darkMode ? 'border-gray-600' : 'border-gray-200'}`}>
+              <div className="flex items-center justify-between">
+                <div className="flex-1">
+                  <div className="flex items-center space-x-3">
+                    <h4 className="font-medium">{program.name}</h4>
+                    <Badge variant={program.active ? 'default' : 'secondary'}>
+                      {program.active ? 'Active' : 'Inactive'}
+                    </Badge>
+                  </div>
+                  <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                    {program.criteria}
+                  </p>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Switch
+                    checked={program.active}
+                    onCheckedChange={(checked: boolean) => handleToggleProgram(programId, checked)}
+                  />
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => handleEditProgram(programId)}
+                  >
+                    <Edit className="h-4 w-4" />
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => handleDuplicateProgram(programId)}
+                  >
+                    <Plus className="h-4 w-4" />
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => handleDeleteProgram(programId)}
+                    className="text-red-600 hover:text-red-700"
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
       </CardContent>
     </Card>
