@@ -38,7 +38,7 @@ const ThrivalSystem = () => {
     novelty: 15,
     focus: 15
   },
-  customPrompts: {
+ customPrompts: {
     team: '',
     evidence: '',
     fit: '',
