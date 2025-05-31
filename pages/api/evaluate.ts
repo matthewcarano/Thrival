@@ -93,6 +93,15 @@ Please evaluate this application for the "${criterion}" criterion and respond wi
         })
       }
       
+      // Clean up the JSON string to handle special characters
+      let cleanJsonString = jsonMatch[0]
+        .replace(/\n/g, '\\n')
+        .replace(/\r/g, '\\r')
+        .replace(/\t/g, '\\t')
+        .replace(/[\u0000-\u001F\u007F-\u009F]/g, '')
+      
+      const result = JSON.parse(cleanJsonString)
+      
       const result = JSON.parse(jsonMatch[0])
       
       if (typeof result.score !== 'number' || !result.feedback) {
