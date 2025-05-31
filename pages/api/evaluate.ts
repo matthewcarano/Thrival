@@ -120,3 +120,4 @@ Please evaluate this application for the "${criterion}" criterion and respond wi
       feedback: `Server Error: ${error.message}. Stack: ${error.stack}`
     })
   }
+}
