@@ -171,54 +171,42 @@ const [systemPreferences, setSystemPreferences] = useState({
     }
   ];
 
-  // Mock AI evaluation function
-  const evaluateWithAI = async (criterion: string, applicationText: string, programId: string) => {
-    await new Promise(resolve => setTimeout(resolve, 2000 + Math.random() * 1000));
+  // Real AI evaluation function
+const evaluateWithAI = async (criterion: string, applicationText: string, programId: string) => {
+  try {
+    const program = programs[programId];
+    const criterionPrompt = program?.customPrompts?.[criterion] || program?.overallPrompt || prompts[criterion]?.default;
+    
+    const response = await fetch('/api/evaluate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ 
+        criterion, 
+        applicationText, 
+        programId,
+        prompt: criterionPrompt,
+        externalData: externalData
+      })
+    });
 
-    const baseScore = Math.floor(Math.random() * 4) + 4; // 4-7 base range
-    const programBonus = programId === 'program1' ? 1 : 0;
-    const externalBonus = (externalData.twitter || externalData.github) ? 1 : 0;
+    if (!response.ok) {
+      throw new Error(`API call failed: ${response.status}`);
+    }
 
-    const score = Math.min(10, baseScore + programBonus + externalBonus);
-
-    const evidenceExamples: {[key: string]: string[]} = {
-      team: [
-        "GitHub shows 500+ commits across 15 repositories",
-        "Ex-Coinbase product manager with 3 years DeFi experience", 
-        "Led team that launched $50M TVL protocol in 2023",
-        "Strong technical background with 2 previous successful exits"
-      ],
-      evidence: [
-        "Current TVL of $2.3M with 45% month-over-month growth",
-        "15,000+ Twitter followers with 8% engagement rate",
-        "Demo shows working product with 1,200+ beta users",
-        "Partnerships confirmed with 3 major DeFi protocols"
-      ],
-      fit: [
-        "Deep integration with ecosystem's native AMM",
-        "Utilizes ecosystem-specific yield farming mechanisms", 
-        "Built specifically for ecosystem's unique consensus model",
-        "Leverages ecosystem's cross-chain bridge infrastructure"
-      ],
-      need: [
-        "Addresses $500M+ market gap in current ecosystem",
-        "Survey shows 78% of users want this specific solution",
-        "No direct competitors in ecosystem currently", 
-        "Strong demand signals from 5+ major ecosystem partners"
-      ],
-      novelty: [
-        "First implementation of novel yield optimization algorithm",
-        "Breakthrough approach to solving MEV extraction problem",
-        "Innovative tokenomics model not seen in current market",
-        "Novel use of zero-knowledge proofs for privacy"
-      ],
-      focus: [
-        "Directly addresses ecosystem's #1 strategic priority",
-        "Aligns with roadmap goals for institutional adoption",
-        "Matches program focus on sustainable yield generation",
-        "Perfect fit for ecosystem's Q2 growth targets"
-      ]
+    const result = await response.json();
+    return { 
+      score: result.score, 
+      feedback: result.feedback 
     };
+  } catch (error) {
+    console.error('Evaluation API error:', error);
+    // Fallback to prevent complete failure
+    return { 
+      score: 5, 
+      feedback: 'Evaluation could not be completed due to a technical issue. Please try again.' 
+    };
+  }
+};
 
     const feedback = `${evidenceExamples[criterion][Math.floor(Math.random() * evidenceExamples[criterion].length)]} The project demonstrates ${score >= 8 ? 'exceptional' : score >= 6 ? 'strong' : score >= 4 ? 'adequate' : 'limited'} performance in this criterion. ${score >= 7 ? 'This is a significant strength that enhances the overall application.' : score >= 5 ? 'This area shows promise but could benefit from additional development.' : 'This area requires improvement to meet program standards.'} ${score >= 6 ? 'The evidence provided is convincing and well-documented.' : 'More concrete evidence would strengthen this evaluation.'} Overall, this criterion ${score >= 7 ? 'exceeds' : score >= 5 ? 'meets' : 'falls short of'} the expected standards for this program.`;
 
