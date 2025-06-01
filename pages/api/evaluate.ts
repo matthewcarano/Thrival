@@ -82,6 +82,13 @@ Keep feedback brief and concise. One sentence explaining the score and one sente
 
     if (!response.ok) {
       const errorText = await response.text()
+      console.log('Claude API Error Details:', {
+        status: response.status,
+        statusText: response.statusText,
+        errorText: errorText,
+        apiKeyPresent: !!apiKey,
+        apiKeyLength: apiKey ? apiKey.length : 0
+      })
       return res.status(200).json({
         score: 5,
         feedback: `Claude API Error: ${response.status} - ${errorText}`
