@@ -1871,6 +1871,68 @@ useEffect(() => {
         </div>
     )}
 
+{/* Authentication Modal */}
+      {showAuthModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className={`${darkMode ? 'bg-gray-800' : 'bg-white'} p-6 rounded-lg w-96 max-w-md`}>
+            <h3 className="text-lg font-semibold mb-4">
+              {authMode === 'login' ? 'Sign In to Thrival' : 'Complete Your Setup'}
+            </h3>
+            
+            <div className="space-y-4">
+              <div>
+                <Label>Email</Label>
+                <Input
+                  type="email"
+                  placeholder="Enter your email"
+                  value={authEmail}
+                  onChange={(e: any) => setAuthEmail(e.target.value)}
+                />
+              </div>
+              
+              {authMode === 'login' && (
+                <div>
+                  <Label>Password</Label>
+                  <Input
+                    type="password"
+                    placeholder="Enter your password"
+                    value={authPassword}
+                    onChange={(e: any) => setAuthPassword(e.target.value)}
+                  />
+                </div>
+              )}
+            </div>
+
+            <div className="flex justify-end space-x-2 mt-6">
+              {authMode === 'login' ? (
+                <>
+                  <Button onClick={handleLogin} disabled={!authEmail || !authPassword}>
+                    Sign In
+                  </Button>
+                </>
+              ) : (
+                <>
+                  <Button onClick={handleMagicLink} disabled={!authEmail}>
+                    Send Magic Link
+                  </Button>
+                </>
+              )}
+            </div>
+
+            <div className="text-center mt-4">
+              <p className="text-sm text-gray-600 dark:text-gray-400">
+                {authMode === 'login' 
+                  ? "Don't have an account? Contact your admin for an invitation."
+                  : "Check your email for the magic link to complete setup."
+                }
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Create/Edit Program Modal */}
+           
       {/* Create/Edit Program Modal */}
       {showProgramEditor && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
