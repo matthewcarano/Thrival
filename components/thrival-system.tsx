@@ -733,39 +733,28 @@ useEffect(() => {
             alert('Failed to send magic link: ' + error.message);
           }
         };
-     
-    // Reset form
-    setNewProgram({
-      name: '',
-      overallPrompt: '',
-      weights: { team: 20, evidence: 20, fit: 15, need: 15, novelty: 15, focus: 15 },
-      customPrompts: { team: '', evidence: '', fit: '', need: '', novelty: '', focus: '' }
-    });
-    setShowProgramEditor(false);
-    setEditingProgram(null);
-  };
 
-  const handleUpdateProgram = () => {
+  // Program management functions
+  const handleCreateProgram = () => {
     if (!newProgram.name.trim() || !newProgram.overallPrompt.trim()) {
       alert('Please fill in both program name and overall prompt.');
       return;
     }
-
     const totalWeight = Object.values(newProgram.weights).reduce((sum: number, weight: any) => sum + weight, 0);
     if (totalWeight !== 100) {
       alert(`Criteria weights must total 100%. Currently: ${totalWeight}%`);
       return;
     }
-
+    const programId = `program${Date.now()}`;
     setPrograms(prev => ({
       ...prev,
-      [editingProgram]: {
-        ...prev[editingProgram],
+      [programId]: {
         name: newProgram.name,
         criteria: newProgram.overallPrompt,
         overallPrompt: newProgram.overallPrompt,
         weights: { ...newProgram.weights },
-        customPrompts: { ...newProgram.customPrompts }
+        customPrompts: { ...newProgram.customPrompts },
+        active: true
       }
     }));
 
@@ -779,7 +768,39 @@ useEffect(() => {
     setShowProgramEditor(false);
     setEditingProgram(null);
   };
-  
+
+  const handleUpdateProgram = () => {
+    if (!editingProgram || !newProgram.name.trim() || !newProgram.overallPrompt.trim()) {
+      alert('Please fill in both program name and overall prompt.');
+      return;
+    }
+    const totalWeight = Object.values(newProgram.weights).reduce((sum: number, weight: any) => sum + weight, 0);
+    if (totalWeight !== 100) {
+      alert(`Criteria weights must total 100%. Currently: ${totalWeight}%`);
+      return;
+    }
+    setPrograms(prev => ({
+      ...prev,
+      [editingProgram]: {
+        ...prev[editingProgram],
+        name: newProgram.name,
+        criteria: newProgram.overallPrompt,
+        overallPrompt: newProgram.overallPrompt,
+        weights: { ...newProgram.weights },
+        customPrompts: { ...newProgram.customPrompts }
+      }
+    }));
+    // Reset form
+    setNewProgram({
+      name: '',
+      overallPrompt: '',
+      weights: { team: 20, evidence: 20, fit: 15, need: 15, novelty: 15, focus: 15 },
+      customPrompts: { team: '', evidence: '', fit: '', need: '', novelty: '', focus: '' }
+    });
+    setShowProgramEditor(false);
+    setEditingProgram(null);
+  };
+
   // Save criteria settings
   const handleSaveCriteriaSettings = () => {
     try {
