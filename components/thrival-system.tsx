@@ -982,37 +982,19 @@ useEffect(() => {
                 </Button>
               </div>
 
-          {/* Temporary Auth Test Button */}
-               <div className="flex justify-center mt-4">
-                 <Button 
-                   onClick={() => {
-                     console.log('Button clicked - testing supabase');
-                     
-                     // Test if supabase is imported
-                     if (!supabase) {
-                       console.log('ERROR: supabase is not imported');
-                       alert('Supabase not imported');
-                       return;
-                     }
-                     
-                     console.log('Supabase imported successfully');
-                     
-                     // Test auth function
-                     try {
-                       supabase.auth.getUser().then((result) => {
-                         console.log('Auth result:', result);
-                         alert('Auth test complete - check console');
-                       });
-                     } catch (error) {
-                       console.log('Auth error:', error);
-                       alert('Auth error - check console');
-                     }
-                   }}
-                   variant="outline"
-                 >
-                   Test Auth Modal
-                 </Button>
-               </div>
+         {/* Temporary Auth Test Button */}
+            <div className="flex justify-center mt-4">
+              <Button 
+                onClick={() => {
+                  console.log('Showing auth modal');
+                  setShowAuthModal(true);
+                  console.log('showAuthModal set to true');
+                }}
+                variant="outline"
+              >
+                Test Auth Modal
+              </Button>
+            </div>
                </div>
           </TabsContent>
                           
