@@ -101,23 +101,8 @@ const ThrivalSystem = () => {
   
   const [editingProgram, setEditingProgram] = useState<string | null>(null);
   
-  const [programs, setPrograms] = useState<any>({
-    program1: {
-      name: 'Program 1 - DeFi Innovation',
-      active: true,
-      criteria: 'Focus on decentralized finance protocols and yield optimization'
-    },
-    program2: {
-      name: 'Program 2 - Infrastructure & Tooling',
-      active: true,
-      criteria: 'Developer tools, APIs, and blockchain infrastructure'
-    },
-    program3: {
-      name: 'Program 3 - Consumer Applications',
-      active: false,
-      criteria: 'End-user facing applications and mobile experiences'
-    }
-  });
+  const [programs, setPrograms] = useState<any>({});
+  const [loadingPrograms, setLoadingPrograms] = useState(true);
 
   const [externalData, setExternalData] = useState({
     twitter: '',
@@ -530,6 +515,44 @@ useEffect(() => {
   checkAuth();
 }, []);
 
+// Load programs from Supabase
+useEffect(() => {
+  const loadPrograms = async () => {
+    if (!user) return;
+    
+    try {
+      setLoadingPrograms(true);
+      const { data, error } = await supabase
+        .from('programs')
+        .select('*')
+        .order('created_at', { ascending: false });
+      
+      if (error) throw error;
+      
+      // Convert array to object format for your existing UI
+      const programsObj = {};
+      data.forEach(program => {
+        programsObj[program.id] = {
+          name: program.name,
+          criteria: program.criteria,
+          overallPrompt: program.overall_prompt,
+          weights: program.weights,
+          customPrompts: program.custom_prompts,
+          active: program.active
+        };
+      });
+      
+      setPrograms(programsObj);
+    } catch (error) {
+      console.error('Error loading programs:', error);
+    } finally {
+      setLoadingPrograms(false);
+    }
+  };
+
+  loadPrograms();
+}, [user]);
+  
 // Simple test useEffect
 useEffect(() => {
   console.log('TEST: useEffect is working!');
