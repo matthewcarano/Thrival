@@ -493,6 +493,22 @@ const ThrivalSystem = () => {
     }
   };
 
+const handleAddTeamMember = () => {
+    if (!newTeamMember.name.trim() || !newTeamMember.email.trim()) {
+      alert('Please fill in both name and email.');
+      return;
+    }
+  
+    const member = {
+      id: Date.now(),
+      ...newTeamMember
+    };
+  
+    setTeamMembers((prev: any) => [...prev, member]);
+    setNewTeamMember({ name: '', email: '', role: 'Evaluator' });
+    setShowTeamEditor(false);
+  };
+  
   const handleDeleteTeamMember = (memberId: number) => {
     setTeamMembers((prev: any) => prev.filter((member: any) => member.id !== memberId));
   };
