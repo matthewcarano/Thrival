@@ -30,6 +30,8 @@ const ThrivalSystem = () => {
   const [bulkProcessing, setBulkProcessing] = useState(false);
   const [bulkResults, setBulkResults] = useState<any[]>([]);
   const [showProgramEditor, setShowProgramEditor] = useState(false);
+  const [user, setUser] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
   const [newProgram, setNewProgram] = useState({
     name: '',
     overallPrompt: '',
