@@ -2078,9 +2078,9 @@ useEffect(() => {
                 }}
               >
                 Cancel
-              </Button>
+             </Button>
               <Button 
-                const handleUpdateProgram_DUPLICATE = () => {
+                onClick={editingProgram ? handleUpdateProgram : handleCreateProgram}
                 disabled={Object.values(newProgram.weights).reduce((sum: number, weight: any) => sum + weight, 0) !== 100}
               >
                 {editingProgram ? 'Update Program' : 'Create Program'}
@@ -2089,10 +2089,10 @@ useEffect(() => {
           </div>
         </div>
       )}
-
         </Tabs>
       </div>
     </div>
   );
 };
+
 export default ThrivalSystem;
