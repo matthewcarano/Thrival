@@ -2259,7 +2259,7 @@ useEffect(() => {
           </div>
         </div>
       )}
-    )}
+      )}
+    </div>
   );
 };
-export default ThrivalSystem;
