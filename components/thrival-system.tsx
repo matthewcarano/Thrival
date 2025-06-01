@@ -14,8 +14,8 @@ import { supabase } from '@/lib/supabase';
 const Label = ({ children, className }: any) => <div className={`text-sm font-medium ${className || ''}`}>{children}</div>;
 
 const ThrivalSystem = () => {
+  
   // State declarations
-// State declarations
   const [activeTab, setActiveTab] = useState('evaluate');
   const [searchTerm, setSearchTerm] = useState('');
   const [showTeamInvite, setShowTeamInvite] = useState(false);
@@ -448,20 +448,23 @@ const evaluateWithAI = async (criterion: string, applicationText: string, progra
   }, [darkMode]);
 
 // Check authentication status
-  useEffect(() => {
-    const checkAuth = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      setUser(user);
-      setLoading(false);
-      
-      // Show auth modal if not logged in
-      if (!user) {
-        setShowAuthModal(true);
-      }
-    };
+useEffect(() => {
+  const checkAuth = async () => {
+    console.log('checkAuth function running');
+    const { data: { user } } = await supabase.auth.getUser();
+    console.log('User:', user);
+    setUser(user);
+    setLoading(false);
     
-    checkAuth();
-  }, []);
+    // Show auth modal if not logged in
+    if (!user) {
+      console.log('No user, showing auth modal');
+      setShowAuthModal(true);
+    }
+  };
+  
+  checkAuth();
+}, []);
   
    // Test API connections
   const handleTestApiConnection = async (apiType: string) => {
