@@ -476,26 +476,33 @@ const ThrivalSystem = () => {
     try {
       switch (apiType) {
         case 'claude':
-          if (!apiKeys.claude) {
-            throw new Error('API key is required');
-          }
-          
-          // Test Claude API with a simple request
-          const claudeResponse = await fetch('/api/test-claude', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ apiKey: apiKeys.claude })
-          });
-          
-          if (!claudeResponse.ok) {
-            throw new Error('Invalid API key or connection failed');
-          }
-          
-          setConnectionStatus(prev => ({ 
-            ...prev, 
-            [apiType]: { success: true, message: 'Connection successful! API key is valid.' } 
-          }));
-          break;
+  if (!apiKeys.claude) {
+    throw new Error('API key is required');
+  }
+  
+  // Test Claude API using the existing evaluate endpoint
+  const claudeResponse = await fetch('/api/evaluate', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ 
+      criterion: 'test',
+      applicationText: 'This is a test evaluation.',
+      prompt: 'Please respond with a simple test message.',
+      apiKey: apiKeys.claude
+    })
+  });
+  
+  if (!claudeResponse.ok) {
+    throw new Error('Invalid API key or connection failed');
+  }
+  
+  const result = await claudeResponse.json();
+  
+  setConnectionStatus(prev => ({ 
+    ...prev, 
+    [apiType]: { success: true, message: 'Connection successful! API key is valid.' } 
+  }));
+  break;
 
         case 'twitter':
           if (!apiKeys.twitter) {
