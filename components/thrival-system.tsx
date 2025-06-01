@@ -58,6 +58,19 @@ const ThrivalSystem = () => {
     alert('Login failed: ' + error.message);
   }
 };
+  const handleRequestMagicLink = async () => {
+    try {
+      const { error } = await supabase.auth.signInWithOtp({
+        email: authEmail,
+        options: { shouldCreateUser: false }
+      });
+      if (error) throw error;
+      alert('Magic link sent! Check your email.');
+    } catch (error: any) {
+      alert('Failed to send magic link: ' + error.message);
+    }
+  };
+  
   const handleInviteUser = async () => {
   // Only allow admins to send invites
   if (!isAdmin(user)) {
