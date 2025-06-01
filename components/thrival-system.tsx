@@ -472,6 +472,35 @@ const ThrivalSystem = () => {
     }
   }, [darkMode]);
 
+// Check authentication status
+useEffect(() => {
+  const checkAuth = async () => {
+    console.log('Checking authentication status');
+    const { data: { user } } = await supabase.auth.getUser();
+    console.log('User result:', user);
+    
+    if (!user) {
+      console.log('No user found, showing auth modal');
+      setShowAuthModal(true);
+    } else {
+      console.log('User authenticated:', user.email);
+      setUser(user);
+      
+      // Check if admin
+      if (isAdmin(user)) {
+        console.log('Admin user detected');
+      }
+    }
+  };
+
+  checkAuth();
+}, []);
+
+// Simple test useEffect
+useEffect(() => {
+  console.log('TEST: useEffect is working!');
+}, []);
+
   // Test API connections
   const handleTestApiConnection = async (apiType: string) => {
     setTestingConnection(apiType);
@@ -524,35 +553,7 @@ const ThrivalSystem = () => {
         case 'github':
           if (!apiKeys.github) {
             throw new Error('Personal access token is required');
-          }
-          
-          // Check authentication status
-            useEffect(() => {
-              const checkAuth = async () => {
-                console.log('Checking authentication status');
-                const { data: { user } } = await supabase.auth.getUser();
-                console.log('User result:', user);
-                
-                if (!user) {
-                  console.log('No user found, showing auth modal');
-                  setShowAuthModal(true);
-                } else {
-                  console.log('User authenticated:', user.email);
-                  setUser(user);
-                  
-                  // Check if admin
-                  if (isAdmin(user)) {
-                    console.log('Admin user detected');
-                  }
-                }
-              };
-             
-              // Simple test useEffect
-                  useEffect(() => {
-                    console.log('TEST: useEffect is working!');
-                  }, []);
-
-              
+          }              
               checkAuth();
             }, []);
 
@@ -573,7 +574,6 @@ const ThrivalSystem = () => {
             [apiType]: { success: true, message: 'Connection successful! Token is valid.' } 
           }));
           break;
-
         default:
           throw new Error('Unknown API type');
       }
