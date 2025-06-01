@@ -1926,7 +1926,9 @@ useEffect(() => {
           </TabsContent>
         </Tabs>
       </div>
-
+    )}
+   </div>
+  );
       {/* Authentication Modal */}
       {showAuthModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
