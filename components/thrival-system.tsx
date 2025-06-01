@@ -457,41 +457,42 @@ const ThrivalSystem = () => {
     setShowProgramEditor(false);
   };
 
-    const activePrograms = Object.entries(programs).filter(([, prog]) => (prog as any).active);
-    const remainingActiveAfterDelete = activePrograms.filter(([id]) => id !== programId);
-    if (remainingActiveAfterDelete.length === 0) {
-      alert('Cannot delete the last active program. Please ensure at least one program remains active.');
-      return;
-    }
-  
-    try {
-      const { error } = await supabase
-        .from('programs')
-        .delete()
-        .eq('id', programId);
-  
-      if (error) throw error;
-  
-      // Update local state
-      setPrograms((prev: any) => {
-        const updated = { ...prev };
-        delete updated[programId];
-        return updated;
-      });
-  
-      if (selectedProgram === programId) {
-        const remainingPrograms = Object.keys(programs).filter(id => id !== programId);
-        setSelectedProgram(remainingPrograms[0]);
+      const handleDeleteProgram = async (programId: string) => {
+      const activePrograms = Object.entries(programs).filter(([, prog]) => (prog as any).active);
+      const remainingActiveAfterDelete = activePrograms.filter(([id]) => id !== programId);
+      if (remainingActiveAfterDelete.length === 0) {
+        alert('Cannot delete the last active program. Please ensure at least one program remains active.');
+        return;
       }
-  
-      setShowDeleteConfirm(false);
-      setDeletingProgram(null);
-      alert('Program deleted successfully!');
-    } catch (error: any) {
-      console.error('Error deleting program:', error);
-      alert('Failed to delete program: ' + error.message);
-    }
-  };
+    
+      try {
+        const { error } = await supabase
+          .from('programs')
+          .delete()
+          .eq('id', programId);
+    
+        if (error) throw error;
+    
+        // Update local state
+        setPrograms((prev: any) => {
+          const updated = { ...prev };
+          delete updated[programId];
+          return updated;
+        });
+    
+        if (selectedProgram === programId) {
+          const remainingPrograms = Object.keys(programs).filter(id => id !== programId);
+          setSelectedProgram(remainingPrograms[0]);
+        }
+    
+        setShowDeleteConfirm(false);
+        setDeletingProgram(null);
+        alert('Program deleted successfully!');
+      } catch (error: any) {
+        console.error('Error deleting program:', error);
+        alert('Failed to delete program: ' + error.message);
+      }
+    };
 
 const handleAddTeamMember = () => {
     if (!newTeamMember.name.trim() || !newTeamMember.email.trim()) {
