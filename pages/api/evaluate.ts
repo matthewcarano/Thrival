@@ -15,6 +15,11 @@ export default async function handler(
       return res.status(400).json({ message: 'Missing required fields' })
     }
 
+    // Add this debugging block:
+      console.log('API Key received:', apiKey ? 'YES' : 'NO')
+      console.log('API Key length:', apiKey ? apiKey.length : 0)
+      console.log('API Key starts with sk-ant:', apiKey ? apiKey.startsWith('sk-ant') : false)
+
     // apiKey now comes from the request body instead of environment
     
     if (!apiKey) {
