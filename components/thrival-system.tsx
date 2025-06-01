@@ -21,6 +21,7 @@ const ThrivalSystem = () => {
   const [activeTab, setActiveTab] = useState('evaluate');
   const [searchTerm, setSearchTerm] = useState('');
   const [showTeamInvite, setShowTeamInvite] = useState(false);
+  const [inviteEmail, setInviteEmail] = useState('');
   const [authEmail, setAuthEmail] = useState('');
   const [authPassword, setAuthPassword] = useState('');
   const [currentEvaluator, setCurrentEvaluator] = useState('Current User');
@@ -40,6 +41,26 @@ const ThrivalSystem = () => {
   const [loading, setLoading] = useState(true);
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [authMode, setAuthMode] = useState<'login' | 'setup'>('login');
+  const handleInviteUser = async () => {
+  if (!inviteEmail.trim()) {
+    alert('Please enter an email address');
+    return;
+  }
+
+  try {
+    const { error } = await supabase.auth.admin.inviteUserByEmail(inviteEmail, {
+      redirectTo: window.location.origin
+    });
+
+    if (error) throw error;
+    
+    alert(`Invitation sent to ${inviteEmail}!`);
+    setInviteEmail('');
+    setShowTeamInvite(false);
+  } catch (error: any) {
+    alert('Failed to send invitation: ' + error.message);
+  }
+};
   // Check if user is admin
   const isAdmin = (user: any) => {
     return user?.email === 'subsacct@proton.me';
@@ -1946,6 +1967,37 @@ useEffect(() => {
           </div>
         </div>
       )}
+
+      {/* Team Invite Modal */}
+        {showTeamInvite && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div className={`${darkMode ? 'bg-gray-800' : 'bg-white'} p-6 rounded-lg w-96 max-w-md`}>
+              <h3 className="text-lg font-semibold mb-4">Invite Team Member</h3>
+              <div className="space-y-4">
+                <div>
+                  <Label>Email Address</Label>
+                  <Input
+                    type="email"
+                    value={inviteEmail}
+                    onChange={(e: any) => setInviteEmail(e.target.value)}
+                    placeholder="colleague@example.com"
+                  />
+                </div>
+              </div>
+              <div className="flex justify-end space-x-2 mt-6">
+                <Button variant="outline" onClick={() => {
+                  setShowTeamInvite(false);
+                  setInviteEmail('');
+                }}>
+                  Cancel
+                </Button>
+                <Button onClick={handleInviteUser}>
+                  Send Invitation
+                </Button>
+              </div>
+            </div>
+          </div>
+        )}
 
       {/* Delete Confirmation Modal */}
       {showDeleteConfirm && (
