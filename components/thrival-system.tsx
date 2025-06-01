@@ -474,7 +474,7 @@ const ThrivalSystem = () => {
     }
   }, [darkMode]);
 
-  // Check authentication status
+  //// Check authentication status
   useEffect(() => {
     const checkAuth = async () => {
       console.log('Checking authentication status');
@@ -491,7 +491,7 @@ const ThrivalSystem = () => {
     };
 
     checkAuth();
-  }, []);
+ // }, []);
 
   return (
     <div className={`min-h-screen transition-colors duration-200 ${darkMode ? 'dark bg-gray-900 text-white' : 'bg-gray-50 text-gray-900'}`}>
