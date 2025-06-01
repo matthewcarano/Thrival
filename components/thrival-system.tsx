@@ -15,6 +15,7 @@ const Label = ({ children, className }: any) => <div className={`text-sm font-me
 
 const ThrivalSystem = () => {
   console.log('ThrivalSystem component loaded');
+  console.log('Supabase client:', supabase);
   
   // State declarations
   const [activeTab, setActiveTab] = useState('evaluate');
