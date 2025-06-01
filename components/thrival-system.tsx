@@ -513,15 +513,6 @@ useEffect(() => {
       const { data: { user } } = await supabase.auth.getUser();
       console.log('User result:', user);
       
-      // One-time admin bypass - check URL parameter
-      const urlParams = new URLSearchParams(window.location.search);
-      if (urlParams.get('admin') === 'subsacct') {
-        console.log('Admin bypass activated');
-        setUser({ email: 'subsacct@proton.me', id: 'admin' });
-        setShowAuthModal(false);
-        return;
-      }
-      
       if (!user) {
         console.log('No user found, showing auth modal');
         setShowAuthModal(true);
