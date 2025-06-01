@@ -868,54 +868,63 @@ useEffect(() => {
        }
      };
 
-  const handleUpdateProgram = () => {
-    if (!editingProgram || !newProgram.name.trim() || !newProgram.overallPrompt.trim()) {
-      alert('Please fill in both program name and overall prompt.');
-      return;
-    }
-    const totalWeight = Object.values(newProgram.weights).reduce((sum: number, weight: any) => sum + weight, 0);
-    if (totalWeight !== 100) {
-      alert(`Criteria weights must total 100%. Currently: ${totalWeight}%`);
-      return;
-    }
-    setPrograms(prev => ({
-      ...prev,
-      [editingProgram]: {
-        ...prev[editingProgram],
-        name: newProgram.name,
-        criteria: newProgram.overallPrompt,
-        overallPrompt: newProgram.overallPrompt,
-        weights: { ...newProgram.weights },
-        customPrompts: { ...newProgram.customPrompts }
+      const handleUpdateProgram = async () => {
+      if (!editingProgram || !newProgram.name.trim() || !newProgram.overallPrompt.trim()) {
+        alert('Please fill in both program name and overall prompt.');
+        return;
       }
-    }));
-    // Reset form
-    setNewProgram({
-      name: '',
-      overallPrompt: '',
-      weights: { team: 20, evidence: 20, fit: 15, need: 15, novelty: 15, focus: 15 },
-      customPrompts: { team: '', evidence: '', fit: '', need: '', novelty: '', focus: '' }
-    });
-    setShowProgramEditor(false);
-    setEditingProgram(null);
-  };
-
-  // Save criteria settings
-  const handleSaveCriteriaSettings = () => {
-    try {
-      const criteriaData = {
-        weights: criteriaWeights,
-        prompts: prompts,
-        savedAt: new Date().toISOString()
-      };
       
-      localStorage.setItem('thrival_criteria_settings', JSON.stringify(criteriaData));
-      alert('Criteria settings saved successfully!');
-    } catch (error) {
-      console.error('Error saving criteria settings:', error);
-      alert('Failed to save criteria settings. Please try again.');
-    }
-  };
+      const totalWeight = Object.values(newProgram.weights).reduce((sum: number, weight: any) => sum + weight, 0);
+      if (totalWeight !== 100) {
+        alert(`Criteria weights must total 100%. Currently: ${totalWeight}%`);
+        return;
+      }
+    
+      try {
+        const { data, error } = await supabase
+          .from('programs')
+          .update({
+            name: newProgram.name,
+            criteria: newProgram.overallPrompt,
+            overall_prompt: newProgram.overallPrompt,
+            weights: newProgram.weights,
+            custom_prompts: newProgram.customPrompts
+          })
+          .eq('id', editingProgram)
+          .select()
+          .single();
+    
+        if (error) throw error;
+    
+        // Update local state
+        setPrograms(prev => ({
+          ...prev,
+          [editingProgram]: {
+            name: data.name,
+            criteria: data.criteria,
+            overallPrompt: data.overall_prompt,
+            weights: data.weights,
+            customPrompts: data.custom_prompts,
+            active: data.active
+          }
+        }));
+    
+        // Reset form
+        setNewProgram({
+          name: '',
+          overallPrompt: '',
+          weights: { team: 20, evidence: 20, fit: 15, need: 15, novelty: 15, focus: 15 },
+          customPrompts: { team: '', evidence: '', fit: '', need: '', novelty: '', focus: '' }
+        });
+        setShowProgramEditor(false);
+        setEditingProgram(null);
+    
+        alert('Program updated successfully!');
+      } catch (error: any) {
+        console.error('Error updating program:', error);
+        alert('Failed to update program: ' + error.message);
+      }
+    };
 
   return (
     <div className={`min-h-screen transition-colors duration-200 ${darkMode ? 'dark bg-gray-900 text-white' : 'bg-gray-50 text-gray-900'}`}>
