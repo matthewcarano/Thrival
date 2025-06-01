@@ -1204,10 +1204,21 @@ const evaluateWithAI = async (criterion: string, applicationText: string, progra
           </p>
         </button>
         
-        <div className="p-4 rounded-lg border-2 border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 opacity-50">
-          <h3 className="font-medium">👥 Team & Access</h3>
-          <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">Coming soon</p>
-        </div>
+        <button
+          onClick={() => setActiveSettingsSection('team')}
+          className={`p-4 rounded-lg border-2 text-left transition-colors ${
+            activeSettingsSection === 'team' 
+              ? 'border-blue-200 dark:border-blue-800 bg-blue-50 dark:bg-blue-900/20' 
+              : 'border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 hover:border-blue-200 dark:hover:border-blue-800'
+          }`}
+        >
+          <h3 className={`font-medium ${activeSettingsSection === 'team' ? 'text-blue-900 dark:text-blue-100' : ''}`}>
+            👥 Team & Access
+          </h3>
+          <p className={`text-sm mt-1 ${activeSettingsSection === 'team' ? 'text-blue-700 dark:text-blue-300' : 'text-gray-600 dark:text-gray-400'}`}>
+            Manage team members and roles
+          </p>
+        </button>
         
         <div className="p-4 rounded-lg border-2 border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 opacity-50">
           <h3 className="font-medium">📊 Analytics & Reports</h3>
@@ -1635,10 +1646,80 @@ const evaluateWithAI = async (criterion: string, applicationText: string, progra
           ))}
         </div>
       </CardContent>
+   </Card>
+  )}
+
+  {/* Team & Access Management Section */}
+  {activeSettingsSection === 'team' && (
+    <Card className={darkMode ? 'bg-gray-800 border-gray-700' : ''}>
+      <CardHeader>
+        <div className="flex items-center justify-between">
+          <CardTitle className="flex items-center space-x-2">
+            <span>Team & Access Management</span>
+            <Badge variant="outline" className="text-xs">
+              Organization members
+            </Badge>
+          </CardTitle>
+          <Button onClick={() => setShowTeamInvite(true)}>
+            <Plus className="h-4 w-4 mr-2" />
+            Invite Member
+          </Button>
+        </div>
+      </CardHeader>
+      <CardContent className="space-y-6">
+        {/* Current Team Members */}
+        <div className="space-y-4">
+          <h4 className="font-medium">Team Members</h4>
+          {teamMembers.map((member: any) => (
+            <div key={member.id} className={`p-4 rounded-lg border ${darkMode ? 'border-gray-600' : 'border-gray-200'}`}>
+              <div className="flex items-center justify-between">
+                <div className="flex-1">
+                  <div className="flex items-center space-x-3">
+                    <h4 className="font-medium">{member.name}</h4>
+                    <Badge variant={member.role === 'owner' ? 'default' : 'secondary'}>
+                      {member.role === 'owner' ? 'Owner' : 'Evaluator'}
+                    </Badge>
+                  </div>
+                  <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                    {member.email}
+                  </p>
+                </div>
+                <div className="flex items-center space-x-2">
+                  {member.role !== 'owner' && (
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => handleRemoveTeamMember(member.id)}
+                      className="text-red-600 hover:text-red-700"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  )}
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Access Control Info */}
+        <div className="p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+          <h4 className="font-medium text-blue-900 dark:text-blue-100 mb-2">Role Permissions</h4>
+          <div className="space-y-2 text-sm">
+            <div className="flex items-center space-x-2">
+              <Badge variant="default" className="text-xs">Owner</Badge>
+              <span className="text-blue-800 dark:text-blue-200">Full access - can manage team, delete data, and invite members</span>
+            </div>
+            <div className="flex items-center space-x-2">
+              <Badge variant="secondary" className="text-xs">Evaluator</Badge>
+              <span className="text-blue-800 dark:text-blue-200">Can evaluate applications and view results, but cannot manage team</span>
+            </div>
+          </div>
+        </div>
+      </CardContent>
     </Card>
   )}
-</TabsContent>
 
+</TabsContent>
       {/* Add Team Member Modal */}
       {showTeamEditor && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
