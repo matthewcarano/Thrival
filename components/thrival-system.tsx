@@ -1932,38 +1932,6 @@ useEffect(() => {
             </div>
           </div>
         )}
-
-            <div className="flex justify-end space-x-2 mt-6">
-              {authMode === 'login' ? (
-                <>
-                  <Button onClick={handleLogin} disabled={!authEmail || !authPassword}>
-                    Sign In
-                  </Button>
-                  <Button onClick={handleRequestMagicLink} disabled={!authEmail}>
-                    Send Magic Link
-                  </Button>
-                </>
-              ) : (
-                <>
-                  <Button onClick={handleMagicLink} disabled={!authEmail}>
-                    Send Magic Link
-                  </Button>
-                </>
-              )}
-            </div>
-
-            <div className="text-center mt-4">
-              <p className="text-sm text-gray-600 dark:text-gray-400">
-                {authMode === 'login' 
-                  ? "Don't have an account? Contact your admin for an invitation."
-                  : "Check your email for the magic link to complete setup."
-                }
-              </p>
-            </div>
-          </div>
-        </div>
-      )}
-
       {/* Add Team Member Modal */}
       {showTeamEditor && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
