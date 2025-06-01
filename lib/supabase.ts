@@ -7,22 +7,70 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey)
 
 // Database helper functions
 export const db = {
+  // Auth & Organization
+  async getCurrentUser() {
+    const { data: { user } } = await supabase.auth.getUser()
+    return user
+  },
+
+  async getUserOrganization(userId: string) {
+    const { data, error } = await supabase
+      .from('user_organizations')
+      .select(`
+        *,
+        organizations (*)
+      `)
+      .eq('user_id', userId)
+      .single()
+    
+    if (error && error.code !== 'PGRST116') throw error // PGRST116 is "no rows found"
+    return data
+  },
+
+  async createOrganization(userId: string, orgName: string) {
+    // Create organization
+    const { data: org, error: orgError } = await supabase
+      .from('organizations')
+      .insert([{ name: orgName, owner_id: userId }])
+      .select()
+      .single()
+    
+    if (orgError) throw orgError
+
+    // Add user as owner
+    const { error: memberError } = await supabase
+      .from('user_organizations')
+      .insert([{ 
+        user_id: userId, 
+        organization_id: org.id, 
+        role: 'owner' 
+      }])
+    
+    if (memberError) throw memberError
+    
+    return org
+  },
+
   // Programs
-  async getPrograms(userId: string) {
+  async getPrograms(organizationId: string) {
     const { data, error } = await supabase
       .from('programs')
       .select('*')
-      .eq('user_id', userId)
+      .eq('organization_id', organizationId)
       .order('created_at', { ascending: false })
     
     if (error) throw error
     return data
   },
 
-  async createProgram(userId: string, programData: any) {
+  async createProgram(organizationId: string, userId: string, programData: any) {
     const { data, error } = await supabase
       .from('programs')
-      .insert([{ ...programData, user_id: userId }])
+      .insert([{ 
+        ...programData, 
+        organization_id: organizationId,
+        user_id: userId 
+      }])
       .select()
       .single()
     
@@ -52,24 +100,28 @@ export const db = {
   },
 
   // Evaluations
-  async getEvaluations(userId: string) {
+  async getEvaluations(organizationId: string) {
     const { data, error } = await supabase
       .from('evaluations')
       .select(`
         *,
         programs (name)
       `)
-      .eq('user_id', userId)
+      .eq('organization_id', organizationId)
       .order('created_at', { ascending: false })
     
     if (error) throw error
     return data
   },
 
-  async createEvaluation(userId: string, evaluationData: any) {
+  async createEvaluation(organizationId: string, userId: string, evaluationData: any) {
     const { data, error } = await supabase
       .from('evaluations')
-      .insert([{ ...evaluationData, user_id: userId }])
+      .insert([{ 
+        ...evaluationData, 
+        organization_id: organizationId,
+        user_id: userId 
+      }])
       .select()
       .single()
     
@@ -78,21 +130,41 @@ export const db = {
   },
 
   // Team Members
-  async getTeamMembers(userId: string) {
+  async getTeamMembers(organizationId: string) {
     const { data, error } = await supabase
-      .from('team_members')
-      .select('*')
-      .eq('user_id', userId)
+      .from('user_organizations')
+      .select(`
+        *,
+        auth.users (
+          email
+        )
+      `)
+      .eq('organization_id', organizationId)
       .order('created_at', { ascending: false })
     
     if (error) throw error
     return data
   },
 
-  async createTeamMember(userId: string, memberData: any) {
+  async inviteTeamMember(organizationId: string, email: string, role: 'owner' | 'evaluator', invitedBy: string) {
+    // This is simplified - in production you'd send an email invitation
+    // For now, we'll just add them directly if they have an account
+    const { data: userData, error: userError } = await supabase
+      .from('auth.users')
+      .select('id')
+      .eq('email', email)
+      .single()
+    
+    if (userError) throw new Error('User not found')
+
     const { data, error } = await supabase
-      .from('team_members')
-      .insert([{ ...memberData, user_id: userId }])
+      .from('user_organizations')
+      .insert([{ 
+        user_id: userData.id,
+        organization_id: organizationId,
+        role: role,
+        invited_by: invitedBy
+      }])
       .select()
       .single()
     
@@ -100,11 +172,12 @@ export const db = {
     return data
   },
 
-  async deleteTeamMember(memberId: string) {
+  async removeTeamMember(userId: string, organizationId: string) {
     const { error } = await supabase
-      .from('team_members')
+      .from('user_organizations')
       .delete()
-      .eq('id', memberId)
+      .eq('user_id', userId)
+      .eq('organization_id', organizationId)
     
     if (error) throw error
   }
