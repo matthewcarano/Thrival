@@ -969,7 +969,7 @@ useEffect(() => {
                     </div>
                   </CardContent>
                 </Card>
-              </div>
+            </div>
               
               {/* Start Evaluation Button */}
               <div className="flex justify-center">
@@ -981,35 +981,12 @@ useEffect(() => {
                   {isEvaluating ? 'Evaluating...' : 'Start Evaluation'}
                 </Button>
               </div>
+
+              <p className="text-center mt-4 text-red-500 font-bold">
+                TEST: If you can see this red text, the code is working!
+              </p>
             </div>
           </TabsContent>
-
-            {/* Start Evaluation Button */}
-               <div className="flex justify-center">
-                 <Button 
-                   onClick={handleEvaluate}
-                   disabled={isEvaluating}
-                   size="lg"
-                 >
-                   {isEvaluating ? 'Evaluating...' : 'Start Evaluation'}
-                 </Button>
-               </div>
-               
-               {/* Temporary Auth Test Button */}
-               <div className="flex justify-center mt-4">
-                 <Button 
-                   onClick={async () => {
-                     console.log('Manual auth test running');
-                     const { data: { user } } = await supabase.auth.getUser();
-                     console.log('User result:', user);
-                     setShowAuthModal(true);
-                     console.log('Modal should show now');
-                   }}
-                   variant="outline"
-                 >
-                   Test Auth Modal
-                 </Button>
-               </div>
                           
           {/* Bulk Process Tab */}
           <TabsContent value="bulk" className="space-y-6">
