@@ -474,25 +474,6 @@ const ThrivalSystem = () => {
     }
   }, [darkMode]);
 
-  //// Check authentication status
-  useEffect(() => {
-    const checkAuth = async () => {
-      console.log('Checking authentication status');
-      const { data: { user } } = await supabase.auth.getUser();
-      console.log('User result:', user);
-      
-      if (!user) {
-        console.log('No user found, showing auth modal');
-        setShowAuthModal(true);
-      } else {
-        console.log('User authenticated:', user.email);
-        setUser(user);
-      }
-    };
-
-    checkAuth();
- // }, []);
-
   return (
     <div className={`min-h-screen transition-colors duration-200 ${darkMode ? 'dark bg-gray-900 text-white' : 'bg-gray-50 text-gray-900'}`}>
       {/* Header */}
