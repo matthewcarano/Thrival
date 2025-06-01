@@ -14,7 +14,7 @@ import { supabase } from '@/lib/supabase';
 const Label = ({ children, className }: any) => <div className={`text-sm font-medium ${className || ''}`}>{children}</div>;
 
 const ThrivalSystem = () => {
-  console.log('ThrivalSystem component loaded');
+  console.log('ThrivalSystem component loaded - UPDATED TEST');
   console.log('Supabase client:', supabase);
   
   // State declarations
