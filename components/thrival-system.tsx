@@ -41,6 +41,23 @@ const ThrivalSystem = () => {
   const [loading, setLoading] = useState(true);
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [authMode, setAuthMode] = useState<'login' | 'setup'>('login');
+  const handleLogin = async () => {
+  try {
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email: authEmail,
+      password: authPassword,
+    });
+
+    if (error) throw error;
+
+    setUser(data.user);
+    setShowAuthModal(false);
+    setAuthEmail('');
+    setAuthPassword('');
+  } catch (error: any) {
+    alert('Login failed: ' + error.message);
+  }
+};
   const handleInviteUser = async () => {
   // Only allow admins to send invites
   if (!isAdmin(user)) {
