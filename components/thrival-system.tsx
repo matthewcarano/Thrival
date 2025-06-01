@@ -2093,7 +2093,7 @@ useEffect(() => {
                 Cancel
               </Button>
               <Button 
-                onClick={editingProgram ? handleUpdateProgram : handleCreateProgram}
+                const handleUpdateProgram_DUPLICATE = () => {
                 disabled={Object.values(newProgram.weights).reduce((sum: number, weight: any) => sum + weight, 0) !== 100}
               >
                 {editingProgram ? 'Update Program' : 'Create Program'}
