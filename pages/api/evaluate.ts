@@ -9,13 +9,14 @@ export default async function handler(
   }
 
   try {
-    const { criterion, applicationText, programId, prompt, externalData } = req.body
+    const { criterion, applicationText, programId, prompt, externalData, apiKey } = req.body
 
     if (!criterion || !applicationText || !prompt) {
       return res.status(400).json({ message: 'Missing required fields' })
     }
 
-    const apiKey = process.env.CLAUDE_API_KEY
+    // apiKey now comes from the request body instead of environment
+    
     if (!apiKey) {
       return res.status(200).json({
         score: 5,
