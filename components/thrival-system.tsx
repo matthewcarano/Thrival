@@ -257,37 +257,33 @@ const evaluateWithAI = async (criterion: string, applicationText: string, progra
         finalScore.score >= tier.min && finalScore.score <= tier.max
       );
 
-      const recommendation = tier ? tier.recommendation : 'Ungraded';
+    const recommendation = tier ? tier.recommendation : 'Ungraded';
 
-      // Generate personalized applicant feedback
-      let applicantFeedback = '';
-      if (tier) {
-        const strengths = [];
-        const improvements = [];
-        
-        // Identify strengths (scores 7+) and areas for improvement (scores <6)
-        Object.entries(scores).forEach(([criterion, score]) => {
-          if (score >= 7) {
-            strengths.push(criterion.charAt(0).toUpperCase() + criterion.slice(1));
-          } else if (score < 6) {
-            improvements.push(criterion.charAt(0).toUpperCase() + criterion.slice(1));
-          }
-        });
-        
-        applicantFeedback = `${tier.applicantMessage.replace('{programName}', programs[selectedProgram].name)} `;
-        
-        if (strengths.length > 0) {
-          applicantFeedback += `Strong areas include: ${strengths.join(', ')}. `;
-        }
-        
-        if (improvements.length > 0) {
-          applicantFeedback += `Areas for development: ${improvements.join(', ')}. `;
-        }
-        
-        applicantFeedback += `Overall score: ${finalScore.score.toFixed(1)}/10 (${finalScore.percentage.toFixed(0)}%).`;
-      } else {
-        applicantFeedback = 'Unable to determine appropriate feedback tier.';
+    // Generate personalized applicant feedback based on actual scores
+    let applicantFeedback = '';
+    if (tier) {
+      // Start with base message
+      applicantFeedback = tier.applicantMessage.replace('{programName}', programs[selectedProgram].name);
+      
+      // Add specific score details
+      applicantFeedback += ` Your overall score was ${finalScore.score.toFixed(1)}/10 (${finalScore.percentage.toFixed(0)}%).`;
+      
+      // Add top performing criterion
+      const topScore = Math.max(...Object.values(scores));
+      const topCriterion = Object.entries(scores).find(([, score]) => score === topScore)?.[0];
+      if (topCriterion) {
+        applicantFeedback += ` Your strongest area was ${topCriterion} (${topScore}/10).`;
       }
+      
+      // Add lowest performing criterion if score is low
+      const lowScore = Math.min(...Object.values(scores));
+      const lowCriterion = Object.entries(scores).find(([, score]) => score === lowScore)?.[0];
+      if (lowScore < 6 && lowCriterion) {
+        applicantFeedback += ` Focus on improving ${lowCriterion} (${lowScore}/10) for future applications.`;
+      }
+    } else {
+      applicantFeedback = 'Unable to determine appropriate feedback tier.';
+    }
 
     const evaluation = {
         id: Date.now(),
