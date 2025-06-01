@@ -670,13 +670,11 @@ useEffect(() => {
       alert('Please fill in both program name and overall prompt.');
       return;
     }
-
     const totalWeight = Object.values(newProgram.weights).reduce((sum: number, weight: any) => sum + weight, 0);
     if (totalWeight !== 100) {
       alert(`Criteria weights must total 100%. Currently: ${totalWeight}%`);
       return;
     }
-
     const programId = `program${Date.now()}`;
     setPrograms(prev => ({
       ...prev,
@@ -689,8 +687,19 @@ useEffect(() => {
         active: true
       }
     }));
-    
-       // Authentication functions
+
+    // Reset form
+    setNewProgram({
+      name: '',
+      overallPrompt: '',
+      weights: { team: 20, evidence: 20, fit: 15, need: 15, novelty: 15, focus: 15 },
+      customPrompts: { team: '', evidence: '', fit: '', need: '', novelty: '', focus: '' }
+    });
+    setShowProgramEditor(false);
+    setEditingProgram(null);
+  };
+
+        // Authentication functions
         const handleLogin = async () => {
           try {
             const { data, error } = await supabase.auth.signInWithPassword({
@@ -724,7 +733,7 @@ useEffect(() => {
             alert('Failed to send magic link: ' + error.message);
           }
         };
-    
+     
     // Reset form
     setNewProgram({
       name: '',
