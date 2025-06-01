@@ -984,6 +984,33 @@ useEffect(() => {
             </div>
           </TabsContent>
 
+            {/* Start Evaluation Button */}
+               <div className="flex justify-center">
+                 <Button 
+                   onClick={handleEvaluate}
+                   disabled={isEvaluating}
+                   size="lg"
+                 >
+                   {isEvaluating ? 'Evaluating...' : 'Start Evaluation'}
+                 </Button>
+               </div>
+               
+               {/* Temporary Auth Test Button */}
+               <div className="flex justify-center mt-4">
+                 <Button 
+                   onClick={async () => {
+                     console.log('Manual auth test running');
+                     const { data: { user } } = await supabase.auth.getUser();
+                     console.log('User result:', user);
+                     setShowAuthModal(true);
+                     console.log('Modal should show now');
+                   }}
+                   variant="outline"
+                 >
+                   Test Auth Modal
+                 </Button>
+               </div>
+                          
           {/* Bulk Process Tab */}
           <TabsContent value="bulk" className="space-y-6">
             <Card className={darkMode ? 'bg-gray-800 border-gray-700' : ''}>
