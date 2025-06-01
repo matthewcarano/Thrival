@@ -1355,6 +1355,7 @@ useEffect(() => {
                     </p>
                   </button>
                   
+                 {isAdmin(user) && (
                   <button
                     onClick={() => setActiveSettingsSection('team')}
                     className={`p-4 rounded-lg border-2 text-left transition-colors ${
@@ -1370,6 +1371,7 @@ useEffect(() => {
                       Manage team members and roles
                     </p>
                   </button>
+                )}
                 </div>
               </CardContent>
             </Card>
