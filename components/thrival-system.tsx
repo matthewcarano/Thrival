@@ -762,87 +762,81 @@ useEffect(() => {
     }));
   };
 
-  const handleCreateProgram = () => {
-    if (!newProgram.name.trim() || !newProgram.overallPrompt.trim()) {
-      alert('Please fill in both program name and overall prompt.');
-      return;
-    }
-    const totalWeight = Object.values(newProgram.weights).reduce((sum: number, weight: any) => sum + weight, 0);
-    if (totalWeight !== 100) {
-      alert(`Criteria weights must total 100%. Currently: ${totalWeight}%`);
-      return;
-    }
-    const programId = `program${Date.now()}`;
-    setPrograms(prev => ({
-      ...prev,
-      [programId]: {
-        name: newProgram.name,
-        criteria: newProgram.overallPrompt,
-        overallPrompt: newProgram.overallPrompt,
-        weights: { ...newProgram.weights },
-        customPrompts: { ...newProgram.customPrompts },
-        active: true
+  const handleCreateProgram = async () => {
+      if (!newProgram.name.trim() || !newProgram.overallPrompt.trim()) {
+        alert('Please fill in both program name and overall prompt.');
+        return;
       }
-    }));
-
-    // Reset form
-    setNewProgram({
-      name: '',
-      overallPrompt: '',
-      weights: { team: 20, evidence: 20, fit: 15, need: 15, novelty: 15, focus: 15 },
-      customPrompts: { team: '', evidence: '', fit: '', need: '', novelty: '', focus: '' }
-    });
-    setShowProgramEditor(false);
-    setEditingProgram(null);
-  };
-
-  // Authentication functions
-  const handleLogin = async () => {
-    try {
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email: authEmail,
-        password: authPassword,
-      });
-
-      if (error) throw error;
-
-      setUser(data.user);
-      setShowAuthModal(false);
-      setAuthEmail('');
-      setAuthPassword('');
-    } catch (error: any) {
-      alert('Login failed: ' + error.message);
-    }
-  };
-    const handleRequestMagicLink = async () => {
+      
+      const totalWeight = Object.values(newProgram.weights).reduce((sum: number, weight: any) => sum + weight, 0);
+      if (totalWeight !== 100) {
+        alert(`Criteria weights must total 100%. Currently: ${totalWeight}%`);
+        return;
+      }
+    
       try {
-        const { error } = await supabase.auth.signInWithOtp({
-          email: authEmail,
-          options: { shouldCreateUser: false }
-        });
+        const { data, error } = await supabase
+          .from('programs')
+          .insert([{
+            name: newProgram.name,
+            criteria: newProgram.overallPrompt,
+            overall_prompt: newProgram.overallPrompt,
+            weights: newProgram.weights,
+            custom_prompts: newProgram.customPrompts,
+            active: true,
+            created_by: user.id
+          }])
+          .select()
+          .single();
+    
         if (error) throw error;
-        alert('Magic link sent! Check your email.');
+    
+        // Update local state
+        setPrograms(prev => ({
+          ...prev,
+          [data.id]: {
+            name: data.name,
+            criteria: data.criteria,
+            overallPrompt: data.overall_prompt,
+            weights: data.weights,
+            customPrompts: data.custom_prompts,
+            active: data.active
+          }
+        }));
+    
+        // Reset form
+        setNewProgram({
+          name: '',
+          overallPrompt: '',
+          weights: { team: 20, evidence: 20, fit: 15, need: 15, novelty: 15, focus: 15 },
+          customPrompts: { team: '', evidence: '', fit: '', need: '', novelty: '', focus: '' }
+        });
+        setShowProgramEditor(false);
+        setEditingProgram(null);
+    
+        alert('Program created successfully!');
       } catch (error: any) {
-        alert('Failed to send magic link: ' + error.message);
+        console.error('Error creating program:', error);
+        alert('Failed to create program: ' + error.message);
       }
-};
-
-  
-  const handleMagicLink = async () => {
-    try {
-      const { error } = await supabase.auth.signInWithOtp({
-        email: authEmail,
-        options: {
-          emailRedirectTo: window.location.origin
-        }
-      });
-
-      if (error) throw error;
-      alert('Magic link sent! Check your email.');
-    } catch (error: any) {
-      alert('Failed to send magic link: ' + error.message);
-    }
-  };
+    };
+    
+      
+      const handleMagicLink = async () => {
+        try {
+          const { error } = await supabase.auth.signInWithOtp({
+            email: authEmail,
+            options: {
+              emailRedirectTo: window.location.origin
+            }
+          });
+    
+          if (error) throw error;
+          alert('Magic link sent! Check your email.');
+        } catch (error: any) {
+          alert('Failed to send magic link: ' + error.message);
+       }
+     };
 
   const handleUpdateProgram = () => {
     if (!editingProgram || !newProgram.name.trim() || !newProgram.overallPrompt.trim()) {
