@@ -2260,7 +2260,6 @@ useEffect(() => {
         </div>
       )}
     )}
-   </div>
   );
 };
 export default ThrivalSystem;
