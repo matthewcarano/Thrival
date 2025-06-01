@@ -258,9 +258,36 @@ const evaluateWithAI = async (criterion: string, applicationText: string, progra
       );
 
       const recommendation = tier ? tier.recommendation : 'Ungraded';
-      const applicantFeedback = tier ?
-        tier.applicantMessage.replace('{programName}', programs[selectedProgram].name) :
-        'Unable to determine appropriate feedback tier.';
+
+      // Generate personalized applicant feedback
+      let applicantFeedback = '';
+      if (tier) {
+        const strengths = [];
+        const improvements = [];
+        
+        // Identify strengths (scores 7+) and areas for improvement (scores <6)
+        Object.entries(scores).forEach(([criterion, score]) => {
+          if (score >= 7) {
+            strengths.push(criterion.charAt(0).toUpperCase() + criterion.slice(1));
+          } else if (score < 6) {
+            improvements.push(criterion.charAt(0).toUpperCase() + criterion.slice(1));
+          }
+        });
+        
+        applicantFeedback = `${tier.applicantMessage.replace('{programName}', programs[selectedProgram].name)} `;
+        
+        if (strengths.length > 0) {
+          applicantFeedback += `Strong areas include: ${strengths.join(', ')}. `;
+        }
+        
+        if (improvements.length > 0) {
+          applicantFeedback += `Areas for development: ${improvements.join(', ')}. `;
+        }
+        
+        applicantFeedback += `Overall score: ${finalScore.score.toFixed(1)}/10 (${finalScore.percentage.toFixed(0)}%).`;
+      } else {
+        applicantFeedback = 'Unable to determine appropriate feedback tier.';
+      }
 
     const evaluation = {
         id: Date.now(),
