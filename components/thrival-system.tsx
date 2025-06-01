@@ -982,9 +982,21 @@ useEffect(() => {
                 </Button>
               </div>
 
-              <p className="text-center mt-4 text-red-500 font-bold">
-                TEST: If you can see this red text, the code is working!
-              </p>
+            {/* Temporary Auth Test Button */}
+               <div className="flex justify-center mt-4">
+                 <Button 
+                   onClick={async () => {
+                     console.log('Manual auth test running');
+                     const { data: { user } } = await supabase.auth.getUser();
+                     console.log('User result:', user);
+                     setShowAuthModal(true);
+                     console.log('Modal should show now');
+                   }}
+                   variant="outline"
+                 >
+                   Test Auth Modal
+                 </Button>
+               </div>
             </div>
           </TabsContent>
                           
