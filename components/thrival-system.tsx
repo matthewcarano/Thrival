@@ -546,7 +546,13 @@ const ThrivalSystem = () => {
                   }
                 }
               };
-            
+             
+              // Simple test useEffect
+                  useEffect(() => {
+                    console.log('TEST: useEffect is working!');
+                  }, []);
+
+              
               checkAuth();
             }, []);
 
