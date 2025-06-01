@@ -8,6 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/radix-
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/radix-components';
 import { Switch } from '@/components/ui/radix-components';
 import { UserCheck, FileText, Target, TrendingUp, Lightbulb, Focus, Sun, Moon, Upload, Download, Trash2, Plus, Edit } from 'lucide-react';
+import { supabase } from '@/lib/supabase';
 
 // Simple Label replacement
 const Label = ({ children, className }: any) => <div className={`text-sm font-medium ${className || ''}`}>{children}</div>;
@@ -33,6 +34,8 @@ const ThrivalSystem = () => {
   const [showProgramEditor, setShowProgramEditor] = useState(false);
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [showAuthModal, setShowAuthModal] = useState(false);
+  const [authMode, setAuthMode] = useState<'login' | 'setup'>('login');
   const [newProgram, setNewProgram] = useState({
     name: '',
     overallPrompt: '',
@@ -441,6 +444,23 @@ const evaluateWithAI = async (criterion: string, applicationText: string, progra
       document.documentElement.classList.remove('dark');
     }
   }, [darkMode]);
+
+// Check authentication status
+  useEffect(() => {
+    const checkAuth = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      setUser(user);
+      setLoading(false);
+      
+      // Show auth modal if not logged in
+      if (!user) {
+        setShowAuthModal(true);
+      }
+    };
+    
+    checkAuth();
+  }, []);
+  
    // Test API connections
   const handleTestApiConnection = async (apiType: string) => {
     setTestingConnection(apiType);
