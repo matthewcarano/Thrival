@@ -42,10 +42,11 @@ const ThrivalSystem = () => {
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [authMode, setAuthMode] = useState<'login' | 'setup'>('login');
   const handleInviteUser = async () => {
-  if (!inviteEmail.trim()) {
-    alert('Please enter an email address');
-    return;
-  }
+    // Only allow admins to send invites
+    if (!isAdmin(user)) {
+      alert('Only admins can send invitations');
+      return;
+    }
 
   try {
     const { error } = await supabase.auth.admin.inviteUserByEmail(inviteEmail, {
@@ -787,7 +788,20 @@ useEffect(() => {
       alert('Login failed: ' + error.message);
     }
   };
+    const handleRequestMagicLink = async () => {
+      try {
+        const { error } = await supabase.auth.signInWithOtp({
+          email: authEmail,
+          options: { shouldCreateUser: false }
+        });
+        if (error) throw error;
+        alert('Magic link sent! Check your email.');
+      } catch (error: any) {
+        alert('Failed to send magic link: ' + error.message);
+      }
+};
 
+  
   const handleMagicLink = async () => {
     try {
       const { error } = await supabase.auth.signInWithOtp({
@@ -1889,6 +1903,9 @@ useEffect(() => {
                 <>
                   <Button onClick={handleLogin} disabled={!authEmail || !authPassword}>
                     Sign In
+                  </Button>
+                  <Button onClick={handleRequestMagicLink} disabled={!authEmail}>
+                    Send Magic Link
                   </Button>
                 </>
               ) : (
