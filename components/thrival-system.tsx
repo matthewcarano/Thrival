@@ -690,16 +690,16 @@ useEffect(() => {
       }
     }));
     
-        // Authentication functions
+       // Authentication functions
         const handleLogin = async () => {
           try {
             const { data, error } = await supabase.auth.signInWithPassword({
               email: authEmail,
               password: authPassword,
             });
-        
+      
             if (error) throw error;
-        
+      
             setUser(data.user);
             setShowAuthModal(false);
             setAuthEmail('');
@@ -708,7 +708,7 @@ useEffect(() => {
             alert('Login failed: ' + error.message);
           }
         };
-        
+      
         const handleMagicLink = async () => {
           try {
             const { error } = await supabase.auth.signInWithOtp({
@@ -717,7 +717,7 @@ useEffect(() => {
                 emailRedirectTo: window.location.origin
               }
             });
-        
+      
             if (error) throw error;
             alert('Magic link sent! Check your email.');
           } catch (error: any) {
