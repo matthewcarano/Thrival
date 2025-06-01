@@ -382,8 +382,42 @@ const ThrivalSystem = () => {
         applicantFeedback
       };
       
-      setEvaluationResult(evaluation);
-      setEvaluationHistory(prev => [evaluation, ...prev]);
+setEvaluationResult(evaluation);
+
+  // Save to Supabase
+  try {
+    const { data, error } = await supabase
+      .from('evaluations')
+      .insert([{
+        program_id: selectedProgram,
+        project_name: evaluation.projectName,
+        evaluator_id: user.id,
+        application_text: evaluation.applicationText,
+        external_data: evaluation.externalData,
+        results: evaluation.results,
+        scores: evaluation.scores,
+        weights_used: evaluation.weightsUsed,
+        final_score: evaluation.finalScore,
+        recommendation: evaluation.recommendation,
+        applicant_feedback: evaluation.applicantFeedback
+      }])
+      .select()
+      .single();
+  
+    if (error) throw error;
+  
+    // Update local state with the saved evaluation (including database ID)
+    const savedEvaluation = {
+      ...evaluation,
+      id: data.id
+    };
+    setEvaluationHistory(prev => [savedEvaluation, ...prev]);
+  } catch (error: any) {
+    console.error('Error saving evaluation:', error);
+    // Still add to local state even if save fails
+    setEvaluationHistory(prev => [evaluation, ...prev]);
+    alert('Evaluation completed but failed to save to database: ' + error.message);
+  }
 
       // Auto-redirect to Results page and clear form
       setActiveTab('results');
