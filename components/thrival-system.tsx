@@ -71,39 +71,40 @@ const ThrivalSystem = () => {
     }
   };
   
-  const handleInviteUser = async () => {
-  // Only allow admins to send invites
-  if (!isAdmin(user)) {
-    alert('Only admins can send invitations');
-    return;
-  }
-
-  if (!inviteEmail.trim()) {
-    alert('Please enter an email address');
-    return;
-  }
-
-  try {
-    // Create the invite through your backend
-    const response = await fetch('/api/invite', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email: inviteEmail })
-    });
-
-    const result = await response.json();
-    
-    if (!response.ok) {
-      throw new Error(result.message || 'Failed to send invitation');
+   const handleInviteUser = async () => {
+    // Only allow admins to send invites
+    if (!isAdmin(user)) {
+      alert('Only admins can send invitations');
+      return;
     }
-    
-    alert(`Invitation sent to ${inviteEmail}!`);
-    setInviteEmail('');
-    setShowTeamInvite(false);
-  } catch (error: any) {
-    alert('Failed to send invitation: ' + error.message);
-  }
-};
+  
+    if (!inviteEmail.trim()) {
+      alert('Please enter an email address');
+      return;
+    }
+  
+    try {
+      // Create the invite through Supabase
+      const { data, error } = await supabase
+        .from('team_invitations')
+        .insert([{
+          email: inviteEmail,
+          invited_by: user.id,
+          status: 'pending'
+        }])
+        .select()
+        .single();
+  
+      if (error) throw error;
+      
+      alert(`Invitation sent to ${inviteEmail}!`);
+      setInviteEmail('');
+      setShowTeamInvite(false);
+    } catch (error: any) {
+      console.error('Error sending invitation:', error);
+      alert('Failed to send invitation: ' + error.message);
+    }
+  };
   // Check if user is admin
   const isAdmin = (user: any) => {
     return user?.email === 'subsacct@proton.me';
@@ -672,6 +673,37 @@ useEffect(() => {
     
       loadEvaluationHistory();
     }, [user]);
+  
+  // Load team members from Supabase
+    useEffect(() => {
+      const loadTeamMembers = async () => {
+        if (!user) return;
+        
+        try {
+          const { data, error } = await supabase
+            .from('profiles')
+            .select('id, email, name, role, created_at')
+            .order('created_at', { ascending: false });
+          
+          if (error) throw error;
+          
+          // Convert to your existing format
+          const formattedTeamMembers = data.map(profile => ({
+            id: profile.id,
+            name: profile.name || profile.email,
+            email: profile.email,
+            role: profile.role || 'Evaluator'
+          }));
+          
+          setTeamMembers(formattedTeamMembers);
+        } catch (error) {
+          console.error('Error loading team members:', error);
+        }
+      };
+
+      loadTeamMembers();
+    }, [user]);
+
   
 // Simple test useEffect
 useEffect(() => {
