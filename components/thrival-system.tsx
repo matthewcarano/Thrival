@@ -1879,59 +1879,59 @@ useEffect(() => {
       </div>
 
       {/* Authentication Modal / Landing Page */}
-      {!user && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className={`${darkMode ? 'bg-gray-800' : 'bg-white'} p-8 rounded-lg w-96 max-w-md`}>
-            <div className="text-center mb-6">
-              <h2 className="text-2xl font-bold mb-2">Welcome to Thrival</h2>
-              <p className="text-gray-600 dark:text-gray-400">
-                AI-powered evaluation system
-              </p>
-            </div>
-            
-            <div className="space-y-4">
-              <div>
-                <Label>Email</Label>
-                <Input
-                  type="email"
-                  placeholder="Enter your email"
-                  value={authEmail}
-                  onChange={(e: any) => setAuthEmail(e.target.value)}
-                />
+        {!user && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div className={`${darkMode ? 'bg-gray-800' : 'bg-white'} p-8 rounded-lg w-96 max-w-md`}>
+              <div className="text-center mb-6">
+                <h2 className="text-2xl font-bold mb-2">Welcome to Thrival</h2>
+                <p className="text-gray-600 dark:text-gray-400">
+                  AI-powered evaluation system
+                </p>
               </div>
               
-              <div>
-                <Label>Password</Label>
-                <Input
-                  type="password"
-                  placeholder="Enter your password"
-                  value={authPassword}
-                  onChange={(e: any) => setAuthPassword(e.target.value)}
-                />
-              </div>
-              
-              <div className="space-y-2">
-                <Button 
-                  onClick={handleLogin} 
-                  disabled={!authEmail || !authPassword}
-                  className="w-full"
-                >
-                  Sign In
-                </Button>
+              <div className="space-y-4">
+                <div>
+                  <Label>Email</Label>
+                  <Input
+                    type="email"
+                    placeholder="Enter your email"
+                    value={authEmail}
+                    onChange={(e: any) => setAuthEmail(e.target.value)}
+                  />
+                </div>
                 
-                <Button 
-                  onClick={handleRequestMagicLink} 
-                  disabled={!authEmail}
-                  variant="outline"
-                  className="w-full"
-                >
-                  Send Magic Link
-                </Button>
+                <div>
+                  <Label>Password</Label>
+                  <Input
+                    type="password"
+                    placeholder="Enter your password"
+                    value={authPassword}
+                    onChange={(e: any) => setAuthPassword(e.target.value)}
+                  />
+                </div>
+                
+                <div className="space-y-2">
+                  <Button 
+                    onClick={handleLogin} 
+                    disabled={!authEmail || !authPassword}
+                    className="w-full"
+                  >
+                    Sign In
+                  </Button>
+                  
+                  <Button 
+                    onClick={handleRequestMagicLink} 
+                    disabled={!authEmail}
+                    variant="outline"
+                    className="w-full"
+                  >
+                    Send Magic Link
+                  </Button>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
 
             <div className="flex justify-end space-x-2 mt-6">
               {authMode === 'login' ? (
