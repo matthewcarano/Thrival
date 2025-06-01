@@ -479,16 +479,17 @@ useEffect(() => {
     const { data: { user } } = await supabase.auth.getUser();
     console.log('User result:', user);
     
-    if (!user) {
+   if (!user) {
       console.log('No user found, showing auth modal');
       setShowAuthModal(true);
     } else {
       console.log('User authenticated:', user.email);
       setUser(user);
       
-      // Check if admin
+      // Check if admin - close modal for admin
       if (isAdmin(user)) {
         console.log('Admin user detected');
+        setShowAuthModal(false);  // ← Add this line
       }
     }
   };
