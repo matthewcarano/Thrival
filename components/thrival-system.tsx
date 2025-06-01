@@ -39,7 +39,10 @@ const ThrivalSystem = () => {
   const [loading, setLoading] = useState(true);
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [authMode, setAuthMode] = useState<'login' | 'setup'>('login');
-  
+  // Check if user is admin
+  const isAdmin = (user: any) => {
+    return user?.email === 'subsacct@proton.me';
+  };
   const [newProgram, setNewProgram] = useState({
     name: '',
     overallPrompt: '',
@@ -522,6 +525,30 @@ const ThrivalSystem = () => {
             throw new Error('Personal access token is required');
           }
           
+          // Check authentication status
+            useEffect(() => {
+              const checkAuth = async () => {
+                console.log('Checking authentication status');
+                const { data: { user } } = await supabase.auth.getUser();
+                console.log('User result:', user);
+                
+                if (!user) {
+                  console.log('No user found, showing auth modal');
+                  setShowAuthModal(true);
+                } else {
+                  console.log('User authenticated:', user.email);
+                  setUser(user);
+                  
+                  // Check if admin
+                  if (isAdmin(user)) {
+                    console.log('Admin user detected');
+                  }
+                }
+              };
+            
+              checkAuth();
+            }, []);
+
           // Test GitHub API
           const githubResponse = await fetch('https://api.github.com/user', {
             headers: {
