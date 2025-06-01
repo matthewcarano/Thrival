@@ -17,6 +17,7 @@ const ThrivalSystem = () => {
 // State declarations
   const [activeTab, setActiveTab] = useState('evaluate');
   const [searchTerm, setSearchTerm] = useState('');
+  const [showTeamInvite, setShowTeamInvite] = useState(false);
   const [currentEvaluator, setCurrentEvaluator] = useState('Current User');
   const [projectName, setProjectName] = useState('');
   const [activeSettingsSection, setActiveSettingsSection] = useState('overview');
