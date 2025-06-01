@@ -475,21 +475,29 @@ const ThrivalSystem = () => {
 // Check authentication status
 useEffect(() => {
   const checkAuth = async () => {
-    console.log('Checking authentication status');
-    const { data: { user } } = await supabase.auth.getUser();
-    console.log('User result:', user);
-    
-   if (!user) {
-      console.log('No user found, showing auth modal');
-      setShowAuthModal(true);
-    } else {
-      console.log('User authenticated:', user.email);
-      setUser(user);
+      console.log('Checking authentication status');
+      const { data: { user } } = await supabase.auth.getUser();
+      console.log('User result:', user);
       
-      // Check if admin - close modal for admin
-      if (isAdmin(user)) {
-        console.log('Admin user detected');
-        setShowAuthModal(false);  // ← Add this line
+      // One-time admin bypass - check URL parameter
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get('admin') === 'subsacct') {
+        console.log('Admin bypass activated');
+        setUser({ email: 'subsacct@proton.me', id: 'admin' });
+        setShowAuthModal(false);
+        return;
+      }
+      
+      if (!user) {
+        console.log('No user found, showing auth modal');
+        setShowAuthModal(true);
+      } else {
+        console.log('User authenticated:', user.email);
+        setUser(user);
+        setShowAuthModal(false);
+        
+        if (isAdmin(user)) {
+          console.log('Admin user detected');
       }
     }
   };
