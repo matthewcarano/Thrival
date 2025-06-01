@@ -508,28 +508,33 @@ const ThrivalSystem = () => {
 
 // Check authentication status
 useEffect(() => {
-    const checkAuth = async () => {
+  const checkAuth = async () => {
       console.log('Checking authentication status');
       const { data: { user } } = await supabase.auth.getUser();
       console.log('User result:', user);
       
-      // Admin bypass check
+      // One-time admin bypass - check URL parameter
       const urlParams = new URLSearchParams(window.location.search);
       if (urlParams.get('admin') === 'subsacct') {
         console.log('Admin bypass activated');
         setUser({ email: 'subsacct@proton.me', id: 'admin' });
+        setShowAuthModal(false);
         return;
       }
       
-      if (user) {
+      if (!user) {
+        console.log('No user found, showing auth modal');
+        setShowAuthModal(true);
+      } else {
         console.log('User authenticated:', user.email);
         setUser(user);
+        setShowAuthModal(false);
+        
         if (isAdmin(user)) {
           console.log('Admin user detected');
-        }
       }
-      // Note: No automatic modal - just let them see the landing page
-    };
+    }
+  };
 
   checkAuth();
 }, []);
@@ -892,61 +897,7 @@ useEffect(() => {
       </header>
 
       {/* Main Content */}
-      {!user ? (
-        // Signed-out landing page
-        <div className="container mx-auto px-6 py-8 text-center">
-          <h2 className="text-3xl font-bold mb-4">Welcome to Thrival</h2>
-          <p className="text-gray-600 dark:text-gray-400 mb-8">
-            AI-powered evaluation system for grant applications
-          </p>
-          
-          <Card className={`max-w-md mx-auto ${darkMode ? 'bg-gray-800 border-gray-700' : ''}`}>
-            <CardHeader>
-              <CardTitle>Sign In</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div>
-                <Label>Email</Label>
-                <Input
-                  type="email"
-                  placeholder="Enter your email"
-                  value={authEmail}
-                  onChange={(e: any) => setAuthEmail(e.target.value)}
-                />
-              </div>
-              <div>
-                <Label>Password</Label>
-                <Input
-                  type="password"
-                  placeholder="Enter your password"
-                  value={authPassword}
-                  onChange={(e: any) => setAuthPassword(e.target.value)}
-                />
-              </div>
-              
-              <div className="space-y-2">
-                <Button 
-                  onClick={handleLogin} 
-                  disabled={!authEmail || !authPassword}
-                  className="w-full"
-                >
-                  Sign In
-                </Button>
-                
-                <Button 
-                  onClick={handleRequestMagicLink} 
-                  disabled={!authEmail}
-                  variant="outline"
-                  className="w-full"
-                >
-                  Send Magic Link
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-      ) : (
-        <div className="container mx-auto px-6 py-8">
+      <div className="container mx-auto px-6 py-8">
         <Tabs value={activeTab} onValueChange={setActiveTab}>
           <TabsList className="grid w-full grid-cols-4">
             <TabsTrigger value="evaluate">Evaluate</TabsTrigger>
@@ -1926,9 +1877,7 @@ useEffect(() => {
           </TabsContent>
         </Tabs>
       </div>
-    )}
-   </div>
-  );
+
       {/* Authentication Modal */}
       {showAuthModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
@@ -2259,7 +2208,8 @@ useEffect(() => {
           </div>
         </div>
       )}
-      )}
     </div>
   );
 };
+
+export default ThrivalSystem;
