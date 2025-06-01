@@ -746,7 +746,7 @@ useEffect(() => {
   };
 
   const handleUpdateProgram = () => {
-    if (!editingProgram || !newProgram.name.trim() || !newProgram.overallPrompt.trim()) {
+    if (!newProgram.name.trim() || !newProgram.overallPrompt.trim()) {
       alert('Please fill in both program name and overall prompt.');
       return;
     }
