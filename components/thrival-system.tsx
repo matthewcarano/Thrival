@@ -982,15 +982,12 @@ useEffect(() => {
                 </Button>
               </div>
 
-            {/* Temporary Auth Test Button */}
+           {/* Temporary Auth Test Button */}
                <div className="flex justify-center mt-4">
                  <Button 
-                   onClick={async () => {
-                     console.log('Manual auth test running');
-                     const { data: { user } } = await supabase.auth.getUser();
-                     console.log('User result:', user);
-                     setShowAuthModal(true);
-                     console.log('Modal should show now');
+                   onClick={() => {
+                     console.log('Button clicked!');
+                     alert('Button works!');
                    }}
                    variant="outline"
                  >
