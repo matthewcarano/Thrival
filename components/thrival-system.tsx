@@ -457,10 +457,10 @@ const ThrivalSystem = () => {
     setShowProgramEditor(false);
   };
 
-  const handleDeleteProgram = async (programId: string) => {
     const activePrograms = Object.entries(programs).filter(([, prog]) => (prog as any).active);
-    if (activePrograms.length <= 1) {
-      alert('Cannot delete the last active program.');
+    const remainingActiveAfterDelete = activePrograms.filter(([id]) => id !== programId);
+    if (remainingActiveAfterDelete.length === 0) {
+      alert('Cannot delete the last active program. Please ensure at least one program remains active.');
       return;
     }
   
@@ -1828,18 +1828,13 @@ useEffect(() => {
                   {/* Program List */}
                   <div className="space-y-4">
                     {Object.entries(programs).map(([programId, program]: [string, any]) => (
-                      <div key={programId} className={`p-4 rounded-lg border ${darkMode ? 'border-gray-600' : 'border-gray-200'}`}>
+                     <div key={programId} className={`p-4 rounded-lg border ${darkMode ? 'border-gray-600' : 'border-gray-200'}`}>
                         <div className="flex items-center justify-between">
-                          <div className="flex-1">
-                            <div className="flex items-center space-x-3">
-                              <h4 className="font-medium">{program.name}</h4>
-                              <Badge variant={program.active ? 'default' : 'secondary'}>
-                                {program.active ? 'Active' : 'Inactive'}
-                              </Badge>
-                            </div>
-                            <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-                              {program.criteria}
-                            </p>
+                          <div className="flex items-center space-x-3">
+                            <h4 className="font-medium">{program.name}</h4>
+                            <Badge variant={program.active ? 'default' : 'secondary'}>
+                              {program.active ? 'Active' : 'Inactive'}
+                            </Badge>
                           </div>
                           <div className="flex items-center space-x-2">
                             <Switch
@@ -1852,13 +1847,6 @@ useEffect(() => {
                               onClick={() => handleEditProgram(programId)}
                             >
                               <Edit className="h-4 w-4" />
-                            </Button>
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              onClick={() => handleDuplicateProgram(programId)}
-                            >
-                              <Plus className="h-4 w-4" />
                             </Button>
                             <Button
                               variant="ghost"
