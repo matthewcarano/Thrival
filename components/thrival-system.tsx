@@ -19,6 +19,8 @@ const ThrivalSystem = () => {
   const [activeTab, setActiveTab] = useState('evaluate');
   const [searchTerm, setSearchTerm] = useState('');
   const [showTeamInvite, setShowTeamInvite] = useState(false);
+  const [authEmail, setAuthEmail] = useState('');
+  const [authPassword, setAuthPassword] = useState('');
   const [currentEvaluator, setCurrentEvaluator] = useState('Current User');
   const [projectName, setProjectName] = useState('');
   const [activeSettingsSection, setActiveSettingsSection] = useState('overview');
@@ -684,7 +686,42 @@ const evaluateWithAI = async (criterion: string, applicationText: string, progra
         active: true
       }
     }));
-
+    
+        // Authentication functions
+        const handleLogin = async () => {
+          try {
+            const { data, error } = await supabase.auth.signInWithPassword({
+              email: authEmail,
+              password: authPassword,
+            });
+        
+            if (error) throw error;
+        
+            setUser(data.user);
+            setShowAuthModal(false);
+            setAuthEmail('');
+            setAuthPassword('');
+          } catch (error: any) {
+            alert('Login failed: ' + error.message);
+          }
+        };
+        
+        const handleMagicLink = async () => {
+          try {
+            const { error } = await supabase.auth.signInWithOtp({
+              email: authEmail,
+              options: {
+                emailRedirectTo: window.location.origin
+              }
+            });
+        
+            if (error) throw error;
+            alert('Magic link sent! Check your email.');
+          } catch (error: any) {
+            alert('Failed to send magic link: ' + error.message);
+          }
+        };
+    
     // Reset form
     setNewProgram({
       name: '',
