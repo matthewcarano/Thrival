@@ -63,7 +63,7 @@ Keep feedback brief and concise. One sentence explaining the score and one sente
         'x-api-key': apiKey,
       },
       body: JSON.stringify({
-        model: 'claude-3-5-sonnet-20241022',
+        model: 'claude-3-sonnet-20240229',
         max_tokens: 1000,
         system: systemPrompt,
         messages: [
