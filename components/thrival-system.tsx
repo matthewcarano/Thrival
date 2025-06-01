@@ -186,6 +186,22 @@ const ThrivalSystem = () => {
     try {
       const program = programs[programId];
       const criterionPrompt = program?.customPrompts?.[criterion] || program?.overallPrompt || prompts[criterion]?.default;
+      
+      // Get API key from localStorage
+      const savedConfig = localStorage.getItem('thrival_api_config');
+      let claudeApiKey = '';
+      if (savedConfig) {
+        const config = JSON.parse(savedConfig);
+        claudeApiKey = config.apiKeys?.claude || '';
+      }
+      
+      if (!claudeApiKey) {
+        return { 
+          score: 5, 
+          feedback: 'No Claude API key configured. Please add your API key in Settings → API Configuration.'
+        };
+      }
+      
       const response = await fetch('/api/evaluate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -194,14 +210,15 @@ const ThrivalSystem = () => {
           applicationText, 
           programId,
           prompt: criterionPrompt,
-          externalData: externalData
+          externalData: externalData,
+          apiKey: claudeApiKey
         })
       });
-
+  
       if (!response.ok) {
         throw new Error(`API call failed: ${response.status}`);
       }
-
+  
       const result = await response.json();
       return { 
         score: result.score, 
