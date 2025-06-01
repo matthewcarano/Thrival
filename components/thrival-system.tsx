@@ -630,6 +630,48 @@ useEffect(() => {
 
   loadPrograms();
 }, [user]);
+
+    // Load evaluation history from Supabase
+    useEffect(() => {
+      const loadEvaluationHistory = async () => {
+        if (!user) return;
+        
+        try {
+          const { data, error } = await supabase
+            .from('evaluations')
+            .select(`
+              *,
+              programs!inner(name)
+            `)
+            .order('created_at', { ascending: false });
+          
+          if (error) throw error;
+          
+          // Convert to your existing format
+          const formattedEvaluations = data.map(eval => ({
+            id: eval.id,
+            program: { name: eval.programs.name },
+            projectName: eval.project_name,
+            evaluator: 'User', // You can enhance this later with user names
+            date: new Date(eval.created_at).toISOString().split('T')[0],
+            applicationText: eval.application_text,
+            externalData: eval.external_data || {},
+            results: eval.results,
+            scores: eval.scores,
+            weightsUsed: eval.weights_used,
+            finalScore: eval.final_score,
+            recommendation: eval.recommendation,
+            applicantFeedback: eval.applicant_feedback
+          }));
+          
+          setEvaluationHistory(formattedEvaluations);
+        } catch (error) {
+          console.error('Error loading evaluation history:', error);
+        }
+      };
+    
+      loadEvaluationHistory();
+    }, [user]);
   
 // Simple test useEffect
 useEffect(() => {
