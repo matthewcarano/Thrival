@@ -747,11 +747,10 @@ const evaluateWithAI = async (criterion: string, applicationText: string, progra
       {/* Main Content */}
       <div className="container mx-auto px-6 py-8">
         <Tabs value={activeTab} onValueChange={setActiveTab}>
-          <TabsList className="grid w-full grid-cols-5">
+          <TabsList className="grid w-full grid-cols-4">
             <TabsTrigger value="evaluate">Evaluate</TabsTrigger>
             <TabsTrigger value="bulk">Bulk Process</TabsTrigger>
             <TabsTrigger value="results">Results</TabsTrigger>
-            <TabsTrigger value="team">Team</TabsTrigger>
             <TabsTrigger value="settings">Settings</TabsTrigger>
           </TabsList>
 
@@ -1142,44 +1141,6 @@ const evaluateWithAI = async (criterion: string, applicationText: string, progra
         </Card>
       </TabsContent>
 
-          {/* Team Tab */}
-          <TabsContent value="team" className="space-y-6">
-            <Card className={darkMode ? 'bg-gray-800 border-gray-700' : ''}>
-              <CardHeader>
-                <div className="flex items-center justify-between">
-                  <CardTitle>Team Members</CardTitle>
-                  <Button onClick={() => setShowTeamEditor(true)}>
-                    <Plus className="h-4 w-4 mr-2" />
-                    Add Member
-                  </Button>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  {teamMembers.map((member: any) => (
-                    <div key={member.id} className={`p-4 rounded-lg border ${darkMode ? 'border-gray-600' : 'border-gray-200'}`}>
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <h4 className="font-medium">{member.name}</h4>
-                          <p className="text-sm text-gray-600 dark:text-gray-400">{member.email}</p>
-                          <Badge variant="outline" className="mt-1">
-                            {member.role}
-                          </Badge>
-                        </div>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => handleDeleteTeamMember(member.id)}
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
 
 {/* Settings Tab */}
 <TabsContent value="settings" className="space-y-6">
