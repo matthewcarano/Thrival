@@ -648,20 +648,20 @@ useEffect(() => {
           if (error) throw error;
           
           // Convert to your existing format
-          const formattedEvaluations = data.map(eval => ({
-            id: eval.id,
+          const formattedEvaluations = data.map(evaluation => ({
+            id: evaluation.id,
             program: { name: eval.programs.name },
-            projectName: eval.project_name,
+            projectName: evaluation.project_name,
             evaluator: 'User', // You can enhance this later with user names
             date: new Date(eval.created_at).toISOString().split('T')[0],
-            applicationText: eval.application_text,
-            externalData: eval.external_data || {},
-            results: eval.results,
-            scores: eval.scores,
-            weightsUsed: eval.weights_used,
-            finalScore: eval.final_score,
-            recommendation: eval.recommendation,
-            applicantFeedback: eval.applicant_feedback
+            applicationText: evaluation.application_text,
+            externalData: evaluation.external_data || {},
+            results: evaluation.results,
+            scores: evaluation.scores,
+            weightsUsed: evaluation.weights_used,
+            finalScore: evaluation.final_score,
+            recommendation: evaluation.recommendation,
+            applicantFeedback: evaluation.applicant_feedback
           }));
           
           setEvaluationHistory(formattedEvaluations);
