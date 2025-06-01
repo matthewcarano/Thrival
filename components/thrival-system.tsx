@@ -650,10 +650,10 @@ useEffect(() => {
           // Convert to your existing format
           const formattedEvaluations = data.map(evaluation => ({
             id: evaluation.id,
-            program: { name: eval.programs.name },
+            program: { name: evaluation.programs.name },
             projectName: evaluation.project_name,
             evaluator: 'User', // You can enhance this later with user names
-            date: new Date(eval.created_at).toISOString().split('T')[0],
+            date: new Date(evaluation.created_at).toISOString().split('T')[0],
             applicationText: evaluation.application_text,
             externalData: evaluation.external_data || {},
             results: evaluation.results,
