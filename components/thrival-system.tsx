@@ -457,43 +457,40 @@ const ThrivalSystem = () => {
     setShowProgramEditor(false);
   };
 
-  const handleDeleteProgram = (programId: string) => {
+  const handleDeleteProgram = async (programId: string) => {
     const activePrograms = Object.entries(programs).filter(([, prog]) => (prog as any).active);
     if (activePrograms.length <= 1) {
       alert('Cannot delete the last active program.');
       return;
     }
-
-    setPrograms((prev: any) => {
-      const updated = { ...prev };
-      delete updated[programId];
-      return updated;
-    });
-
-    if (selectedProgram === programId) {
-      const remainingPrograms = Object.keys(programs).filter(id => id !== programId);
-      setSelectedProgram(remainingPrograms[0]);
+  
+    try {
+      const { error } = await supabase
+        .from('programs')
+        .delete()
+        .eq('id', programId);
+  
+      if (error) throw error;
+  
+      // Update local state
+      setPrograms((prev: any) => {
+        const updated = { ...prev };
+        delete updated[programId];
+        return updated;
+      });
+  
+      if (selectedProgram === programId) {
+        const remainingPrograms = Object.keys(programs).filter(id => id !== programId);
+        setSelectedProgram(remainingPrograms[0]);
+      }
+  
+      setShowDeleteConfirm(false);
+      setDeletingProgram(null);
+      alert('Program deleted successfully!');
+    } catch (error: any) {
+      console.error('Error deleting program:', error);
+      alert('Failed to delete program: ' + error.message);
     }
-
-    setShowDeleteConfirm(false);
-    setDeletingProgram(null);
-  };
-
-  // Team management  
-  const handleAddTeamMember = () => {
-    if (!newTeamMember.name.trim() || !newTeamMember.email.trim()) {
-      alert('Please fill in both name and email.');
-      return;
-    }
-
-    const member = {
-      id: Date.now(),
-      ...newTeamMember
-    };
-
-    setTeamMembers((prev: any) => [...prev, member]);
-    setNewTeamMember({ name: '', email: '', role: 'Evaluator' });
-    setShowTeamEditor(false);
   };
 
   const handleDeleteTeamMember = (memberId: number) => {
@@ -757,15 +754,28 @@ useEffect(() => {
   };
 
   // Program management functions
-  const handleToggleProgram = (programId: string, active: boolean) => {
-    setPrograms(prev => ({
-      ...prev,
-      [programId]: {
-        ...prev[programId],
-        active: active
-      }
-    }));
-  };
+ const handleToggleProgram = async (programId: string, active: boolean) => {
+    try {
+      const { error } = await supabase
+        .from('programs')
+        .update({ active })
+        .eq('id', programId);
+  
+      if (error) throw error;
+  
+      // Update local state
+      setPrograms(prev => ({
+        ...prev,
+        [programId]: {
+          ...prev[programId],
+          active: active
+        }
+      }));
+    } catch (error: any) {
+      console.error('Error updating program status:', error);
+      alert('Failed to update program status: ' + error.message);
+    }
+};
 
   const handleEditProgram = (programId: string) => {
     const program = programs[programId];
