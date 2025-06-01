@@ -61,7 +61,6 @@ Keep feedback brief and concise. One sentence explaining the score and one sente
       headers: {
         'Content-Type': 'application/json',
         'x-api-key': apiKey,
-        'anthropic-version': '2023-06-01'
       },
       body: JSON.stringify({
         model: 'claude-3-5-sonnet-20241022',
