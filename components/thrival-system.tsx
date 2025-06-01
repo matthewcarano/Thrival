@@ -553,10 +553,7 @@ useEffect(() => {
         case 'github':
           if (!apiKeys.github) {
             throw new Error('Personal access token is required');
-          }              
-              checkAuth();
-            }, []);
-
+          } 
           // Test GitHub API
           const githubResponse = await fetch('https://api.github.com/user', {
             headers: {
