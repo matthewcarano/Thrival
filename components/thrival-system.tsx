@@ -42,18 +42,30 @@ const ThrivalSystem = () => {
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [authMode, setAuthMode] = useState<'login' | 'setup'>('login');
   const handleInviteUser = async () => {
-    // Only allow admins to send invites
-    if (!isAdmin(user)) {
-      alert('Only admins can send invitations');
-      return;
-    }
+  // Only allow admins to send invites
+  if (!isAdmin(user)) {
+    alert('Only admins can send invitations');
+    return;
+  }
+
+  if (!inviteEmail.trim()) {
+    alert('Please enter an email address');
+    return;
+  }
 
   try {
-    const { error } = await supabase.auth.admin.inviteUserByEmail(inviteEmail, {
-      redirectTo: window.location.origin
+    // Create the invite through your backend
+    const response = await fetch('/api/invite', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: inviteEmail })
     });
 
-    if (error) throw error;
+    const result = await response.json();
+    
+    if (!response.ok) {
+      throw new Error(result.message || 'Failed to send invitation');
+    }
     
     alert(`Invitation sent to ${inviteEmail}!`);
     setInviteEmail('');
