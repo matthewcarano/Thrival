@@ -1013,6 +1013,7 @@ useEffect(() => {
                    Test Auth Modal
                  </Button>
                </div>
+               </div>
           </TabsContent>
                           
           {/* Bulk Process Tab */}
