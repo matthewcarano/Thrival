@@ -63,6 +63,15 @@ Keep feedback brief and concise. One sentence explaining the score and one sente
     
     Please evaluate this application for the "${criterion}" criterion using the program guidance above and respond with the JSON format specified above.`
 
+      // Debug: Log what we're sending to Claude
+      console.log('Sending to Claude:', {
+        modelUsed: 'claude-3-sonnet-20240229',
+        systemPromptLength: systemPrompt.length,
+        userPromptLength: userPrompt.length,
+        apiKeyLength: apiKey.length,
+        apiKeyStart: apiKey.substring(0, 10)
+      });
+    
     const response = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: {
