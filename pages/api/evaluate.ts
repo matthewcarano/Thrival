@@ -16,9 +16,10 @@ export default async function handler(
     }
 
     // Add this debugging block:
-      console.log('API Key received:', apiKey ? 'YES' : 'NO')
-      console.log('API Key length:', apiKey ? apiKey.length : 0)
-      console.log('API Key starts with sk-ant:', apiKey ? apiKey.startsWith('sk-ant') : false)
+        console.log('API Key received:', apiKey ? 'YES' : 'NO')
+        console.log('API Key length:', apiKey ? apiKey.length : 0)
+        console.log('API Key starts with sk-ant:', apiKey ? apiKey.startsWith('sk-ant') : false)
+        console.log('First 20 chars of API key:', apiKey ? apiKey.substring(0, 20) : 'NONE')
 
     // apiKey now comes from the request body instead of environment
     
