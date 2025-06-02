@@ -23,23 +23,6 @@ export default async function handler(
       return res.status(400).json({ message: 'Missing required fields' })
     }
 
-   // Debug info - we'll include this in the response temporarily
-      const debugInfo = {
-        apiKeyReceived: apiKey ? 'YES' : 'NO',
-        apiKeyLength: apiKey ? apiKey.length : 0,
-        apiKeyStartsCorrect: apiKey ? apiKey.startsWith('sk-ant') : false,
-        apiKeyFirst20: apiKey ? apiKey.substring(0, 20) : 'NONE'
-      };
-
-    // apiKey now comes from the request body instead of environment
-    
-    if (!apiKey) {
-      return res.status(200).json({
-        score: 5,
-        feedback: `Claude API Error: ${response.status} - ${errorText}. Debug: ${JSON.stringify(debugInfo)}`
-      })
-    }
-
    const systemPrompt = `You are an expert grant application evaluator. Your task is to evaluate applications based on specific criteria and provide both a numerical score (1-10) and detailed feedback.
 
    For this evaluation, you are assessing the "${criterion}" criterion for a grant application. Use the program-specific evaluation guidance provided below as your primary framework for assessment.
