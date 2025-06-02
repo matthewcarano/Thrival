@@ -389,9 +389,10 @@ setEvaluationResult(evaluation);
   try {
     const { data, error } = await supabase
       .from('evaluations')
-      .insert([{
+     .insert([{
         program_id: selectedProgram,
         project_name: evaluation.projectName,
+        evaluator: user.email || 'Unknown User',  // Add this line
         evaluator_id: user.id,
         application_text: evaluation.applicationText,
         external_data: evaluation.externalData,
