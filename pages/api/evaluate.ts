@@ -11,11 +11,19 @@ export default async function handler(
   try {
     const { criterion, applicationText, programId, prompt, externalData, apiKey } = req.body
 
-      // Simple debug test
+     // Simple debug test
       if (!apiKey || !apiKey.startsWith('sk-ant')) {
         return res.status(200).json({
           score: 5,
           feedback: `API Key issue: Received=${apiKey ? 'YES' : 'NO'}, Length=${apiKey ? apiKey.length : 0}, Format=${apiKey ? apiKey.startsWith('sk-ant') : false}`
+        })
+      }
+      
+      // Add this new debug:
+      if (criterion === 'test') {
+        return res.status(200).json({
+          score: 8,
+          feedback: 'Test successful - API key and endpoint working!'
         })
       }
 
