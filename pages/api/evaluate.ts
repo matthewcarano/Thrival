@@ -11,6 +11,14 @@ export default async function handler(
   try {
     const { criterion, applicationText, programId, prompt, externalData, apiKey } = req.body
 
+      // Simple debug test
+      if (!apiKey || !apiKey.startsWith('sk-ant')) {
+        return res.status(200).json({
+          score: 5,
+          feedback: `API Key issue: Received=${apiKey ? 'YES' : 'NO'}, Length=${apiKey ? apiKey.length : 0}, Format=${apiKey ? apiKey.startsWith('sk-ant') : false}`
+        })
+      }
+
     if (!criterion || !applicationText || !prompt) {
       return res.status(400).json({ message: 'Missing required fields' })
     }
@@ -29,7 +37,7 @@ export default async function handler(
       return res.status(200).json({
         score: 5,
         feedback: `Claude API Error: ${response.status} - ${errorText}. Debug: ${JSON.stringify(debugInfo)}`
-})
+      })
     }
 
    const systemPrompt = `You are an expert grant application evaluator. Your task is to evaluate applications based on specific criteria and provide both a numerical score (1-10) and detailed feedback.
