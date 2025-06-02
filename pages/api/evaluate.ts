@@ -15,19 +15,21 @@ export default async function handler(
       return res.status(400).json({ message: 'Missing required fields' })
     }
 
-    // Add this debugging block:
-        console.log('API Key received:', apiKey ? 'YES' : 'NO')
-        console.log('API Key length:', apiKey ? apiKey.length : 0)
-        console.log('API Key starts with sk-ant:', apiKey ? apiKey.startsWith('sk-ant') : false)
-        console.log('First 20 chars of API key:', apiKey ? apiKey.substring(0, 20) : 'NONE')
+   // Debug info - we'll include this in the response temporarily
+      const debugInfo = {
+        apiKeyReceived: apiKey ? 'YES' : 'NO',
+        apiKeyLength: apiKey ? apiKey.length : 0,
+        apiKeyStartsCorrect: apiKey ? apiKey.startsWith('sk-ant') : false,
+        apiKeyFirst20: apiKey ? apiKey.substring(0, 20) : 'NONE'
+      };
 
     // apiKey now comes from the request body instead of environment
     
     if (!apiKey) {
       return res.status(200).json({
         score: 5,
-        feedback: 'No Claude API key configured'
-      })
+        feedback: `Claude API Error: ${response.status} - ${errorText}. Debug: ${JSON.stringify(debugInfo)}`
+})
     }
 
    const systemPrompt = `You are an expert grant application evaluator. Your task is to evaluate applications based on specific criteria and provide both a numerical score (1-10) and detailed feedback.
