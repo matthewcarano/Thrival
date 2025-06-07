@@ -1309,6 +1309,9 @@ useEffect(() => {
                   {isEvaluating ? 'Evaluating...' : 'Start Evaluation'}
                 </Button>
               </div>
+            </div>
+          </TabsContent>
+
                           
           {/* Bulk Process Tab */}
           <TabsContent value="bulk" className="space-y-6">
