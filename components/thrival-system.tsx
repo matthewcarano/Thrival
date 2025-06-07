@@ -2014,7 +2014,7 @@ useEffect(() => {
 
                     <h4 className="font-medium">System Prompts</h4>
 
-                      <<Button onClick={async () => {
+                      <Button onClick={async () => {
                         try {
                           console.log('Testing table read...');
                           const { data, error, count } = await supabase
