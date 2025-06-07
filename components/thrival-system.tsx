@@ -1546,6 +1546,24 @@ useEffect(() => {
                       Create, edit & manage evaluation programs
                     </p>
                   </button>
+
+                  {isAdmin(user) && (
+                    <button
+                      onClick={() => setActiveSettingsSection('prompts')}
+                      className={`p-4 rounded-lg border-2 text-left transition-colors ${
+                        activeSettingsSection === 'prompts' 
+                          ? 'border-blue-200 dark:border-blue-800 bg-blue-50 dark:bg-blue-900/20' 
+                          : 'border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 hover:border-blue-200 dark:hover:border-blue-800'
+                      }`}
+                    >
+                      <h3 className={`font-medium ${activeSettingsSection === 'prompts' ? 'text-blue-900 dark:text-blue-100' : ''}`}>
+                        🎯 Prompt Management
+                      </h3>
+                      <p className={`text-sm mt-1 ${activeSettingsSection === 'prompts' ? 'text-blue-700 dark:text-blue-300' : 'text-gray-600 dark:text-gray-400'}`}>
+                        Edit AI evaluation prompts & scoring guidelines
+                      </p>
+                    </button>
+                  )}
                   
                  {isAdmin(user) && (
                   <button
