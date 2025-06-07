@@ -226,26 +226,26 @@ const ThrivalSystem = () => {
 
   const gradingTiers = [
     {
-      min: 9,
-      max: 10,
+      min: 4.5,
+      max: 5,
       recommendation: 'Strongly Recommend',
       applicantMessage: 'Congratulations! Your application demonstrates exceptional merit across all evaluation criteria.'
     },
     {
-      min: 7,
-      max: 8.9,
+      min: 3.5,
+      max: 4.4,
       recommendation: 'Recommend',
       applicantMessage: 'Your application shows strong potential and aligns well with {programName} objectives.'
     },
     {
-      min: 5,
-      max: 6.9,
+      min: 2.5,
+      max: 3.4,
       recommendation: 'Conditional',
       applicantMessage: 'Your application shows promise but requires additional development in key areas.'
     },
     {
       min: 0,
-      max: 4.9,
+      max: 2.4,
       recommendation: 'Do Not Fund',
       applicantMessage: 'Unfortunately, your application does not meet the current criteria for {programName}.'
     }
@@ -334,7 +334,7 @@ const ThrivalSystem = () => {
     }
   };
 
-  // Calculate weighted score
+ // Calculate weighted score
   const calculateWeightedScore = (scores: any, programWeights?: any) => {
     const weights = programWeights || criteriaWeights;
     const totalWeightedScore =
@@ -344,8 +344,8 @@ const ThrivalSystem = () => {
       (scores.need * weights.need / 100) +
       (scores.novelty * weights.novelty / 100) +
       (scores.focus * weights.focus / 100);
-
-    const percentage = (totalWeightedScore / 10) * 100;
+  
+    const percentage = (totalWeightedScore / 5) * 100;  // Changed from /10 to /5
     return { score: totalWeightedScore, percentage };
   };
 
