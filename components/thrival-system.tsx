@@ -2223,6 +2223,7 @@ useEffect(() => {
             </div>
           </div>
         )}
+      
       {/* Add Team Member Modal */}
       {showTeamEditor && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
@@ -2490,6 +2491,25 @@ useEffect(() => {
           </div>
         </div>
       )}
+
+      {/* Prompt Editor Modal */}
+      {showPromptEditor && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className={`${darkMode ? 'bg-gray-800' : 'bg-white'} p-6 rounded-lg w-96 max-w-md`}>
+            <h3 className="text-lg font-semibold mb-4">Edit Prompt</h3>
+            <p>Editing: {editingPrompt}</p>
+            <div className="flex justify-end space-x-2 mt-6">
+              <Button variant="outline" onClick={() => setShowPromptEditor(false)}>
+                Cancel
+              </Button>
+              <Button onClick={() => setShowPromptEditor(false)}>
+                Save
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 };
