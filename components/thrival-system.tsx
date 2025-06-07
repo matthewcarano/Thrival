@@ -957,6 +957,30 @@ useEffect(() => {
       // Load current criterion prompt
     }
   };
+
+  const handleSavePrompt = async () => {
+      try {
+        // Save to Supabase
+        const { data, error } = await supabase
+          .from('prompt_templates')
+          .upsert([{
+            prompt_type: editingPrompt,
+            prompt_text: 'placeholder', // We'll update this
+            created_by: user.id
+          }])
+          .select()
+          .single();
+    
+        if (error) throw error;
+        
+        alert('Prompt saved successfully!');
+        setShowPromptEditor(false);
+        setEditingPrompt(null);
+      } catch (error: any) {
+        console.error('Error saving prompt:', error);
+        alert('Failed to save prompt: ' + error.message);
+      }
+    };
   
   const handleCreateProgram = async () => {
       if (!newProgram.name.trim() || !newProgram.overallPrompt.trim()) {
@@ -999,30 +1023,6 @@ useEffect(() => {
             active: data.active
           }
         }));
-        
-    const handleSavePrompt = async () => {
-        try {
-          // Save to Supabase
-          const { data, error } = await supabase
-            .from('prompt_templates')
-            .upsert([{
-              prompt_type: editingPrompt,
-              prompt_text: 'placeholder', // We'll update this
-              created_by: user.id
-            }])
-            .select()
-            .single();
-      
-          if (error) throw error;
-          
-          alert('Prompt saved successfully!');
-          setShowPromptEditor(false);
-          setEditingPrompt(null);
-        } catch (error: any) {
-          console.error('Error saving prompt:', error);
-          alert('Failed to save prompt: ' + error.message);
-        }
-      };
         
         // Reset form
         setNewProgram({
