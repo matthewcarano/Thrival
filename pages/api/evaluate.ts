@@ -75,6 +75,9 @@ Keep feedback brief and concise. One sentence explaining the score and one sente
     // Temporary: Return a mock successful response to test the flow
     const response = {
       ok: true,
+      status: 200,
+      statusText: 'OK',
+      text: () => Promise.resolve('Mock response'),
       json: () => Promise.resolve({
         content: [{ text: '{"score": 7, "feedback": "Test evaluation successful - this proves the flow works!"}' }]
       })
