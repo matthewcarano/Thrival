@@ -1464,25 +1464,42 @@ useEffect(() => {
                   <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
                     {/* Recommendation Card - 2/5 width */}
                     <div className="md:col-span-2">
-                      <Card className="p-4 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20">
-                        <div className="space-y-2">
-                          <div className="text-2xl font-bold text-blue-600 text-center">
-                            {evaluationResult.finalScore.score.toFixed(1)}/5
-                          </div>
-                          <div className="text-sm text-gray-600 dark:text-gray-400 text-center">
-                            {evaluationResult.finalScore.percentage.toFixed(0)}%
-                          </div>
-                          <Badge className="w-full justify-center" variant={
-                            evaluationResult.recommendation === 'Strongly Recommend' ? 'default' :
-                            evaluationResult.recommendation === 'Recommend' ? 'default' :
-                            evaluationResult.recommendation === 'Conditional' ? 'secondary' : 'destructive'
-                          }>
+                      <Card className="p-4 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 relative">
+                        {/* Recommendation Badge - Top Right Corner */}
+                        <div className="absolute top-2 right-2">
+                          <Badge className={`px-3 py-1 ${
+                            evaluationResult.recommendation === 'Strongly Recommend' || evaluationResult.recommendation === 'Recommend' 
+                              ? 'bg-green-500 text-white hover:bg-green-600' 
+                              : evaluationResult.recommendation === 'Conditional' 
+                              ? 'bg-yellow-500 text-white hover:bg-yellow-600' 
+                              : 'bg-red-500 text-white hover:bg-red-600'
+                          }`}>
                             {evaluationResult.recommendation}
                           </Badge>
-                          <div className="text-xs text-gray-500 dark:text-gray-400 text-center mt-2">
-                            <div>{evaluationResult.date}</div>
-                            <div>{evaluationResult.program.name}</div>
-                            <div>{evaluationResult.projectName}</div>
+                        </div>
+                    
+                        <div className="space-y-3 mt-6">
+                          {/* Score and Percentage - Same Line, Same Size */}
+                          <div className="text-center">
+                            <span className="text-2xl font-bold text-blue-600">
+                              {evaluationResult.finalScore.score.toFixed(1)}/5
+                            </span>
+                            <span className="text-2xl font-bold text-gray-600 dark:text-gray-400 ml-4">
+                              {evaluationResult.finalScore.percentage.toFixed(0)}%
+                            </span>
+                          </div>
+                    
+                          {/* Project Info - Centered */}
+                          <div className="text-center space-y-1">
+                            <div className="font-medium text-lg">
+                              {evaluationResult.projectName}
+                            </div>
+                            <div className="font-medium text-base text-gray-700 dark:text-gray-300">
+                              {evaluationResult.program.name}
+                            </div>
+                            <div className="text-sm text-gray-500 dark:text-gray-400">
+                              {evaluationResult.date}
+                            </div>
                           </div>
                         </div>
                       </Card>
