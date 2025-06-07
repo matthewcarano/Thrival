@@ -35,6 +35,8 @@ export default async function handler(
 
    For this evaluation, you are assessing the "${criterion}" criterion for a grant application. Use the program-specific evaluation guidance provided below as your primary framework for assessment.
 
+   IMPORTANT: You MUST respond with valid JSON only. Do not include any other text before or after the JSON.`;
+
 SCORING GUIDELINES:
 - Score 1-3: Poor/Inadequate - Major deficiencies that significantly impact viability
 - Score 4-5: Below Average - Some issues but shows potential
