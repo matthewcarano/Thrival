@@ -2500,6 +2500,7 @@ useEffect(() => {
                   className="w-full"
                 />
               </div>
+            </div>
             
             <div className="flex justify-end space-x-2 mt-6">
               <Button variant="outline" onClick={() => setShowPromptEditor(false)}>
