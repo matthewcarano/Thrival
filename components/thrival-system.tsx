@@ -1451,6 +1451,7 @@ useEffect(() => {
 
           {/* Results Tab */}
           <TabsContent value="results" className="space-y-6">
+            
             {/* Latest Evaluation Result */}
             {evaluationResult && (
               <Card className={darkMode ? 'bg-gray-800 border-gray-700' : ''}>
@@ -1458,44 +1459,37 @@ useEffect(() => {
                   <CardTitle>Latest Evaluation Result</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-6">
-                  {/* Project Info */}
-                  <div className="flex items-center justify-between p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
-                    <div>
-                      <h3 className="font-medium text-lg">{evaluationResult.projectName}</h3>
-                      <p className="text-sm text-gray-600 dark:text-gray-400">
-                        Evaluated by {evaluationResult.evaluator} on {evaluationResult.date} using {evaluationResult.program.name}
-                      </p>
-                    </div>
-                    <Badge className="text-lg px-4 py-2" variant={
-                      evaluationResult.recommendation === 'Strongly Recommend' ? 'default' :
-                      evaluationResult.recommendation === 'Recommend' ? 'default' :
-                      evaluationResult.recommendation === 'Conditional' ? 'secondary' : 'destructive'
-                    }>
-                      {evaluationResult.finalScore.score.toFixed(1)}/5
-                    </Badge>
-                  </div>
             
-                  {/* Overall Score + Overall Feedback Row */}
+                  {/* Recommendation Score Card + Overall Feedback Row */}
                   <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
-                    {/* Overall Score - 1/5 width */}
-                    <div className="md:col-span-1">
-                      <Card className="p-6 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20">
-                        <div className="text-center">
-                          <div className="text-3xl font-bold text-blue-600">{evaluationResult.finalScore.score.toFixed(1)}/5</div>
-                          <div className="text-sm text-gray-600 dark:text-gray-400">{evaluationResult.finalScore.percentage.toFixed(0)}%</div>
-                          <Badge className="mt-2" variant={
+                    {/* Recommendation Card - 2/5 width */}
+                    <div className="md:col-span-2">
+                      <Card className="p-4 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20">
+                        <div className="space-y-2">
+                          <div className="text-2xl font-bold text-blue-600 text-center">
+                            {evaluationResult.finalScore.score.toFixed(1)}/5
+                          </div>
+                          <div className="text-sm text-gray-600 dark:text-gray-400 text-center">
+                            {evaluationResult.finalScore.percentage.toFixed(0)}%
+                          </div>
+                          <Badge className="w-full justify-center" variant={
                             evaluationResult.recommendation === 'Strongly Recommend' ? 'default' :
                             evaluationResult.recommendation === 'Recommend' ? 'default' :
                             evaluationResult.recommendation === 'Conditional' ? 'secondary' : 'destructive'
                           }>
                             {evaluationResult.recommendation}
                           </Badge>
+                          <div className="text-xs text-gray-500 dark:text-gray-400 text-center mt-2">
+                            <div>{evaluationResult.date}</div>
+                            <div>{evaluationResult.program.name}</div>
+                            <div>{evaluationResult.projectName}</div>
+                          </div>
                         </div>
                       </Card>
                     </div>
             
-                    {/* Overall Feedback - 4/5 width */}
-                    <div className="md:col-span-4">
+                    {/* Overall Feedback - 3/5 width */}
+                    <div className="md:col-span-3">
                       <Card className="p-4 h-full">
                         <h4 className="font-medium mb-2">Overall Feedback</h4>
                         <p className="text-sm text-gray-600 dark:text-gray-400">
@@ -1504,14 +1498,6 @@ useEffect(() => {
                       </Card>
                     </div>
                   </div>
-            
-                  {/* Board Feedback Card */}
-                  <Card className="p-4 bg-green-50 dark:bg-green-900/20">
-                    <h4 className="font-medium mb-2">Board Feedback</h4>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">
-                      [Board feedback will be generated here - focused on ecosystem alignment, strategic fit, and reasoning for program board presentation]
-                    </p>
-                  </Card>
             
                   {/* Criteria Breakdown */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -1532,6 +1518,14 @@ useEffect(() => {
                       </Card>
                     ))}
                   </div>
+            
+                  {/* Board Feedback Card */}
+                  <Card className="p-4 bg-green-50 dark:bg-green-900/20">
+                    <h4 className="font-medium mb-2">Board Feedback</h4>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                      [Board feedback will be generated here - focused on ecosystem alignment, strategic fit, and reasoning for program board presentation]
+                    </p>
+                  </Card>
             
                   {/* Applicant Feedback */}
                   <Card className="p-4 bg-blue-50 dark:bg-blue-900/20">
