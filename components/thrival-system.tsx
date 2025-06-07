@@ -954,7 +954,8 @@ useEffect(() => {
       const { data, error } = await supabase
         .from('prompt_templates')
         .select('prompt_text')
-        .eq('prompt_type', promptType);
+        .eq('prompt_type', promptType)
+        .order('created_at', { ascending: false });
       
       console.log('Load response:', { data, error });
       
