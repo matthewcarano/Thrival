@@ -2012,6 +2012,23 @@ useEffect(() => {
                 <CardContent className="space-y-6">
                   <div className="space-y-4">
                     <h4 className="font-medium">System Prompts</h4>
+
+                    <h4 className="font-medium">System Prompts</h4>
+
+                      <Button onClick={async () => {
+                        try {
+                          console.log('Testing table read...');
+                          const { data, error, count } = await supabase
+                            .from('prompt_templates')
+                            .select('*', { count: 'exact' });
+                          console.log('Test read result:', { data, error, count });
+                        } catch (error) {
+                          console.error('Test read error:', error);
+                        }
+                      }} variant="outline">
+                        Test Table Read
+                      </Button>
+                      
                     <div className="grid grid-cols-1 gap-4">
                       </div>
                 
