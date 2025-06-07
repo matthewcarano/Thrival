@@ -2487,53 +2487,6 @@ useEffect(() => {
           </div>
         </div>
       )}
-     {/* Prompt Editor Modal */}
-    {showPromptEditor && (
-      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-        <div className={`${darkMode ? 'bg-gray-800' : 'bg-white'} p-6 rounded-lg w-full max-w-4xl max-h-[90vh] overflow-y-auto`}>
-          <h3 className="text-lg font-semibold mb-4">
-            Edit {editingPrompt === 'scoring' ? 'Scoring Guidelines' : 
-                 editingPrompt === 'system' ? 'System Prompt' : 
-                 `${editingPrompt} Criterion Prompt`}
-          </h3>
-              
-          <div className="space-y-4">
-            <div>
-              <Label>Prompt Text</Label>
-              <Textarea
-                rows={15}
-                placeholder="Enter your prompt here..."
-                 className="w-full"
-              />
-             </div>
-              
-            {editingPrompt === 'scoring' && (
-              <div>
-                <Label>Scoring Scale</Label>
-                 <Select defaultValue="5">
-                  <SelectTrigger className="w-32">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="5">1-5 Scale</SelectItem>
-                    <SelectItem value="10">1-10 Scale</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-            )}
-           </div>
-              
-          <div className="flex justify-end space-x-2 mt-6">
-            <Button variant="outline" onClick={() => setShowPromptEditor(false)}>
-              Cancel
-            </Button>
-            <Button onClick={handleSavePrompt}>
-              Save Prompt
-            </Button>
-          </div>
-      </div>
-      </div>
-    )}
     </div>
   );
 };
