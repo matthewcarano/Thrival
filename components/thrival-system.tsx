@@ -984,7 +984,7 @@ useEffect(() => {
             active: data.active
           }
         }));
-
+        
         // Prompt management functions
         const handleEditPrompt = (promptType: string, criterion?: string) => {
           setEditingPrompt(promptType);
@@ -2065,6 +2065,7 @@ useEffect(() => {
                   </div>
                 </CardHeader>
                 <CardContent className="space-y-6">
+                  
                   {/* Program List */}
                   <div className="space-y-4">
                     {Object.entries(programs).map(([programId, program]: [string, any]) => (
