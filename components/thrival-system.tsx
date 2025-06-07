@@ -2013,7 +2013,7 @@ useEffect(() => {
                           <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
                             Custom prompt for {criterion} evaluation
                           </p>
-                          <Button variant="outline" size="sm" onClick={() => handleEditPrompt('criterion', criterion)}>
+                          <Button variant="outline" size="sm" onClick={() => handleEditPrompt(criterion)}>
                             <Edit className="h-4 w-4 mr-2" />
                             Edit {criterion}
                           </Button>
