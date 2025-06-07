@@ -969,17 +969,22 @@ useEffect(() => {
   };
 
   const handleSavePrompt = async () => {
+      console.log('Saving prompt:', editingPrompt);
+      console.log('Prompt text:', currentPromptText);
+      
       try {
         const { data, error } = await supabase
           .from('prompt_templates')
           .upsert([{
             prompt_type: editingPrompt,
-            prompt_text: currentPromptText,  // ← Save the actual textarea content
+            prompt_text: currentPromptText,
             created_by: user.id
           }])
           .select()
           .single();
     
+        console.log('Save result:', data);
+        
         if (error) throw error;
         
         alert('Prompt saved successfully!');
