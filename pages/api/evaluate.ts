@@ -83,6 +83,7 @@ export default async function handler(
         }
       ]
     })
+  })
 
     if (!response.ok) {
       const errorText = await response.text()
