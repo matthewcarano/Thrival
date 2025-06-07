@@ -2488,7 +2488,7 @@ useEffect(() => {
           <div className={`${darkMode ? 'bg-gray-800' : 'bg-white'} p-6 rounded-lg w-full max-w-4xl max-h-[90vh] overflow-y-auto`}>
             <h3 className="text-lg font-semibold mb-4">
               Edit {editingPrompt === 'system' ? 'AI Evaluator Instructions' : 
-               `${editingPrompt.charAt(0).toUpperCase() + editingPrompt.slice(1)} Criterion Prompt`}
+                   `${editingPrompt.charAt(0).toUpperCase() + editingPrompt.slice(1)}`}
             </h3>
             
             <div className="space-y-4">
