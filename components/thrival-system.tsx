@@ -39,6 +39,7 @@ const ThrivalSystem = () => {
   const [showProgramEditor, setShowProgramEditor] = useState(false);
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [currentPromptText, setCurrentPromptText] = useState('');
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [authMode, setAuthMode] = useState<'login' | 'setup'>('login');
   const [prompts, setPrompts] = useState({
@@ -944,18 +945,27 @@ useEffect(() => {
   };
   
   // Prompt management functions
-  const handleEditPrompt = (promptType: string, criterion?: string) => {
+  const handleEditPrompt = async (promptType: string) => {
     setEditingPrompt(promptType);
-    setShowPromptEditor(true);
     
-    // Load current prompt content based on type
-    if (promptType === 'scoring') {
-      // Load current scoring guidelines
-    } else if (promptType === 'system') {
-      // Load current system prompt
-    } else if (promptType === 'criterion' && criterion) {
-      // Load current criterion prompt
+    try {
+      // Load prompt from Supabase
+      const { data, error } = await supabase
+        .from('prompt_templates')
+        .select('prompt_text')
+        .eq('prompt_type', promptType)
+        .single();
+      
+      if (error && error.code !== 'PGRST116') throw error; // PGRST116 = no rows found
+      
+      // Set the prompt text (empty if no prompt exists yet)
+      setCurrentPromptText(data?.prompt_text || '');
+    } catch (error) {
+      console.error('Error loading prompt:', error);
+      setCurrentPromptText(''); // Start with empty if error
     }
+    
+    setShowPromptEditor(true);
   };
 
   const handleSavePrompt = async () => {
