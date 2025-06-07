@@ -202,7 +202,7 @@ const ThrivalSystem = () => {
     itemsPerPage: 25
   });
 
-  const [prompts, setPrompts] = useState({
+  const [defaultPrompts, setDefaultPrompts] = useState({
     team: {
       default: 'Evaluate the team\'s experience, track record, and ability to execute on this project.'
     },
