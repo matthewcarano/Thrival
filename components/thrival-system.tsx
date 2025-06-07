@@ -2014,7 +2014,7 @@ useEffect(() => {
 
                     <h4 className="font-medium">System Prompts</h4>
 
-                      <Button onClick={async () => {
+                      <<Button onClick={async () => {
                         try {
                           console.log('Testing table read...');
                           const { data, error, count } = await supabase
@@ -2026,6 +2026,24 @@ useEffect(() => {
                         }
                       }} variant="outline">
                         Test Table Read
+                      </Button>
+                      
+                      <Button onClick={async () => {
+                        try {
+                          console.log('Deleting placeholder entries...');
+                          const { error } = await supabase
+                            .from('prompt_templates')
+                            .delete()
+                            .eq('prompt_text', 'placeholder');
+                          
+                          if (error) throw error;
+                          console.log('Placeholder entries deleted');
+                          alert('Placeholder entries cleared!');
+                        } catch (error) {
+                          console.error('Delete error:', error);
+                        }
+                      }} variant="outline">
+                        Clear Placeholders
                       </Button>
                       
                     <div className="grid grid-cols-1 gap-4">
