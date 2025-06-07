@@ -970,12 +970,11 @@ useEffect(() => {
 
   const handleSavePrompt = async () => {
       try {
-        // Save to Supabase
         const { data, error } = await supabase
           .from('prompt_templates')
           .upsert([{
             prompt_type: editingPrompt,
-            prompt_text: 'placeholder', // We'll update this
+            prompt_text: currentPromptText,  // ← Save the actual textarea content
             created_by: user.id
           }])
           .select()
