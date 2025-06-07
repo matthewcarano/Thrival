@@ -65,7 +65,7 @@ Keep feedback brief and concise. One sentence explaining the score and one sente
 
       // Debug: Log what we're sending to Claude
       console.log('Sending to Claude:', {
-        modelUsed: 'claude-3-sonnet-20240229',
+        modelUsed: 'claude-3-haiku-20240307',
         systemPromptLength: systemPrompt.length,
         userPromptLength: userPrompt.length,
         apiKeyLength: apiKey.length,
@@ -80,7 +80,7 @@ Keep feedback brief and concise. One sentence explaining the score and one sente
         'anthropic-version': '2023-06-01'
       },
       body: JSON.stringify({
-        model: 'claude-3-sonnet-20240229',
+        model: 'claude-3-haiku-20240307',
         max_tokens: 1000,
         system: systemPrompt,
         messages: [
