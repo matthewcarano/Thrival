@@ -83,15 +83,15 @@ export default async function handler(
     },
     body: JSON.stringify({
       model: 'claude-3-haiku-20240307',
-      max_tokens: 100,
+      max_tokens: 1000,
+      system: systemPrompt,
       messages: [
         {
           role: 'user',
-          content: 'Rate this on a scale of 1-10 and explain why: ' + applicationText.substring(0, 100)
+          content: userPrompt
         }
       ]
     })
-  })
 
     if (!response.ok) {
       const errorText = await response.text()
