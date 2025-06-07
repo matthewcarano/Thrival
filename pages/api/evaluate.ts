@@ -76,7 +76,8 @@ Keep feedback brief and concise. One sentence explaining the score and one sente
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'x-api-key': apiKey
+      'x-api-key': apiKey,
+      'anthropic-version': '2023-06-01'
     },
     body: JSON.stringify({
       model: 'claude-3-haiku-20240307',
