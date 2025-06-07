@@ -2009,7 +2009,7 @@ useEffect(() => {
                         <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
                           Overall scoring scale and guidelines (currently 1-10, will change to 1-5)
                         </p>
-                        <Button variant="outline" size="sm">
+                        <Button variant="outline" size="sm" onClick={() => handleEditPrompt('scoring')}>
                           <Edit className="h-4 w-4 mr-2" />
                           Edit Guidelines
                         </Button>
@@ -2020,7 +2020,7 @@ useEffect(() => {
                         <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
                           Main instruction prompt for Claude evaluations
                         </p>
-                        <Button variant="outline" size="sm">
+                        <Button variant="outline" size="sm" onClick={() => handleEditPrompt('system')}>
                           <Edit className="h-4 w-4 mr-2" />
                           Edit System Prompt
                         </Button>
@@ -2035,7 +2035,7 @@ useEffect(() => {
                           <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
                             Custom prompt for {criterion} evaluation
                           </p>
-                          <Button variant="outline" size="sm">
+                          <Button variant="outline" size="sm" onClick={() => handleEditPrompt('criterion', criterion)}>
                             <Edit className="h-4 w-4 mr-2" />
                             Edit {criterion}
                           </Button>
