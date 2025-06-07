@@ -947,11 +947,11 @@ useEffect(() => {
   const handleEditPrompt = (promptType: string, criterion?: string) => {
     setEditingPrompt(promptType);
     setShowPromptEditor(true);
-          
+    
     // Load current prompt content based on type
     if (promptType === 'scoring') {
       // Load current scoring guidelines
-    } else if (promptType === 'system') 
+    } else if (promptType === 'system') {
       // Load current system prompt
     } else if (promptType === 'criterion' && criterion) {
       // Load current criterion prompt
