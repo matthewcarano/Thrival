@@ -20,7 +20,7 @@ const ThrivalSystem = () => {
   // State declarations
   const [activeTab, setActiveTab] = useState('evaluate');
   const [searchTerm, setSearchTerm] = useState('');
-  const [showTeamInvite, setShowTeamInvite] = useState(false);handleEditPrompt
+  const [showTeamInvite, setShowTeamInvite] = useState(false);
   const [inviteEmail, setInviteEmail] = useState('');
   const [authEmail, setAuthEmail] = useState('');
   const [authPassword, setAuthPassword] = useState('');
