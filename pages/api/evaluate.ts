@@ -33,25 +33,25 @@ export default async function handler(
 
    const systemPrompt = `You are an expert grant application evaluator. Your task is to evaluate applications based on specific criteria and provide both a numerical score (1-10) and detailed feedback.
 
-   For this evaluation, you are assessing the "${criterion}" criterion for a grant application. Use the program-specific evaluation guidance provided below as your primary framework for assessment.
-
-   IMPORTANT: You MUST respond with valid JSON only. Do not include any other text before or after the JSON.`;
-
-SCORING GUIDELINES:
-- Score 1-3: Poor/Inadequate - Major deficiencies that significantly impact viability
-- Score 4-5: Below Average - Some issues but shows potential
-- Score 6-7: Good/Solid - Meets expectations with room for improvement  
-- Score 8-9: Excellent - Strong performance with minor gaps
-- Score 10: Exceptional - Outstanding performance across all aspects
-
-RESPONSE FORMAT:
-Provide your response as a JSON object with exactly this structure:
-{
-  "score": [number between 1-10],
-  "feedback": "[1-2 sentences maximum explaining the score]"
-}
-
-Keep feedback brief and concise. One sentence explaining the score and one sentence with specific details or recommendations.`
+  For this evaluation, you are assessing the "${criterion}" criterion for a grant application. Use the program-specific evaluation guidance provided below as your primary framework for assessment.
+  
+  SCORING GUIDELINES:
+  - Score 1-3: Poor/Inadequate - Major deficiencies that significantly impact viability
+  - Score 4-5: Below Average - Some issues but shows potential
+  - Score 6-7: Good/Solid - Meets expectations with room for improvement  
+  - Score 8-9: Excellent - Strong performance with minor gaps
+  - Score 10: Exceptional - Outstanding performance across all aspects
+  
+  RESPONSE FORMAT:
+  Provide your response as a JSON object with exactly this structure:
+  {
+    "score": [number between 1-10],
+    "feedback": "[1-2 sentences maximum explaining the score]"
+  }
+  
+  Keep feedback brief and concise. One sentence explaining the score and one sentence with specific details or recommendations.
+  
+  IMPORTANT: You MUST respond with valid JSON only. Do not include any other text before or after the JSON.`;
 
    const userPrompt = `EVALUATION CRITERIA: ${criterion}
     
