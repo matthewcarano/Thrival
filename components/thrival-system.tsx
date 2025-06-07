@@ -2020,7 +2020,6 @@ useEffect(() => {
                         </div>
                       ))}
                     </div>
-                  </div>
                 </CardContent>
               </Card>
             )}
