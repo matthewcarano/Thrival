@@ -1991,26 +1991,17 @@ useEffect(() => {
                   <div className="space-y-4">
                     <h4 className="font-medium">System Prompts</h4>
                     <div className="grid grid-cols-1 gap-4">
-                      <div className="p-4 rounded-lg border border-gray-200 dark:border-gray-600">
-                        <h5 className="font-medium mb-2">🎯 Scoring Guidelines</h5>
-                        <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
-                          Overall scoring scale and guidelines (currently 1-10, will change to 1-5)
-                        </p>
-                        <Button variant="outline" size="sm" onClick={() => handleEditPrompt('scoring')}>
-                          <Edit className="h-4 w-4 mr-2" />
-                          Edit Guidelines
-                        </Button>
                       </div>
-                      
+                
                       <div className="p-4 rounded-lg border border-gray-200 dark:border-gray-600">
-                        <h5 className="font-medium mb-2">🤖 System Prompt</h5>
-                        <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
-                          Main instruction prompt for Claude evaluations
-                        </p>
-                        <Button variant="outline" size="sm" onClick={() => handleEditPrompt('system')}>
-                          <Edit className="h-4 w-4 mr-2" />
-                          Edit System Prompt
-                        </Button>
+                        <h5 className="font-medium mb-2">🤖 AI Evaluator Instructions</h5>
+                          <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
+                            Base instructions that tell Claude who they are and what they're doing
+                          </p>
+                          <Button variant="outline" size="sm" onClick={() => handleEditPrompt('system')}>
+                            <Edit className="h-4 w-4 mr-2" />
+                            Edit Instructions
+                          </Button>
                       </div>
                     </div>
                     
@@ -2497,9 +2488,8 @@ useEffect(() => {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className={`${darkMode ? 'bg-gray-800' : 'bg-white'} p-6 rounded-lg w-full max-w-4xl max-h-[90vh] overflow-y-auto`}>
             <h3 className="text-lg font-semibold mb-4">
-              Edit {editingPrompt === 'scoring' ? 'Scoring Guidelines' : 
-                   editingPrompt === 'system' ? 'System Prompt' : 
-                   `${editingPrompt} Criterion Prompt`}
+              Edit {editingPrompt === 'system' ? 'AI Evaluator Instructions' : 
+               `${editingPrompt.charAt(0).toUpperCase() + editingPrompt.slice(1)} Criterion Prompt`}
             </h3>
             
             <div className="space-y-4">
@@ -2511,22 +2501,6 @@ useEffect(() => {
                   className="w-full"
                 />
               </div>
-              
-              {editingPrompt === 'scoring' && (
-                <div>
-                  <Label>Scoring Scale</Label>
-                  <Select defaultValue="5">
-                    <SelectTrigger className="w-32">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="5">1-5 Scale</SelectItem>
-                      <SelectItem value="10">1-10 Scale</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-              )}
-            </div>
             
             <div className="flex justify-end space-x-2 mt-6">
               <Button variant="outline" onClick={() => setShowPromptEditor(false)}>
