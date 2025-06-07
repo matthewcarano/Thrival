@@ -728,7 +728,7 @@ useEffect(() => {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ 
-      criterion: 'test',
+      criterion: 'team',
       applicationText: 'This is a test evaluation.',
       prompt: 'Please respond with a simple test message.',
       apiKey: apiKeys.claude
