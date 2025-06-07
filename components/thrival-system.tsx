@@ -946,6 +946,7 @@ useEffect(() => {
   
   // Prompt management functions
   const handleEditPrompt = async (promptType: string) => {
+    console.log('Loading prompt for type:', promptType);
     setEditingPrompt(promptType);
     
     try {
@@ -956,10 +957,17 @@ useEffect(() => {
         .eq('prompt_type', promptType)
         .single();
       
-      if (error && error.code !== 'PGRST116') throw error; // PGRST116 = no rows found
+      console.log('Load response:', { data, error });
+      
+      if (error && error.code !== 'PGRST116') {
+        console.error('Load error:', error);
+        throw error;
+      }
       
       // Set the prompt text (empty if no prompt exists yet)
-      setCurrentPromptText(data?.prompt_text || '');
+      const promptText = data?.prompt_text || '';
+      console.log('Setting prompt text to:', promptText);
+      setCurrentPromptText(promptText);
     } catch (error) {
       console.error('Error loading prompt:', error);
       setCurrentPromptText(''); // Start with empty if error
