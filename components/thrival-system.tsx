@@ -254,8 +254,38 @@ const ThrivalSystem = () => {
   // Real AI evaluation function
   const evaluateWithAI = async (criterion: string, applicationText: string, programId: string) => {
     try {
+      // 1. Load base AI Evaluator Instructions from database
+      const { data: systemData, error: systemError } = await supabase
+        .from('prompt_templates')
+        .select('prompt_text')
+        .eq('prompt_type', 'system')
+        .order('created_at', { ascending: false });
+      
+      const baseInstructions = systemData?.[0]?.prompt_text || 'You are an expert grant application evaluator.';
+      
+      // 2. Load criterion-specific prompt from database
+      const { data: criterionData, error: criterionError } = await supabase
+        .from('prompt_templates')
+        .select('prompt_text')
+        .eq('prompt_type', criterion)
+        .order('created_at', { ascending: false });
+      
+      const criterionPrompt = criterionData?.[0]?.prompt_text || '';
+      
+      // 3. Get program-specific context
       const program = programs[programId];
-      const criterionPrompt = program?.customPrompts?.[criterion] || program?.overallPrompt || prompts[criterion]?.default;
+      const programContext = program?.customPrompts?.[criterion] || program?.overallPrompt || '';
+      
+      // 4. Layer all prompts together
+      let combinedPrompt = baseInstructions;
+      
+      if (criterionPrompt) {
+        combinedPrompt += `\n\nCRITERION-SPECIFIC GUIDANCE:\n${criterionPrompt}`;
+      }
+      
+      if (programContext) {
+        combinedPrompt += `\n\nPROGRAM-SPECIFIC CONTEXT:\n${programContext}`;
+      }
       
       // Get API key from localStorage
       const savedConfig = localStorage.getItem('thrival_api_config');
@@ -279,7 +309,7 @@ const ThrivalSystem = () => {
           criterion, 
           applicationText, 
           programId,
-          prompt: criterionPrompt,
+          prompt: combinedPrompt,  // Send the layered prompt
           externalData: externalData,
           apiKey: claudeApiKey
         })
