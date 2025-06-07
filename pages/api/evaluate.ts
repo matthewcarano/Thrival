@@ -72,25 +72,13 @@ Keep feedback brief and concise. One sentence explaining the score and one sente
         apiKeyStart: apiKey.substring(0, 10)
       });
     
-    const response = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': apiKey,
-        'anthropic-version': '2023-06-01'
-      },
-      body: JSON.stringify({
-        model: 'claude-3-haiku-20240307',
-        max_tokens: 1000,
-        system: systemPrompt,
-        messages: [
-          {
-            role: 'user',
-            content: userPrompt
-          }
-        ]
+    // Temporary: Return a mock successful response to test the flow
+    const response = {
+      ok: true,
+      json: () => Promise.resolve({
+        content: [{ text: '{"score": 7, "feedback": "Test evaluation successful - this proves the flow works!"}' }]
       })
-    })
+    };
 
     if (!response.ok) {
       const errorText = await response.text()
