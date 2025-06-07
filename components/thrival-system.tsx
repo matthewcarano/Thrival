@@ -20,7 +20,7 @@ const ThrivalSystem = () => {
   // State declarations
   const [activeTab, setActiveTab] = useState('evaluate');
   const [searchTerm, setSearchTerm] = useState('');
-  const [showTeamInvite, setShowTeamInvite] = useState(false);
+  const [showTeamInvite, setShowTeamInvite] = useState(false);handleEditPrompt
   const [inviteEmail, setInviteEmail] = useState('');
   const [authEmail, setAuthEmail] = useState('');
   const [authPassword, setAuthPassword] = useState('');
@@ -954,8 +954,7 @@ useEffect(() => {
       const { data, error } = await supabase
         .from('prompt_templates')
         .select('prompt_text')
-        .eq('prompt_type', promptType)
-        .single();
+        .eq('prompt_type', promptType);
       
       console.log('Load response:', { data, error });
       
@@ -964,8 +963,8 @@ useEffect(() => {
         throw error;
       }
       
-      // Set the prompt text (empty if no prompt exists yet)
-      const promptText = data?.prompt_text || '';
+      // Get the first result since we removed .single()
+      const promptText = data?.[0]?.prompt_text || '';
       console.log('Setting prompt text to:', promptText);
       setCurrentPromptText(promptText);
     } catch (error) {
