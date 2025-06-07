@@ -1471,23 +1471,48 @@ useEffect(() => {
                       evaluationResult.recommendation === 'Recommend' ? 'default' :
                       evaluationResult.recommendation === 'Conditional' ? 'secondary' : 'destructive'
                     }>
-                      {evaluationResult.finalScore.score.toFixed(1)}/10
+                      {evaluationResult.finalScore.score.toFixed(1)}/5
                     </Badge>
                   </div>
-          
-                  {/* Overall Score */}
-                  <div className="text-center p-6 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 rounded-lg">
-                    <div className="text-4xl font-bold text-blue-600">{evaluationResult.finalScore.score.toFixed(1)}/10</div>
-                    <div className="text-lg text-gray-600 dark:text-gray-400">{evaluationResult.finalScore.percentage.toFixed(0)}% Overall Score</div>
-                    <Badge className="mt-2" variant={
-                      evaluationResult.recommendation === 'Strongly Recommend' ? 'default' :
-                      evaluationResult.recommendation === 'Recommend' ? 'default' :
-                      evaluationResult.recommendation === 'Conditional' ? 'secondary' : 'destructive'
-                    }>
-                      {evaluationResult.recommendation}
-                    </Badge>
+            
+                  {/* Overall Score + Overall Feedback Row */}
+                  <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+                    {/* Overall Score - 1/5 width */}
+                    <div className="md:col-span-1">
+                      <Card className="p-6 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20">
+                        <div className="text-center">
+                          <div className="text-3xl font-bold text-blue-600">{evaluationResult.finalScore.score.toFixed(1)}/5</div>
+                          <div className="text-sm text-gray-600 dark:text-gray-400">{evaluationResult.finalScore.percentage.toFixed(0)}%</div>
+                          <Badge className="mt-2" variant={
+                            evaluationResult.recommendation === 'Strongly Recommend' ? 'default' :
+                            evaluationResult.recommendation === 'Recommend' ? 'default' :
+                            evaluationResult.recommendation === 'Conditional' ? 'secondary' : 'destructive'
+                          }>
+                            {evaluationResult.recommendation}
+                          </Badge>
+                        </div>
+                      </Card>
+                    </div>
+            
+                    {/* Overall Feedback - 4/5 width */}
+                    <div className="md:col-span-4">
+                      <Card className="p-4 h-full">
+                        <h4 className="font-medium mb-2">Overall Feedback</h4>
+                        <p className="text-sm text-gray-600 dark:text-gray-400">
+                          [Overall feedback will be generated here - comprehensive analysis of project strengths, weaknesses, and key insights for your understanding]
+                        </p>
+                      </Card>
+                    </div>
                   </div>
-          
+            
+                  {/* Board Feedback Card */}
+                  <Card className="p-4 bg-green-50 dark:bg-green-900/20">
+                    <h4 className="font-medium mb-2">Board Feedback</h4>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                      [Board feedback will be generated here - focused on ecosystem alignment, strategic fit, and reasoning for program board presentation]
+                    </p>
+                  </Card>
+            
                   {/* Criteria Breakdown */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {Object.entries(evaluationResult.results).map(([criterion, result]: [string, any]) => (
@@ -1496,7 +1521,7 @@ useEffect(() => {
                           <h4 className="font-medium capitalize">{criterion}</h4>
                           <div className="flex items-center space-x-2">
                             <Badge variant="outline" className="text-lg px-3 py-1">
-                              {(result as any).score}/10
+                              {(result as any).score}/5
                             </Badge>
                             <Badge variant="outline" className={darkMode ? 'border-white/20' : ''}>
                               {evaluationResult.weightsUsed[criterion]}% weight
@@ -1507,7 +1532,7 @@ useEffect(() => {
                       </Card>
                     ))}
                   </div>
-          
+            
                   {/* Applicant Feedback */}
                   <Card className="p-4 bg-blue-50 dark:bg-blue-900/20">
                     <h4 className="font-medium mb-2">Applicant Feedback</h4>
