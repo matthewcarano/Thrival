@@ -41,6 +41,21 @@ const ThrivalSystem = () => {
   const [loading, setLoading] = useState(true);
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [authMode, setAuthMode] = useState<'login' | 'setup'>('login');
+  const [prompts, setPrompts] = useState({
+    systemPrompt: '',
+    scoringGuidelines: '',
+    criterionPrompts: {
+      team: '',
+      evidence: '',
+      fit: '',
+      need: '',
+      novelty: '',
+      focus: ''
+    }
+  });
+  const [editingPrompt, setEditingPrompt] = useState<string | null>(null);
+  const [showPromptEditor, setShowPromptEditor] = useState(false);
+  
   const handleLogin = async () => {
   try {
     const { data, error } = await supabase.auth.signInWithPassword({
