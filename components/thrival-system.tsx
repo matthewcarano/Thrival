@@ -1949,7 +1949,65 @@ useEffect(() => {
                 </CardContent>
               </Card>
             )}
-              
+
+            {/* Prompt Management Section */}
+            {activeSettingsSection === 'prompts' && isAdmin(user) && (
+              <Card className={darkMode ? 'bg-gray-800 border-gray-700' : ''}>
+                <CardHeader>
+                  <CardTitle className="flex items-center space-x-2">
+                    <span>Prompt Management</span>
+                    <Badge variant="outline" className="text-xs">
+                      AI evaluation prompts
+                    </Badge>
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-6">
+                  <div className="space-y-4">
+                    <h4 className="font-medium">System Prompts</h4>
+                    <div className="grid grid-cols-1 gap-4">
+                      <div className="p-4 rounded-lg border border-gray-200 dark:border-gray-600">
+                        <h5 className="font-medium mb-2">🎯 Scoring Guidelines</h5>
+                        <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
+                          Overall scoring scale and guidelines (currently 1-10, will change to 1-5)
+                        </p>
+                        <Button variant="outline" size="sm">
+                          <Edit className="h-4 w-4 mr-2" />
+                          Edit Guidelines
+                        </Button>
+                      </div>
+                      
+                      <div className="p-4 rounded-lg border border-gray-200 dark:border-gray-600">
+                        <h5 className="font-medium mb-2">🤖 System Prompt</h5>
+                        <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
+                          Main instruction prompt for Claude evaluations
+                        </p>
+                        <Button variant="outline" size="sm">
+                          <Edit className="h-4 w-4 mr-2" />
+                          Edit System Prompt
+                        </Button>
+                      </div>
+                    </div>
+                    
+                    <h4 className="font-medium mt-6">Criterion-Specific Prompts</h4>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      {['team', 'evidence', 'fit', 'need', 'novelty', 'focus'].map((criterion) => (
+                        <div key={criterion} className="p-4 rounded-lg border border-gray-200 dark:border-gray-600">
+                          <h5 className="font-medium mb-2 capitalize">{criterion}</h5>
+                          <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
+                            Custom prompt for {criterion} evaluation
+                          </p>
+                          <Button variant="outline" size="sm">
+                            <Edit className="h-4 w-4 mr-2" />
+                            Edit {criterion}
+                          </Button>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+            
             {/* Program Management Section */}
             {activeSettingsSection === 'programs' && (
               <Card className={darkMode ? 'bg-gray-800 border-gray-700' : ''}>
