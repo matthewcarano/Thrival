@@ -2506,6 +2506,8 @@ useEffect(() => {
                 <Label>Prompt Text</Label>
                 <Textarea
                   rows={15}
+                  value={currentPromptText}
+                  onChange={(e) => setCurrentPromptText(e.target.value)}
                   placeholder="Enter your prompt here..."
                   className="w-full"
                 />
