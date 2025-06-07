@@ -2535,7 +2535,10 @@ useEffect(() => {
                 <Textarea
                   rows={15}
                   value={currentPromptText}
-                  onChange={(e) => setCurrentPromptText(e.target.value)}
+                  onChange={(e) => {
+                    console.log('Textarea changed to:', e.target.value);
+                    setCurrentPromptText(e.target.value);
+                  }}
                   placeholder="Enter your prompt here..."
                   className="w-full"
                 />
