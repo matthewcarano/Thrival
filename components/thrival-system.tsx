@@ -453,6 +453,7 @@ const ThrivalSystem = () => {
             external_data: evaluation.externalData,
             
             // Store all feedback types
+            results: evaluation.criterionFeedback,
             criterion_feedback: evaluation.criterionFeedback,
             overall_feedback: evaluation.overallFeedback,
             board_feedback: evaluation.boardFeedback,
