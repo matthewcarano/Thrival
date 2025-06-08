@@ -417,7 +417,6 @@ const ThrivalSystem = () => {
         focus: evaluationResult.criterionFeedback.focus.score
       };
   
-      const finalScore = calculateWeightedScore(scores, programWeights);
   
       // Create complete evaluation object
       const evaluation = {
