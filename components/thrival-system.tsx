@@ -393,6 +393,13 @@ const ThrivalSystem = () => {
       }
   
       const evaluationResult = await response.json();
+      // DEBUG: See what Claude actually returned
+      console.log('=== CLAUDE RESPONSE DEBUG ===');
+      console.log('totalScore:', evaluationResult.totalScore);
+      console.log('percentage:', evaluationResult.percentage);
+      console.log('Team score:', evaluationResult.criterionFeedback?.team?.score);
+      console.log('Evidence score:', evaluationResult.criterionFeedback?.evidence?.score);
+      console.log('Full response structure:', Object.keys(evaluationResult));
       
       // Validate the response structure
       if (!evaluationResult.criterionFeedback || !evaluationResult.overallFeedback) {
