@@ -37,8 +37,8 @@ export default async function handler(
    
     // Initialize Supabase client
     const supabase = createClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+      'https://baieuwnbiiwumgjydjvs.supabase.co',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzd... (your anon key)'
     );
 
     // Load AI Evaluator Instructions from Supabase
