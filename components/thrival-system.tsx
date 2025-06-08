@@ -1562,8 +1562,8 @@ useEffect(() => {
                   <Card className="p-4 bg-green-50 dark:bg-green-900/20">
                     <h4 className="font-medium mb-2">Board Feedback</h4>
                     <p className="text-sm text-gray-600 dark:text-gray-400">
-                      [Board feedback will be generated here - focused on ecosystem alignment, strategic fit, and reasoning for program board presentation]
-                    </p>
+                    {evaluationResult.boardFeedback || evaluationResult.board_feedback || "No board feedback available"}
+                  </p>
                   </Card>
             
                   {/* Applicant Feedback */}
