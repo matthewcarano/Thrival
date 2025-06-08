@@ -1532,7 +1532,7 @@ useEffect(() => {
                       <Card className="p-4 h-full">
                         <h4 className="font-medium mb-2">Overall Feedback</h4>
                         <p className="text-sm text-gray-600 dark:text-gray-400">
-                          [Overall feedback will be generated here - comprehensive analysis of project strengths, weaknesses, and key insights for your understanding]
+                          {evaluationResult.overallFeedback}
                         </p>
                       </Card>
                     </div>
