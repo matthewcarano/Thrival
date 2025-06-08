@@ -428,9 +428,12 @@ const ThrivalSystem = () => {
         boardFeedback: evaluationResult.boardFeedback,
         applicantFeedback: evaluationResult.applicantFeedback,
         
-        scores,
+        scores: evaluationResult.criterionFeedback,  // Use Claude's scores
         weightsUsed: programWeights,
-        finalScore,
+        finalScore: { 
+          score: evaluationResult.totalScore, 
+          percentage: evaluationResult.percentage 
+        },  // Use Claude's calculations
         recommendation: evaluationResult.recommendation,
         
         // Legacy fields for backward compatibility
