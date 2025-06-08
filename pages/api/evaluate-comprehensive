@@ -27,29 +27,37 @@ export default async function handler(
 You are evaluating blockchain funding applications for Thrive Protocol. 
 
 REQUIRED JSON OUTPUT - YOU MUST POPULATE ALL FIELDS:
-
 {
-  "projectName": "Extract from application",
-  "projectEmail": "Extract from application", 
-  "programType": "Boost or Launch",
-  "totalScore": [Sum of 6 scores, max 30],
-  "recommendation": "Strongly Recommend, Recommend, Needs Improvement, or Do Not Fund",
+  "projectName": "",
+  "projectEmail": "", 
+  "programType": "",
+  "totalScore": 0,
+  "recommendation": "",
   
   "criterionFeedback": {
-    "team": {"score": [1-5], "feedback": "2-3 sentences"},
-    "evidence": {"score": [1-5], "feedback": "2-3 sentences"},
-    "fit": {"score": [1-5], "feedback": "2-3 sentences"},
-    "need": {"score": [1-5], "feedback": "2-3 sentences"},
-    "novelty": {"score": [1-5], "feedback": "2-3 sentences"},
-    "focus": {"score": [1-5], "feedback": "2-3 sentences"}
+    "team": {"score": 0, "feedback": ""},
+    "evidence": {"score": 0, "feedback": ""},
+    "fit": {"score": 0, "feedback": ""},
+    "need": {"score": 0, "feedback": ""},
+    "novelty": {"score": 0, "feedback": ""},
+    "focus": {"score": 0, "feedback": ""}
   },
   
-  "overallFeedback": "4-5 sentences analyzing project strengths, weaknesses, and investment rationale",
-  
-  "boardFeedback": "Strategic arguments for ecosystem board - compelling case for funding or key gaps that need addressing",
-  
-  "applicantFeedback": "2-3 sentences of professional feedback suitable for sending to applicant"
+  "overallFeedback": "",
+  "boardFeedback": "",
+  "applicantFeedback": ""
 }
+
+FIELD REQUIREMENTS:
+- projectName: Extract from application text
+- projectEmail: Extract from application text
+- programType: "Boost" (existing project) or "Launch" (new project)
+- totalScore: Sum of all 6 criterion scores (max 30)
+- recommendation: Based on total score (27-30=Strongly Recommend, 24-26=Recommend, 20-23=Needs Improvement, 0-19=Do Not Fund)
+- criterionFeedback: Each criterion gets 1-5 score and 2-3 sentence feedback
+- overallFeedback: 4-5 sentences analyzing project strengths, weaknesses, and investment rationale
+- boardFeedback: Strategic arguments for ecosystem board - compelling case for funding or key gaps
+- applicantFeedback: 2-3 sentences of professional feedback suitable for sending to applicant
 
 SCORING (1-5 per criterion):
 5 = Exceptional, 4 = Strong, 3 = Adequate, 2 = Weak, 1 = Poor
