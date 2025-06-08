@@ -132,8 +132,20 @@ Please evaluate this application according to the framework above and respond wi
     const responseText = claudeResponse.content[0]?.text || ''
     
     try {
+      // Extract JSON from Claude's response (in case it includes extra text)
+      let jsonText = responseText;
+      
+      // Find the first { and last } to extract just the JSON
+      const firstBrace = responseText.indexOf('{');
+      const lastBrace = responseText.lastIndexOf('}');
+      
+      if (firstBrace !== -1 && lastBrace !== -1 && firstBrace < lastBrace) {
+        jsonText = responseText.substring(firstBrace, lastBrace + 1);
+        console.log('Extracted JSON from Claude response');
+      }
+      
       // Parse the JSON response from Claude
-      const evaluationResult = JSON.parse(responseText);
+      const evaluationResult = JSON.parse(jsonText);
       
       // Validate required fields
       if (!evaluationResult.criterionFeedback || !evaluationResult.overallFeedback || !evaluationResult.boardFeedback) {
