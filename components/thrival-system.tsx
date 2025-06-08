@@ -443,7 +443,7 @@ const ThrivalSystem = () => {
           novelty: { score: scores.novelty, feedback: evaluationResult.criterionFeedback.novelty.feedback },
           focus: { score: scores.focus, feedback: evaluationResult.criterionFeedback.focus.feedback }
         }
-  
+      };
       setEvaluationResult(evaluation);
   
       // Save to Supabase
