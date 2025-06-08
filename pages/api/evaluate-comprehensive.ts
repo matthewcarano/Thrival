@@ -163,7 +163,11 @@ Please evaluate this application according to the framework above and respond wi
     }
 
   } catch (error: any) {
-    console.error('Comprehensive evaluation error:', error);
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ 
+      message: error.message,
+      errorName: error.name,
+      stack: error.stack?.substring(0, 500),
+      details: String(error)
+    });
   }
 }
