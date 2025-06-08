@@ -134,11 +134,14 @@ Please evaluate this application according to the framework above and respond wi
       })
     })
 
-    if (!response.ok) {
+   if (!response.ok) {
       const errorText = await response.text()
-      console.log('Claude API Error:', response.status, errorText)
-      return res.status(500).json({ message: `Claude API Error: ${response.status}` })
-    }
+      return res.status(500).json({ 
+        message: `Claude API Error: ${response.status}`,
+        details: errorText,
+        status: response.status
+      })
+}
 
     const claudeResponse = await response.json()
     const responseText = claudeResponse.content[0]?.text || ''
