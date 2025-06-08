@@ -349,132 +349,145 @@ const ThrivalSystem = () => {
     return { score: totalWeightedScore, percentage };
   };
 
-  // Main evaluation function
+ // Main evaluation function - UPDATED for comprehensive evaluation
   const handleEvaluate = async () => {
     if (!applicationText.trim()) {
       alert('Please enter application text before evaluating.');
       return;
     }
-
+  
     setIsEvaluating(true);
     setActiveTab('evaluate');
-
+  
     try {
-      const criteria = ['team', 'evidence', 'fit', 'need', 'novelty', 'focus'];
-      const results: any = {};
-
-      for (const criterion of criteria) {
-        const result = await evaluateWithAI(criterion, applicationText, selectedProgram);
-        results[criterion] = result;
+      // Get API key from localStorage
+      const savedConfig = localStorage.getItem('thrival_api_config');
+      let claudeApiKey = '';
+      if (savedConfig) {
+        const config = JSON.parse(savedConfig);
+        claudeApiKey = config.apiKeys?.claude || '';
       }
-
-      const scores = {
-        team: results.team.score,
-        evidence: results.evidence.score,
-        fit: results.fit.score,
-        need: results.need.score,
-        novelty: results.novelty.score,
-        focus: results.focus.score
-      };
-
+      
+      if (!claudeApiKey) {
+        alert('No Claude API key configured. Please add your API key in Settings → API Configuration.');
+        setIsEvaluating(false);
+        return;
+      }
+  
+      // Make single comprehensive evaluation call
+      const response = await fetch('/api/evaluate-comprehensive', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          applicationText,
+          projectName: projectName || `Application ${Date.now()}`,
+          selectedProgram,
+          externalData: externalData,
+          apiKey: claudeApiKey
+        })
+      });
+  
+      if (!response.ok) {
+        throw new Error(`API call failed: ${response.status}`);
+      }
+  
+      const evaluationResult = await response.json();
+      
+      // Validate the response structure
+      if (!evaluationResult.criterionFeedback || !evaluationResult.overallFeedback) {
+        throw new Error('Invalid evaluation response structure');
+      }
+  
+      // Calculate weighted score using program weights
       const programWeights = programs[selectedProgram]?.weights || criteriaWeights;
+      const scores = {
+        team: evaluationResult.criterionFeedback.team.score,
+        evidence: evaluationResult.criterionFeedback.evidence.score,
+        fit: evaluationResult.criterionFeedback.fit.score,
+        need: evaluationResult.criterionFeedback.need.score,
+        novelty: evaluationResult.criterionFeedback.novelty.score,
+        focus: evaluationResult.criterionFeedback.focus.score
+      };
+  
       const finalScore = calculateWeightedScore(scores, programWeights);
-
-      // Find the appropriate grading tier
-      const tier = gradingTiers.find(tier =>
-        finalScore.score >= tier.min && finalScore.score <= tier.max
-      );
-
-      const recommendation = tier ? tier.recommendation : 'Ungraded';
-
-      // Generate personalized applicant feedback based on actual scores
-      let applicantFeedback = '';
-      if (tier) {
-        // Start with base message
-        applicantFeedback = tier.applicantMessage.replace('{programName}', programs[selectedProgram].name);
-        
-        // Add specific score details
-        applicantFeedback += ` Your overall score was ${finalScore.score.toFixed(1)}/10 (${finalScore.percentage.toFixed(0)}%).`;
-        
-        // Add top performing criterion
-        const topScore = Math.max(...Object.values(scores));
-        const topCriterion = Object.entries(scores).find(([, score]) => score === topScore)?.[0];
-        if (topCriterion) {
-          applicantFeedback += ` Your strongest area was ${topCriterion} (${topScore}/10).`;
-        }
-        
-        // Add lowest performing criterion if score is low
-        const lowScore = Math.min(...Object.values(scores));
-        const lowCriterion = Object.entries(scores).find(([, score]) => score === lowScore)?.[0];
-        if (lowScore < 6 && lowCriterion) {
-          applicantFeedback += ` Focus on improving ${lowCriterion} (${lowScore}/10) for future applications.`;
-        }
-      } else {
-        applicantFeedback = 'Unable to determine appropriate feedback tier.';
-      }
-
+  
+      // Create complete evaluation object
       const evaluation = {
         id: Date.now(),
         program: programs[selectedProgram],
-        projectName: projectName || `Application ${Date.now()}`,
+        projectName: evaluationResult.projectName || projectName || `Application ${Date.now()}`,
         evaluator: currentEvaluator,
         date: new Date().toISOString().split('T')[0],
         applicationText,
         externalData: { ...externalData },
-        results,
+        
+        // New comprehensive feedback structure
+        criterionFeedback: evaluationResult.criterionFeedback,
+        overallFeedback: evaluationResult.overallFeedback,
+        boardFeedback: evaluationResult.boardFeedback,
+        applicantFeedback: evaluationResult.applicantFeedback,
+        
         scores,
         weightsUsed: programWeights,
         finalScore,
-        recommendation,
-        applicantFeedback
+        recommendation: evaluationResult.recommendation,
+        
+        // Legacy fields for backward compatibility
+        results: evaluationResult.criterionFeedback
       };
-      
-setEvaluationResult(evaluation);
-
-  // Save to Supabase
-  try {
-    const { data, error } = await supabase
-      .from('evaluations')
-     .insert([{
-        program_id: selectedProgram,
-        project_name: evaluation.projectName,
-        evaluator: user.email || 'Unknown User',  // Add this line
-        evaluator_id: user.id,
-        application_text: evaluation.applicationText,
-        external_data: evaluation.externalData,
-        results: evaluation.results,
-        scores: evaluation.scores,
-        weights_used: evaluation.weightsUsed,
-        final_score: evaluation.finalScore,
-        recommendation: evaluation.recommendation,
-        applicant_feedback: evaluation.applicantFeedback
-      }])
-      .select()
-      .single();
   
-    if (error) throw error;
+      setEvaluationResult(evaluation);
   
-    // Update local state with the saved evaluation (including database ID)
-    const savedEvaluation = {
-      ...evaluation,
-      id: data.id
-    };
-    setEvaluationHistory(prev => [savedEvaluation, ...prev]);
-  } catch (error: any) {
-    console.error('Error saving evaluation:', error);
-    // Still add to local state even if save fails
-    setEvaluationHistory(prev => [evaluation, ...prev]);
-    alert('Evaluation completed but failed to save to database: ' + error.message);
-  }
-
+      // Save to Supabase
+      try {
+        const { data, error } = await supabase
+          .from('evaluations')
+          .insert([{
+            program_id: selectedProgram,
+            project_name: evaluation.projectName,
+            evaluator: user.email || 'Unknown User',
+            evaluator_id: user.id,
+            application_text: evaluation.applicationText,
+            external_data: evaluation.externalData,
+            
+            // Store all feedback types
+            criterion_feedback: evaluation.criterionFeedback,
+            overall_feedback: evaluation.overallFeedback,
+            board_feedback: evaluation.boardFeedback,
+            applicant_feedback: evaluation.applicantFeedback,
+            
+            scores: evaluation.scores,
+            weights_used: evaluation.weightsUsed,
+            final_score: evaluation.finalScore,
+            recommendation: evaluation.recommendation
+          }])
+          .select()
+          .single();
+  
+        if (error) throw error;
+  
+        // Update local state with the saved evaluation
+        const savedEvaluation = {
+          ...evaluation,
+          id: data.id
+        };
+        setEvaluationHistory(prev => [savedEvaluation, ...prev]);
+      } catch (error: any) {
+        console.error('Error saving evaluation:', error);
+        // Still add to local state even if save fails
+        setEvaluationHistory(prev => [evaluation, ...prev]);
+        alert('Evaluation completed but failed to save to database: ' + error.message);
+      }
+  
       // Auto-redirect to Results page and clear form
       setActiveTab('results');
       setApplicationText('');
       setProjectName('');
       setExternalData({ twitter: '', github: '', website: '' });
-    } catch (error) {
+  
+    } catch (error: any) {
       console.error('Evaluation error:', error);
-      alert('An error occurred during evaluation. Please try again.');
+      alert('An error occurred during evaluation: ' + error.message);
     } finally {
       setIsEvaluating(false);
     }
