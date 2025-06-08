@@ -431,9 +431,9 @@ const ThrivalSystem = () => {
         scores: evaluationResult.criterionFeedback,  // Use Claude's scores
         weightsUsed: programWeights,
         finalScore: { 
-          score: evaluationResult.totalScore, 
-          percentage: evaluationResult.percentage 
-        },  // Use Claude's calculations
+          score: evaluationResult.totalScore || 0, 
+          percentage: evaluationResult.percentage || 0
+        },  // Use Claude's calculations with fallbacks
         recommendation: evaluationResult.recommendation,
         
         // Legacy fields for backward compatibility
