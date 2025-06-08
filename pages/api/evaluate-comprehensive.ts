@@ -122,8 +122,8 @@ Please evaluate this application according to the framework above and respond wi
         'anthropic-version': '2023-06-01'
       },
       body: JSON.stringify({
-        model: 'claude-3-haiku-20240307',
-        max_tokens: 4096,
+        model: 'claude-3-5-haiku-20241022',
+        max_tokens: 8000,
         system: systemPrompt,
         messages: [
           {
