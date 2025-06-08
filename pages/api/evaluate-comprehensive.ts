@@ -1,6 +1,7 @@
 // pages/api/evaluate-comprehensive.ts
 
 import type { NextApiRequest, NextApiResponse } from 'next'
+import { createClient } from '@supabase/supabase-js'
 
 export default async function handler(
   req: NextApiRequest,
@@ -33,72 +34,56 @@ export default async function handler(
     }
 
     console.log('=== ABOUT TO CALL CLAUDE ===');
-    // Build the comprehensive prompt
-    let systemPrompt = `AI EVALUATOR INSTRUCTIONS
+   
+    // Initialize Supabase client
+    const supabase = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+    );
 
-You are evaluating blockchain funding applications for Thrive Protocol. 
+    // Load AI Evaluator Instructions from Supabase
+    let systemPrompt = '';
+    try {
+      const { data: promptData, error: promptError } = await supabase
+        .from('prompt_templates')
+        .select('prompt_text')
+        .eq('prompt_type', 'system')
+        .eq('active', true)
+        .single();
+        
+      if (promptData && promptData.prompt_text) {
+        systemPrompt = promptData.prompt_text;
+        console.log('Successfully loaded AI Evaluator Instructions from database');
+      } else {
+        throw new Error('No active system prompt found');
+      }
+    } catch (error) {
+      console.error('Failed to load AI Evaluator Instructions from database:', error);
+      // Fallback to ensure evaluation can still work
+      systemPrompt = `AI EVALUATOR INSTRUCTIONS
+    You are evaluating blockchain funding applications for Thrive Protocol.
+    [FALLBACK PROMPT - Please update AI Evaluator Instructions in Settings]
 
-REQUIRED JSON OUTPUT - YOU MUST POPULATE ALL FIELDS:
-{
-  "projectName": "",
-  "projectEmail": "", 
-  "programType": "",
-  "totalScore": 0,
-  "recommendation": "",
-  
-  "criterionFeedback": {
-    "team": {"score": 0, "feedback": ""},
-    "evidence": {"score": 0, "feedback": ""},
-    "fit": {"score": 0, "feedback": ""},
-    "need": {"score": 0, "feedback": ""},
-    "novelty": {"score": 0, "feedback": ""},
-    "focus": {"score": 0, "feedback": ""}
-  },
-  
-  "overallFeedback": "",
-  "boardFeedback": "",
-  "applicantFeedback": ""
-}
-
-FIELD REQUIREMENTS:
-- projectName: Extract from application text
-- projectEmail: Extract from application text
-- programType: "Boost" (existing project) or "Launch" (new project)
-- totalScore: Sum of all 6 criterion scores (max 30)
-- recommendation: Based on total score (27-30=Strongly Recommend, 24-26=Recommend, 20-23=Needs Improvement, 0-19=Do Not Fund)
-- criterionFeedback: Each criterion gets 1-5 score and 2-3 sentence feedback
-- overallFeedback: 4-5 sentences analyzing project strengths, weaknesses, and investment rationale
-- boardFeedback: Strategic arguments for ecosystem board - compelling case for funding or key gaps
-- applicantFeedback: 2-3 sentences of professional feedback suitable for sending to applicant
-
-SCORING (1-5 per criterion):
-5 = Exceptional, 4 = Strong, 3 = Adequate, 2 = Weak, 1 = Poor
-
-RECOMMENDATIONS:
-27-30 = Strongly Recommend
-24-26 = Recommend  
-20-23 = Needs Improvement
-0-19 = Do Not Fund
-
-FEEDBACK REQUIREMENTS:
-
-Overall Feedback: Comprehensive analysis including project strengths, weaknesses, scale potential, and verification needs for any external evidence claims.
-
-Board Feedback: Strategic presentation for ecosystem decision-makers. For strong projects: compelling funding arguments. For weaker projects: key gaps and development needs.
-
-Applicant Feedback: Professional, encouraging communication. Be informative but avoid disputable details. Focus on strategic guidance.
-
-CRITICAL RULES:
-
-- Return ONLY the JSON object, no other text
-- Base assessment only on information explicitly provided in application
-- Never invent or fabricate information not present
-- If information is missing, state "Application does not provide [specific detail]"
-- All JSON fields must contain meaningful content
-- Score conservatively when details are missing`;
+    REQUIRED JSON OUTPUT: { "projectName": "", "projectEmail": "", "programType": "", "totalScore": 0, "recommendation": "", "criterionFeedback": {"team": {"score": 0, "feedback": ""}, "evidence": {"score": 0, "feedback": ""}, "fit": {"score": 0, "feedback": ""}, "need": {"score": 0, "feedback": ""}, "novelty": {"score": 0, "feedback": ""}, "focus": {"score": 0, "feedback": ""}}, "overallFeedback": "", "boardFeedback": "", "applicantFeedback": "" }`;
+    }
 
     // Add program-specific context if available
-    // You'll need to load this from your database/config based on selectedProgram
+    if (selectedProgram) {
+      try {
+        const { data: programData, error: programError } = await supabase
+          .from('programs')
+          .select('overall_prompt')
+          .eq('id', selectedProgram)
+          .single();
+          
+        if (programData && programData.overall_prompt) {
+          systemPrompt += '\n\nPROGRAM-SPECIFIC CONTEXT:\n' + programData.overall_prompt;
+          console.log('Added program-specific context for:', selectedProgram);
+        }
+      } catch (error) {
+        console.error('Failed to load program context:', error);
+      }
+    }
     
     let userPrompt = `APPLICATION TO EVALUATE:
 
