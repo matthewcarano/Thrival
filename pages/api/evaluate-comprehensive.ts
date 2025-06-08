@@ -123,7 +123,7 @@ Please evaluate this application according to the framework above and respond wi
       },
       body: JSON.stringify({
         model: 'claude-3-haiku-20240307',
-        max_tokens: 4000,
+        max_tokens: 6000,
         system: systemPrompt,
         messages: [
           {
