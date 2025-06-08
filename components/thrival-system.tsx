@@ -373,76 +373,12 @@ const ThrivalSystem = () => {
         return;
       }
 
-      // ADD THIS: Preprocess CSV data into clean format
-      let processedApplicationText = applicationText;
-      
-      // Check if it's CSV data (starts with quotes and has comma separators)
-      if (applicationText.includes('"Project Name"') || applicationText.includes('","')) {
-        try {
-          // Parse CSV data
-          const lines = applicationText.split('\n');
-          const headers = lines[0].split('","').map(h => h.replace(/"/g, ''));
-          const values = lines[1] ? lines[1].split('","').map(v => v.replace(/"/g, '')) : [];
-          
-          // Create a mapping of headers to values
-          const dataMap = {};
-          headers.forEach((header, index) => {
-            dataMap[header] = values[index] || '';
-          });
-          
-          // Format into clean, structured text
-          processedApplicationText = `APPLICATION SUBMISSION
-
-PROJECT INFORMATION:
-Project Name: ${dataMap['Project Name'] || 'Not specified'}
-Email: ${dataMap['Email'] || 'Not provided'}
-Website: ${dataMap['Project Website'] || 'Not provided'}
-GitHub: ${dataMap['Project GitHub'] || 'Not provided'}
-
-TEAM INFORMATION:
-${dataMap['Info on Team Members (Include X, LinkedIn & GitHub profiles if possible)'] || 'No team information provided'}
-
-PROJECT STRATEGY & AUDIENCE:
-Strategy for Onchain Metrics: ${dataMap['Describe your project\'s strategy for driving sustainable onchain metrics'] || 'Not provided'}
-
-Target Audience: ${dataMap['Who is your target audience?'] || 'Not specified'}
-
-Competitive Advantage: ${dataMap['What is your project\'s competitive advantage and/or unique value proposition'] || 'Not provided'}
-
-TECHNICAL & BUSINESS MODEL:
-Technical Infrastructure: ${dataMap['Please provide a breakdown of your project\'s technical infrastructure and how you intend to build it on Boba'] || 'Not provided'}
-
-Revenue Model: ${dataMap['Please outline your project\'s revenue model'] || 'Not provided'}
-
-Boba Deployment Goals: ${dataMap['What are you seeking to accomplish by deploying on Boba?'] || 'Not provided'}
-
-SUPPORTING MATERIALS:
-Demo Video: ${dataMap['Please submit a demo video/walkthrough showcasing your project and its core features, if available'] || 'Not provided'}
-
-Supporting Resources: ${dataMap['Link(s) to supporting resources or documents relevant to your Project'] || 'Not provided'}
-
-FUNDING & MILESTONES:
-Funding Use: ${dataMap['What does your project need funding for and how will the grant funding be used?'] || 'Not provided'}
-
-Milestone 1: ${dataMap['Milestone 1 - Testnet Deployment'] || 'Not specified'}
-Milestone 2: ${dataMap['Milestone 2 - Mainnet Deployment'] || 'Not specified'}
-Milestone 3: ${dataMap['Milestone 3 - Traction'] || 'Not specified'}
-Milestone 4: ${dataMap['Milestone 4 - Scale'] || 'Not specified'}`;
-
-          console.log('Processed CSV data into structured format');
-        } catch (error) {
-          console.error('Error processing CSV data:', error);
-          // Fall back to original text if processing fails
-          processedApplicationText = applicationText;
-        }
-      }
-
     // Make single comprehensive evaluation call
       const response = await fetch('/api/evaluate-comprehensive', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
-          applicationText: processedApplicationText,
+          applicationText,
           projectName: projectName || `Application ${Date.now()}`,
           selectedProgram,
           externalData: externalData,
