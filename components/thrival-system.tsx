@@ -388,7 +388,9 @@ const ThrivalSystem = () => {
       });
   
       if (!response.ok) {
-        throw new Error(`API call failed: ${response.status}`);
+        const errorData = await response.json().catch(() => ({ message: 'Unknown error' }));
+        console.error('API Error Details:', errorData);
+        throw new Error(`API Error: ${JSON.stringify(errorData)}`);
       }
   
       const evaluationResult = await response.json();
