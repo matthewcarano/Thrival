@@ -6,21 +6,33 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
+  console.log('=== API CALLED ===');
+  console.log('Method:', req.method);
+  console.log('Body keys:', Object.keys(req.body || {}));
+  
   if (req.method !== 'POST') {
     return res.status(405).json({ message: 'Method not allowed' })
   }
 
   try {
     const { applicationText, projectName, selectedProgram, externalData, apiKey } = req.body
-
+    
+    console.log('=== EXTRACTED DATA ===');
+    console.log('Has applicationText:', !!applicationText);
+    console.log('Has apiKey:', !!apiKey);
+    console.log('ApiKey starts with sk-ant:', apiKey?.startsWith('sk-ant'));
+    
     if (!apiKey || !apiKey.startsWith('sk-ant')) {
+      console.log('=== API KEY ERROR ===');
       return res.status(400).json({ message: 'Valid Claude API key required' })
     }
       
     if (!applicationText) {
+      console.log('=== APPLICATION TEXT ERROR ===');
       return res.status(400).json({ message: 'Application text is required' })
     }
 
+    console.log('=== ABOUT TO CALL CLAUDE ===');
     // Build the comprehensive prompt
     let systemPrompt = `AI EVALUATOR INSTRUCTIONS
 
