@@ -345,7 +345,7 @@ const ThrivalSystem = () => {
       (scores.novelty * weights.novelty / 100) +
       (scores.focus * weights.focus / 100);
   
-    const percentage = (totalWeightedScore / 5) * 100;  // Changed from /10 to /5
+    const percentage = (totalWeightedScore / 5) * 100;  // Changed to Toal of 30 score
     return { score: totalWeightedScore, percentage };
   };
 
@@ -1634,7 +1634,7 @@ useEffect(() => {
                             </div>
                             <div className="flex items-center space-x-3">
                               <Badge variant="outline" className="text-lg px-3 py-1">
-                                {evaluation.finalScore.score.toFixed(1)}/10
+                                {evaluation.finalScore.score.toFixed(1)}/30
                               </Badge>
                               <Badge variant={
                                 evaluation.recommendation === 'Strongly Recommend' ? 'default' :
