@@ -55,7 +55,6 @@ export default async function handler(
           .from('prompt_templates')
           .select('prompt_text')
           .eq('prompt_type', 'system')
-          .eq('active', true);
         
       console.log('Query result:', promptData);
       
