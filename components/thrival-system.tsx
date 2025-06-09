@@ -455,7 +455,10 @@ const ThrivalSystem = () => {
       
       // Legacy fields for backward compatibility
       results: evaluationResult.criterionFeedback
-  
+      };
+      
+      setEvaluationResult(evaluation);
+      
       // Save to Supabase
       try {
         const { data, error } = await supabase
