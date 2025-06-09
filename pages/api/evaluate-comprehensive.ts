@@ -44,18 +44,26 @@ export default async function handler(
     // Load AI Evaluator Instructions from Supabase
     let systemPrompt = '';
     try {
+      console.log('=== LOADING PROMPT FROM SUPABASE ===');
       const { data: promptData, error: promptError } = await supabase
         .from('prompt_templates')
         .select('prompt_text')
         .eq('prompt_type', 'system')
-        .eq('active', true)
-        .single();
+        .eq('active', true);
         
-      if (promptData && promptData.prompt_text) {
-        systemPrompt = promptData.prompt_text;
-        console.log('Successfully loaded AI Evaluator Instructions from database');
+      console.log('Query result:', promptData);
+      
+      if (promptError) {
+        console.error('Supabase error:', promptError);
+        throw promptError;
+      }
+      
+      if (promptData && promptData.length > 0) {
+        systemPrompt = promptData[0].prompt_text;
+        console.log('SUCCESS: Loaded prompt, length:', systemPrompt.length);
       } else {
-        throw new Error('No active system prompt found');
+        console.log('NO PROMPT FOUND - using fallback');
+        throw new Error('No system prompt found');
       }
     } catch (error) {
       console.error('Failed to load AI Evaluator Instructions from database:', error);
@@ -63,10 +71,8 @@ export default async function handler(
       systemPrompt = `AI EVALUATOR INSTRUCTIONS
     You are evaluating blockchain funding applications for Thrive Protocol.
     [FALLBACK PROMPT - Please update AI Evaluator Instructions in Settings]
-
     REQUIRED JSON OUTPUT: { "projectName": "", "projectEmail": "", "programType": "", "totalScore": 0, "recommendation": "", "criterionFeedback": {"team": {"score": 0, "feedback": ""}, "evidence": {"score": 0, "feedback": ""}, "fit": {"score": 0, "feedback": ""}, "need": {"score": 0, "feedback": ""}, "novelty": {"score": 0, "feedback": ""}, "focus": {"score": 0, "feedback": ""}}, "overallFeedback": "", "boardFeedback": "", "applicantFeedback": "" }`;
     }
-
     // Add program-specific context if available
     if (selectedProgram) {
       try {
