@@ -372,6 +372,10 @@ const ThrivalSystem = () => {
         setIsEvaluating(false);
         return;
       }
+      // DEBUG: Check if we're sending the right data
+      console.log('=== REQUEST DEBUG ===');
+      console.log('selectedProgram:', selectedProgram);
+      console.log('apiKey length:', claudeApiKey.length);
 
     // Make single comprehensive evaluation call
       const response = await fetch('/api/evaluate-comprehensive', {
