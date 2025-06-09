@@ -438,25 +438,23 @@ const ThrivalSystem = () => {
         boardFeedback: evaluationResult.boardFeedback,
         applicantFeedback: evaluationResult.applicantFeedback,
         
-        scores: evaluationResult.criterionFeedback,  // Use Claude's scores
-        weightsUsed: programWeights,
-        finalScore: { 
-          score: evaluationResult.totalScore || 0, 
-          percentage: evaluationResult.percentage || 0
-        },  // Use Claude's calculations with fallbacks
-        recommendation: evaluationResult.recommendation,
-        
-        // Legacy fields for backward compatibility
-        results: {
-          team: { score: scores.team, feedback: evaluationResult.criterionFeedback.team.feedback },
-          evidence: { score: scores.evidence, feedback: evaluationResult.criterionFeedback.evidence.feedback },
-          fit: { score: scores.fit, feedback: evaluationResult.criterionFeedback.fit.feedback },
-          need: { score: scores.need, feedback: evaluationResult.criterionFeedback.need.feedback },
-          novelty: { score: scores.novelty, feedback: evaluationResult.criterionFeedback.novelty.feedback },
-          focus: { score: scores.focus, feedback: evaluationResult.criterionFeedback.focus.feedback }
-        }
-      };
-      setEvaluationResult(evaluation);
+        scores: {
+        team: evaluationResult.criterionFeedback.team.score,
+        evidence: evaluationResult.criterionFeedback.evidence.score,
+        fit: evaluationResult.criterionFeedback.fit.score,
+        need: evaluationResult.criterionFeedback.need.score,
+        novelty: evaluationResult.criterionFeedback.novelty.score,
+        focus: evaluationResult.criterionFeedback.focus.score
+      },
+      weightsUsed: programWeights,
+      finalScore: { 
+        score: evaluationResult.totalScore || 0, 
+        percentage: evaluationResult.percentage || 0
+      },
+      recommendation: evaluationResult.recommendation,
+      
+      // Legacy fields for backward compatibility
+      results: evaluationResult.criterionFeedback
   
       // Save to Supabase
       try {
