@@ -345,7 +345,7 @@ const ThrivalSystem = () => {
       (scores.novelty * weights.novelty / 100) +
       (scores.focus * weights.focus / 100);
   
-    const percentage = (totalWeightedScore / 5) * 100;  // Changed to Toal of 30 score
+    const percentage = (totalWeightedScore / 30) * 100;  // Fixed: max possible is 30, not 5
     return { score: totalWeightedScore, percentage };
   };
 
