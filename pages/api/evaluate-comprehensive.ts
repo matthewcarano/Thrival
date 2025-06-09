@@ -1,5 +1,4 @@
 // pages/api/evaluate-comprehensive.ts
-// Force redeploy
 
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { createClient } from '@supabase/supabase-js'
@@ -98,17 +97,25 @@ export default async function handler(
     
     let userPrompt = `APPLICATION TO EVALUATE:
 
-Project Name: ${projectName || 'Not specified'}
-
-External Data Provided:
-- Twitter: ${externalData?.twitter || 'Not provided'}
-- GitHub: ${externalData?.github || 'Not provided'}  
-- Website: ${externalData?.website || 'Not provided'}
-
-APPLICATION TEXT:
-${applicationText}
-
-Please evaluate this application according to the framework above and respond with the required JSON structure.`;
+    Project Name: ${projectName || 'Not specified'}
+    
+    External Data Provided:
+    - Twitter: ${externalData?.twitter || 'Not provided'}
+    - GitHub: ${externalData?.github || 'Not provided'}  
+    - Website: ${externalData?.website || 'Not provided'}
+    
+    APPLICATION TEXT:
+    ${applicationText}
+    
+    Please evaluate this application according to the framework above and respond with the required JSON structure.`;
+    
+    console.log('=== FULL PROMPT DEBUG ===');
+    console.log('System Prompt being sent to Claude:');
+    console.log(systemPrompt);
+    console.log('=== END SYSTEM PROMPT ===');
+    console.log('User Prompt being sent to Claude:');
+    console.log(userPrompt);
+    console.log('=== END USER PROMPT ===');
     
     const response = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
