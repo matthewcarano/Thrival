@@ -1,6 +1,6 @@
 // pages/api/evaluate-comprehensive.ts
 // Force redeploy
-console.log('=== API CALLED - VERSION 2 ===');
+
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { createClient } from '@supabase/supabase-js'
 
@@ -8,7 +8,7 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  console.log('=== API CALLED ===');
+  console.log('=== API CALLED - VERSION 2 ===')
   console.log('Method:', req.method);
   console.log('Body keys:', Object.keys(req.body || {}));
   
