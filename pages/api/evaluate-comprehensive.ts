@@ -167,10 +167,10 @@ export default async function handler(
       // Parse the JSON response from Claude
       const evaluationResult = JSON.parse(jsonText);
       
-      // Validate required fields
-      if (!evaluationResult.criterionFeedback || !evaluationResult.overallFeedback || !evaluationResult.boardFeedback) {
-        throw new Error('Missing required feedback fields');
-      }
+     // Validate required fields  
+     if (!evaluationResult.criterionFeedback) {
+       throw new Error('Missing required feedback fields');
+     }
       
       res.status(200).json(evaluationResult);
     } catch (parseError) {
