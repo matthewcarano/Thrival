@@ -164,8 +164,14 @@ export default async function handler(
         console.log('Extracted JSON from Claude response');
       }
       
-      // Parse the JSON response from Claude
-      const evaluationResult = JSON.parse(jsonText);
+      // Clean and parse the JSON response from Claude
+      const cleanJsonText = jsonText
+        .replace(/[\u0000-\u001F\u007F-\u009F]/g, '') // Remove control characters
+        .replace(/\n/g, '\\n')  // Escape newlines
+        .replace(/\r/g, '\\r')  // Escape carriage returns
+        .replace(/\t/g, '\\t'); // Escape tabs
+      
+      const evaluationResult = JSON.parse(cleanJsonText);
       
      // Validate required fields  
      if (!evaluationResult.criterionFeedback) {
