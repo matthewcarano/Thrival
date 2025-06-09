@@ -335,19 +335,13 @@ const ThrivalSystem = () => {
   };
 
  // Calculate weighted score
-  const calculateWeightedScore = (scores: any, programWeights?: any) => {
-    const weights = programWeights || criteriaWeights;
-    const totalWeightedScore =
-      (scores.team * weights.team / 100) +
-      (scores.evidence * weights.evidence / 100) +
-      (scores.fit * weights.fit / 100) +
-      (scores.need * weights.need / 100) +
-      (scores.novelty * weights.novelty / 100) +
-      (scores.focus * weights.focus / 100);
+const calculateWeightedScore = (scores: any) => {
+  const totalScore = 
+    scores.team + scores.evidence + scores.fit + 
+    scores.need + scores.novelty + scores.focus;
   
-    const percentage = (totalWeightedScore / 30) * 100;  // Fixed: max possible is 30, not 5
-    return { score: totalWeightedScore, percentage };
-  };
+  return { score: totalScore, percentage: Math.round((totalScore / 30) * 100) };
+};
 
  // Main evaluation function - UPDATED for comprehensive evaluation
   const handleEvaluate = async () => {
