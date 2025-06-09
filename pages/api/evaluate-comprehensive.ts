@@ -45,12 +45,17 @@ export default async function handler(
     // Load AI Evaluator Instructions from Supabase
     let systemPrompt = '';
     try {
-      console.log('=== LOADING PROMPT FROM SUPABASE ===');
-      const { data: promptData, error: promptError } = await supabase
-        .from('prompt_templates')
-        .select('prompt_text')
-        .eq('prompt_type', 'system')
-        .eq('active', true);
+      console.log('=== QUERYING ALL PROMPTS ===');
+        const { data: allPrompts, error: allError } = await supabase
+          .from('prompt_templates')
+          .select('*');
+        console.log('All prompts:', allPrompts);
+        
+        const { data: promptData, error: promptError } = await supabase
+          .from('prompt_templates')
+          .select('prompt_text')
+          .eq('prompt_type', 'system')
+          .eq('active', true);
         
       console.log('Query result:', promptData);
       
