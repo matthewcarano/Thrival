@@ -66,6 +66,7 @@ export default async function handler(
       if (promptData && promptData.length > 0) {
         systemPrompt = promptData[0].prompt_text;
         console.log('SUCCESS: Loaded prompt, length:', systemPrompt.length);
+        console.log('First 100 chars of loaded prompt:', systemPrompt.substring(0, 100));
       } else {
         console.log('NO PROMPT FOUND - using fallback');
         throw new Error('No system prompt found');
