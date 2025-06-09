@@ -1516,7 +1516,7 @@ useEffect(() => {
                           {/* Score and Percentage - Same Line, Bigger Size */}
                           <div className="text-center">
                             <span className="text-4xl font-bold text-blue-600">
-                              {evaluationResult.finalScore.score.toFixed(1)}/5
+                              {evaluationResult.finalScore.score.toFixed(1)}/30
                             </span>
                             <span className="text-4xl font-bold text-gray-600 dark:text-gray-400 ml-6">
                               {evaluationResult.finalScore.percentage.toFixed(0)}%
