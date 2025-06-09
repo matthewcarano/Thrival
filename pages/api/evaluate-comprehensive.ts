@@ -1,4 +1,5 @@
 // pages/api/evaluate-comprehensive.ts
+// Force redeploy
 
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { createClient } from '@supabase/supabase-js'
