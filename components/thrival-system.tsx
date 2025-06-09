@@ -414,7 +414,7 @@ const calculateWeightedScore = (scores: any) => {
         novelty: evaluationResult.criterionFeedback.novelty.score,
         focus: evaluationResult.criterionFeedback.focus.score
       };
-      const finalScore = calculateWeightedScore(scores, programWeights);
+      const finalScore = calculateWeightedScore(scores);
   
       // Create complete evaluation object
       const evaluation = {
