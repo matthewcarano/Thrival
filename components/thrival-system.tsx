@@ -420,7 +420,7 @@ const ThrivalSystem = () => {
         novelty: evaluationResult.criterionFeedback.novelty.score,
         focus: evaluationResult.criterionFeedback.focus.score
       };
-  
+      const finalScore = calculateWeightedScore(scores, programWeights);
   
       // Create complete evaluation object
       const evaluation = {
@@ -447,10 +447,7 @@ const ThrivalSystem = () => {
         focus: evaluationResult.criterionFeedback.focus.score
       },
       weightsUsed: programWeights,
-      finalScore: { 
-        score: evaluationResult.totalScore || 0, 
-        percentage: evaluationResult.percentage || 0
-      },
+      finalScore: finalScore,
       recommendation: evaluationResult.recommendation,
       
       // Legacy fields for backward compatibility
