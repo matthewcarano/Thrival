@@ -217,10 +217,7 @@ const ThrivalSystem = () => {
     focus: 15
   });
 
-  const [teamMembers, setTeamMembers] = useState([
-    { id: 1, name: 'Alice Johnson', email: 'alice@company.com', role: 'Lead Evaluator' },
-    { id: 2, name: 'Bob Smith', email: 'bob@company.com', role: 'Technical Reviewer' }
-  ]);
+  const [teamMembers, setTeamMembers] = useState([]);
 
   const [newTeamMember, setNewTeamMember] = useState({
     name: '',
