@@ -331,20 +331,8 @@ const ThrivalSystem = () => {
         combinedPrompt += `\n\nPROGRAM-SPECIFIC CONTEXT:\n${programContext}`;
       }
       
-      // Get API key from localStorage
-      const savedConfig = localStorage.getItem('thrival_api_config');
-      let claudeApiKey = '';
-      if (savedConfig) {
-        const config = JSON.parse(savedConfig);
-        claudeApiKey = config.apiKeys?.claude || '';
-      }
-      
-      if (!claudeApiKey) {
-        return { 
-          score: 5, 
-          feedback: 'System not configured. Please contact administrator.'
-        };
-}
+      // API key is handled by the backend now
+      const claudeApiKey = 'handled-by-backend';
       
       const response = await fetch('/api/evaluate', {
         method: 'POST',
@@ -397,19 +385,9 @@ const calculateWeightedScore = (scores: any) => {
     setIsEvaluating(true);
     setActiveTab('evaluate');
   
-    try {
-      // Get API key from localStorage
-      const savedConfig = localStorage.getItem('thrival_api_config');
-      let claudeApiKey = '';
-      if (savedConfig) {
-        const config = JSON.parse(savedConfig);
-        claudeApiKey = config.apiKeys?.claude || '';
-      }
-      if (!claudeApiKey) {
-        alert('No Claude API key configured. Please add your API key in Settings → API Configuration.');
-        setIsEvaluating(false);
-        return;
-      }
+      // API key is handled by the backend now
+      const claudeApiKey = 'handled-by-backend';
+    
       // DEBUG: Check if we're sending the right data
       console.log('=== REQUEST DEBUG ===');
       console.log('selectedProgram:', selectedProgram);
