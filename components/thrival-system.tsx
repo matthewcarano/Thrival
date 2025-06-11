@@ -514,12 +514,13 @@ const calculateWeightedScore = (scores: any) => {
         alert('Evaluation completed but failed to save to database: ' + error.message);
       }
   
+   try {
       // Auto-redirect to Results page and clear form
       setActiveTab('results');
       setApplicationText('');
       setProjectName('');
       setExternalData({ twitter: '', github: '', website: '' });
-  
+    
     } catch (error: any) {
       console.error('Evaluation error:', error);
       alert('An error occurred during evaluation: ' + error.message);
