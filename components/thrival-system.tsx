@@ -402,7 +402,6 @@ const calculateWeightedScore = (scores: any) => {
           projectName: projectName || `Application ${Date.now()}`,
           selectedProgram,
           externalData: externalData,
-          apiKey: claudeApiKey
         })
       });
   
