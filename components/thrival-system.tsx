@@ -342,9 +342,9 @@ const ThrivalSystem = () => {
       if (!claudeApiKey) {
         return { 
           score: 5, 
-          feedback: 'No Claude API key configured. Please add your API key in Settings → API Configuration.'
+          feedback: 'System not configured. Please contact administrator.'
         };
-      }
+}
       
       const response = await fetch('/api/evaluate', {
         method: 'POST',
