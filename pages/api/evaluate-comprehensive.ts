@@ -16,7 +16,8 @@ export default async function handler(
   }
 
   try {
-    const { applicationText, projectName, selectedProgram, externalData, apiKey } = req.body
+    const { applicationText, projectName, selectedProgram, externalData } = req.body
+    const apiKey = process.env.CLAUDE_API_KEY
     
     console.log('=== EXTRACTED DATA ===');
     console.log('Has applicationText:', !!applicationText);
