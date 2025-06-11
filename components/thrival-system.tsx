@@ -88,7 +88,6 @@ const ThrivalSystem = () => {
   };
   
    const handleInviteUser = async () => {
-    // Only allow admins to send invites
     if (!isAdmin(user)) {
       alert('Only admins can send invitations');
       return;
@@ -100,27 +99,29 @@ const ThrivalSystem = () => {
     }
   
     try {
-      // Create the invite through Supabase
       const { data, error } = await supabase
-        .from('team_invitations')
+        .from('team_members')  // ← Fixed: using your actual table
         .insert([{
           email: inviteEmail,
-          invited_by: user.id,
-          status: 'pending'
+          name: inviteEmail.split('@')[0],
+          role: 'evaluator',
+          user_id: null,
+          organization_id: null
         }])
         .select()
         .single();
   
       if (error) throw error;
       
-      alert(`Invitation sent to ${inviteEmail}!`);
+      alert(`${inviteEmail} has been added to the team!`);
       setInviteEmail('');
       setShowTeamInvite(false);
     } catch (error: any) {
-      console.error('Error sending invitation:', error);
-      alert('Failed to send invitation: ' + error.message);
+      console.error('Error adding team member:', error);
+      alert('Failed to add team member: ' + error.message);
     }
   };
+  
   // Check if user is admin
   const isAdmin = (user: any) => {
     return user?.email === 'subsacct@proton.me';
