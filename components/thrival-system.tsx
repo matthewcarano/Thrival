@@ -88,64 +88,91 @@ const ThrivalSystem = () => {
   };
   
    const handleInviteUser = async () => {
-    if (!isAdmin(user)) {
-      alert('Only admins can send invitations');
-      return;
-    }
-  
-    if (!inviteEmail.trim()) {
-      alert('Please enter an email address');
-      return;
-    }
-  
-    try {
-      const { data, error } = await supabase
-        .from('team_members')  // ← Fixed: using your actual table
-        .insert([{
-          email: inviteEmail,
-          name: inviteEmail.split('@')[0],
-          role: 'evaluator',
-          user_id: null,
-          organization_id: null
-        }])
-        .select()
-        .single();
-  
-      if (error) throw error;
-      
-      alert(`${inviteEmail} has been added to the team!`);
-      setInviteEmail('');
-      setShowTeamInvite(false);
-    } catch (error: any) {
-      console.error('Error adding team member:', error);
-      alert('Failed to add team member: ' + error.message);
-    }
-  };
-  
-  // Check if user is admin
-  const isAdmin = (user: any) => {
-    return user?.email === 'subsacct@proton.me';
-  };
-  const [newProgram, setNewProgram] = useState({
-    name: '',
-    overallPrompt: '',
-    weights: {
-      team: 20,
-      evidence: 20,
-      fit: 15,
-      need: 15,
-      novelty: 15,
-      focus: 15
-    },
-    customPrompts: {
-      team: '',
-      evidence: '',
-      fit: '',
-      need: '',
-      novelty: '',
-      focus: ''
-    }
-  });
+      if (!isAdmin(user)) {
+        alert('Only admins can send invitations');
+        return;
+      }
+    
+      if (!inviteEmail.trim()) {
+        alert('Please enter an email address');
+        return;
+      }
+    
+      try {
+        // Check if user already exists
+        const { data: existingUsers } = await supabase
+          .from('profiles')
+          .select('email')
+          .eq('email', inviteEmail);
+    
+        if (existingUsers && existingUsers.length > 0) {
+          alert('This user is already in the system!');
+          return;
+        }
+    
+        // Create the user account using admin API
+        const response = await fetch('/api/admin-invite', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ 
+            email: inviteEmail,
+            adminUserId: user.id 
+          })
+        });
+    
+        if (!response.ok) {
+          const error = await response.text();
+          throw new Error(error);
+        }
+    
+        const result = await response.json();
+        
+        if (result.success) {
+          // Add to team_members table
+          await supabase
+            .from('team_members')
+            .insert([{
+              email: inviteEmail,
+              name: inviteEmail.split('@')[0],
+              role: 'evaluator',
+              user_id: result.userId,
+              organization_id: null
+            }]);
+    
+          // Show success with instructions
+          alert(`✅ Account created for ${inviteEmail}!\n\n📋 Instructions:\n1. Send them this URL: ${window.location.origin}\n2. They'll be prompted to set a password\n3. They'll have Evaluator access immediately`);
+          
+          setInviteEmail('');
+          setShowTeamInvite(false);
+          
+          // Refresh team list
+          loadTeamMembers();
+        } else {
+          throw new Error(result.error || 'Failed to create account');
+        }
+    
+      } catch (error: any) {
+        console.error('Error creating account:', error);
+        alert('Failed to create account: ' + error.message);
+      }
+    };
+    
+    // Add this loadTeamMembers function if it doesn't exist:
+    const loadTeamMembers = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('team_members')
+          .select('*')
+          .order('created_at', { ascending: false });
+        
+        if (error) throw error;
+        
+        // Update your team members state
+        setTeamMembers(data || []);
+      } catch (error) {
+        console.error('Error loading team members:', error);
+      }
+    };
   
   const [editingProgram, setEditingProgram] = useState<string | null>(null);
   
