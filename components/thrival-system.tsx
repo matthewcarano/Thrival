@@ -799,34 +799,32 @@ useEffect(() => {
     }, [user]);
   
   // Load team members from Supabase
-    useEffect(() => {
-      const loadTeamMembers = async () => {
-        if (!user) return;
+  useEffect(() => {
+    const loadTeamMembers = async () => {
+      if (!user) return;
+      
+      try {
+        // Get real users from Supabase auth
+        const { data: { users }, error } = await supabase.auth.admin.listUsers();
         
-        try {
-          const { data, error } = await supabase
-            .from('profiles')
-            .select('id, email, name, role, created_at')
-            .order('created_at', { ascending: false });
-          
-          if (error) throw error;
-          
-          // Convert to your existing format
-          const formattedTeamMembers = data.map(profile => ({
-            id: profile.id,
-            name: profile.name || profile.email,
-            email: profile.email,
-            role: profile.role || 'Evaluator'
-          }));
-          
-          setTeamMembers(formattedTeamMembers);
-        } catch (error) {
-          console.error('Error loading team members:', error);
-        }
-      };
-
-      loadTeamMembers();
-    }, [user]);
+        if (error) throw error;
+        
+        // Format for your UI
+        const formattedUsers = users.map(authUser => ({
+          id: authUser.id,
+          name: authUser.email?.split('@')[0] || 'Unknown',
+          email: authUser.email,
+          role: authUser.email === 'subsacct@proton.me' ? 'admin' : 'evaluator'
+        }));
+        
+        setTeamMembers(formattedUsers);
+      } catch (error) {
+        console.error('Error loading team members:', error);
+      }
+    };
+  
+    loadTeamMembers();
+  }, [user]);
 
   
 // Simple test useEffect
