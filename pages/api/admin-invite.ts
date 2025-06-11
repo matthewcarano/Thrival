@@ -20,12 +20,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     );
 
     // Verify the requester is an admin
-    const { data: adminUser } = await supabase
-      .from('profiles')
-      .select('email, role')
-      .eq('id', adminUserId)
-      .single();
-
+    const { data: { user: adminUser } } = await supabase.auth.admin.getUserById(adminUserId);
+    
     if (!adminUser || adminUser.email !== 'subsacct@proton.me') {
       return res.status(403).json({ message: 'Unauthorized - Admin access required' });
     }
