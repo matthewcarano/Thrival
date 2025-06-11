@@ -182,20 +182,16 @@ const ThrivalSystem = () => {
     
     // Add this loadTeamMembers function if it doesn't exist:
     const loadTeamMembers = async () => {
-      try {
-        const { data, error } = await supabase
-          .from('team_members')
-          .select('*')
-          .order('created_at', { ascending: false });
-        
-        if (error) throw error;
-        
-        // Update your team members state
-        setTeamMembers(data || []);
-      } catch (error) {
-        console.error('Error loading team members:', error);
-      }
-    };
+    try {
+      const response = await fetch('/api/get-users');
+      if (!response.ok) throw new Error('Failed to fetch users');
+      
+      const users = await response.json();
+      setTeamMembers(users);
+    } catch (error) {
+      console.error('Error loading team members:', error);
+    }
+  };
   
   const [editingProgram, setEditingProgram] = useState<string | null>(null);
   
@@ -801,20 +797,11 @@ useEffect(() => {
       if (!user) return;
       
       try {
-        // Get real users from Supabase auth
-        const { data: { users }, error } = await supabase.auth.admin.listUsers();
+        const response = await fetch('/api/get-users');
+        if (!response.ok) throw new Error('Failed to fetch users');
         
-        if (error) throw error;
-        
-        // Format for your UI
-        const formattedUsers = users.map(authUser => ({
-          id: authUser.id,
-          name: authUser.email?.split('@')[0] || 'Unknown',
-          email: authUser.email,
-          role: authUser.email === 'subsacct@proton.me' ? 'admin' : 'evaluator'
-        }));
-        
-        setTeamMembers(formattedUsers);
+        const users = await response.json();
+        setTeamMembers(users);
       } catch (error) {
         console.error('Error loading team members:', error);
       }
