@@ -1264,7 +1264,7 @@ useEffect(() => {
             <TabsTrigger value="evaluate">Evaluate</TabsTrigger>
             <TabsTrigger value="bulk">Bulk Process</TabsTrigger>
             <TabsTrigger value="results">Results</TabsTrigger>
-            <TabsTrigger value="settings">Settings</TabsTrigger>
+            {isAdmin(user) && <TabsTrigger value="settings">Settings</TabsTrigger>}
           </TabsList>
 
           {/* Evaluate Tab */}
@@ -2339,16 +2339,6 @@ useEffect(() => {
                     placeholder="Enter your email"
                     value={authEmail}
                     onChange={(e: any) => setAuthEmail(e.target.value)}
-                  />
-                </div>
-                
-                <div>
-                  <Label>Password</Label>
-                  <Input
-                    type="password"
-                    placeholder="Enter your password"
-                    value={authPassword}
-                    onChange={(e: any) => setAuthPassword(e.target.value)}
                   />
                 </div>
                 
