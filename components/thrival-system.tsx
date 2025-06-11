@@ -54,6 +54,10 @@ const ThrivalSystem = () => {
       focus: ''
     }
   });
+  // Add this function (after your useState declarations)
+const isAdmin = (user: any) => {
+  return user?.email === 'subsacct@proton.me';
+};
   const [editingPrompt, setEditingPrompt] = useState<string | null>(null);
   const [showPromptEditor, setShowPromptEditor] = useState(false);
   
