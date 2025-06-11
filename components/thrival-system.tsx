@@ -54,13 +54,32 @@ const ThrivalSystem = () => {
       focus: ''
     }
   });
-  // Add this function (after your useState declarations)
-const isAdmin = (user: any) => {
-  return user?.email === 'subsacct@proton.me';
-};
+  
   const [editingPrompt, setEditingPrompt] = useState<string | null>(null);
   const [showPromptEditor, setShowPromptEditor] = useState(false);
-  
+  const [newProgram, setNewProgram] = useState({
+    name: '',
+    overallPrompt: '',
+    weights: { 
+      team: 20, 
+      evidence: 20, 
+      fit: 15, 
+      need: 15, 
+      novelty: 15, 
+      focus: 15 
+    },
+    customPrompts: { 
+      team: '', 
+      evidence: '', 
+      fit: '', 
+      need: '', 
+      novelty: '', 
+      focus: '' 
+    }
+  });
+  const isAdmin = (user: any) => {
+    return user?.email === 'subsacct@proton.me';
+  };
   const handleLogin = async () => {
   try {
     const { data, error } = await supabase.auth.signInWithPassword({
